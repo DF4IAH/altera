@@ -1,0 +1,10 @@
+PLLJ_PLLSPE_INFO.txt
+db
+incremental_db
+top.done
+top.jdi
+top.pin
+top.sof
+*.rpt
+*.smsg
+*.summary
