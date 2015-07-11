@@ -52,7 +52,7 @@
 //////////////////////////////////////////////////////////////////
 
 `include "system_config_defines.vh"
-`include "../tb/global_defines.vh"
+`include "global_defines.vh"
 
 // Normally AMBER_UART_BAUD is defined in the system_config_defines.v file.
 `ifndef AMBER_UART_BAUD

@@ -41,7 +41,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-`include "../system/system_config_defines.vh"
+`include "system_config_defines.vh"
 `include "a23_config_defines.vh"
 
 module a23_execute (

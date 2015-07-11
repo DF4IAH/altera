@@ -39,7 +39,7 @@
 //////////////////////////////////////////////////////////////////
 
 `include "global_timescale.vh"
-`include "../system/system_config_defines.vh"
+`include "system_config_defines.vh"
 `include "global_defines.vh"
 
 

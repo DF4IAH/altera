@@ -39,7 +39,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 `include "system_config_defines.vh"
-`include "../tb/global_timescale.vh"
+`include "global_timescale.vh"
 
 
 //
@@ -275,15 +275,15 @@ assign o_sys_rst = rst0 || !calib_done_33mhz;
 
     altpll #(
              .bandwidth_type          ( "AUTO"                   ),
-             .clk0_divide_by          ( 4                        ),
+             .clk0_divide_by          ( 1                        ),
              .clk0_duty_cycle         ( 50                       ),
-             .clk0_multiply_by        ( 4                        ),   // 200 MHz clock input, x4 to get 800 MHz MCB
+             .clk0_multiply_by        ( 40                       ),   // 200 MHz clock input, x4 to get 800 MHz MCB    // 20 MHz clock input, x40 to get 800 MHz MCB
              .clk0_phase_shift        ( "0"                      ),
              .clk1_divide_by          ( `AMBER_CLK_DIVIDER       ),   // = 800 MHz / LP_CLK_DIVIDER
              .clk1_duty_cycle         ( 50                       ),
-             .clk1_multiply_by        ( 4                        ),
+             .clk1_multiply_by        ( 40                        ),
              .clk1_phase_shift        ( "0"                      ),
-             .inclk0_input_frequency  ( 5000                     ),
+             .inclk0_input_frequency  ( 50000                    ),
 	`ifdef ALTERA_MAX10_FPGA
              .intended_device_family  ( "MAX 10"                 ),
 	`elsif ALTERA_CYCLONE3_FPGA

@@ -39,15 +39,15 @@
 //////////////////////////////////////////////////////////////////
 
 `include "global_timescale.vh"
-`include "../system/system_config_defines.vh"
+`include "system_config_defines.vh"
 `include "global_defines.vh"
 
 
 module tb();
 
 `include "debug_functions.vh"
-`include "../system/system_functions.vh"
-`include "../system/memory_configuration.vh"
+`include "system_functions.vh"
+`include "memory_configuration.vh"
 
 reg                     sysrst;
 `ifdef XILINX_VIRTEX6_FPGA  
@@ -476,11 +476,11 @@ dumpvcd u_dumpvcd();
 // Terminate Test  
 // ======================================
 `ifdef AMBER_A25_CORE
-    `include "../amber25/a25_localparams.vh"
-    `include "../amber25/a25_functions.vh"
+    `include "a25_localparams.vh"
+    `include "a25_functions.vh"
 `else
-    `include "../amber23/a23_localparams.vh"
-    `include "../amber23/a23_functions.vh"
+    `include "a23_localparams.vh"
+    `include "a23_functions.vh"
 `endif
 
 reg             testfail;

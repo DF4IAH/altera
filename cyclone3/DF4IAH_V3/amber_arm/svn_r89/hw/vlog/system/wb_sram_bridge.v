@@ -38,7 +38,7 @@
 // from http://www.opencores.org/lgpl.shtml                     //
 //                                                              //
 //////////////////////////////////////////////////////////////////
-`include "../tb/global_defines.vh"
+`include "global_defines.vh"
 
 module wb_sram_bridge #(
 parameter WB_DWIDTH   = 32,
