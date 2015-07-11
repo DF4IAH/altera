@@ -43,23 +43,30 @@ entity top is
 		o_uart0_cts			: out std_logic;
 
 -- Xilinx Spartan 6 MCB DDR3 Interface
-		io_ddr3_dq			: inout std_logic_vector (15 downto 0);
-		o_ddr3_addr			: out std_logic_vector (12 downto 0);
-		o_ddr3_ba			: out std_logic_vector (2 downto 0);
-		o_ddr3_ras_n		: out std_logic;
-		o_ddr3_cas_n		: out std_logic;
-		o_ddr3_we_n			: out std_logic;
-		o_ddr3_odt			: out std_logic;
-		o_ddr3_reset_n		: out std_logic;
-		o_ddr3_cke			: out std_logic;
-		o_ddr3_dm			: out std_logic_vector (1 downto 0);
-		io_ddr3_dqs_p		: inout std_logic_vector (1 downto 0);
-		io_ddr3_dqs_n		: inout std_logic_vector (1 downto 0);
-		o_ddr3_ck_p			: out std_logic;
-		o_ddr3_ck_n			: out std_logic;
+--		io_ddr3_dq			: inout std_logic_vector (15 downto 0);
+--		o_ddr3_addr			: out std_logic_vector (12 downto 0);
+--		o_ddr3_ba			: out std_logic_vector (2 downto 0);
+--		o_ddr3_ras_n		: out std_logic;
+--		o_ddr3_cas_n		: out std_logic;
+--		o_ddr3_we_n			: out std_logic;
+--		o_ddr3_odt			: out std_logic;
+--		o_ddr3_reset_n		: out std_logic;
+--		o_ddr3_cke			: out std_logic;
+--		o_ddr3_dm			: out std_logic_vector (1 downto 0);
+--		io_ddr3_dqs_p		: inout std_logic_vector (1 downto 0);
+--		io_ddr3_dqs_n		: inout std_logic_vector (1 downto 0);
+--		o_ddr3_ck_p			: out std_logic;
+--		o_ddr3_ck_n			: out std_logic;
 -- ifdef XILINX_SPARTAN6_FPGA
 --		io_mcb3_rzq			: inout std_logic;
 -- endif
+
+-- Altera SRAM 2Mx8 Interface
+		o_sram_cs_n			: out std_logic_vector (3 downto 0);
+		o_sram_read_n		: out std_logic;
+		o_sram_write_n		: out std_logic;
+		o_sram_addr			: out std_logic_vector (20 downto 0);
+		io_sram_data		: inout std_logic_vector (7 downto 0);
 
 -- Ethmac B100 MAC to PHY Interface
 		i_mtx_clk_pad_i	: in std_logic;
@@ -119,6 +126,13 @@ architecture HIERARCHICAL of top is
 --			mcb3_rzq			: inout std_logic;
 -- endif
 
+-- Altera SRAM 2Mx8 Interface
+			o_sram_cs_n		: out std_logic_vector (3 downto 0);
+			o_sram_read_n	: out std_logic;
+			o_sram_write_n	: out std_logic;
+			o_sram_addr		: out std_logic_vector (20 downto 0);
+			io_sram_data	: inout std_logic_vector (7 downto 0);
+
 -- Ethmac B100 MAC to PHY Interface
 			mtx_clk_pad_i	: in std_logic;
 			mtxd_pad_o		: out std_logic_vector (3 downto 0);
@@ -174,39 +188,44 @@ begin
 			o_uart0_cts		=> o_uart0_cts,
 
 -- Xilinx Spartan 6 MCB DDR3 Interface
---			ddr3_dq			=> open,
---			ddr3_addr		=> open,
---			ddr3_ba			=> open,
---			ddr3_ras_n		=> open,
---			ddr3_cas_n		=> open,
---			ddr3_we_n		=> open,
---			ddr3_odt			=> open,
---			ddr3_reset_n	=> open,
---			ddr3_cke			=> open,
---			ddr3_dm			=> open,
---			ddr3_dqs_p		=> open,
---			ddr3_dqs_n		=> open,
---			ddr3_ck_p		=> open,
---			ddr3_ck_n		=> open,
+			ddr3_dq			=> open,
+			ddr3_addr		=> open,
+			ddr3_ba			=> open,
+			ddr3_ras_n		=> open,
+			ddr3_cas_n		=> open,
+			ddr3_we_n		=> open,
+			ddr3_odt			=> open,
+			ddr3_reset_n	=> open,
+			ddr3_cke			=> open,
+			ddr3_dm			=> open,
+			ddr3_dqs_p		=> open,
+			ddr3_dqs_n		=> open,
+			ddr3_ck_p		=> open,
+			ddr3_ck_n		=> open,
 
-			ddr3_dq			=> io_ddr3_dq,
-			ddr3_addr		=> o_ddr3_addr,
-			ddr3_ba			=> o_ddr3_ba,
-			ddr3_ras_n		=> o_ddr3_ras_n,
-			ddr3_cas_n		=> o_ddr3_cas_n,
-			ddr3_we_n		=> o_ddr3_we_n,
-			ddr3_odt			=> o_ddr3_odt,
-			ddr3_reset_n	=> o_ddr3_reset_n,
-			ddr3_cke			=> o_ddr3_cke,
-			ddr3_dm			=> o_ddr3_dm,
-			ddr3_dqs_p		=> io_ddr3_dqs_p,
-			ddr3_dqs_n		=> io_ddr3_dqs_n,
-			ddr3_ck_p		=> o_ddr3_ck_p,
-			ddr3_ck_n		=> o_ddr3_ck_n,
-
+--			ddr3_dq			=> io_ddr3_dq,
+--			ddr3_addr		=> o_ddr3_addr,
+--			ddr3_ba			=> o_ddr3_ba,
+--			ddr3_ras_n		=> o_ddr3_ras_n,
+--			ddr3_cas_n		=> o_ddr3_cas_n,
+--			ddr3_we_n		=> o_ddr3_we_n,
+--			ddr3_odt			=> o_ddr3_odt,
+--			ddr3_reset_n	=> o_ddr3_reset_n,
+--			ddr3_cke			=> o_ddr3_cke,
+--			ddr3_dm			=> o_ddr3_dm,
+--			ddr3_dqs_p		=> io_ddr3_dqs_p,
+--			ddr3_dqs_n		=> io_ddr3_dqs_n,
+--			ddr3_ck_p		=> o_ddr3_ck_p,
+--			ddr3_ck_n		=> o_ddr3_ck_n,
 -- ifdef XILINX_SPARTAN6_FPGA
 --			mcb3_rzq 		=> io_mcb3_rzq,
 -- endif
+
+			o_sram_cs_n		=> o_sram_cs_n,
+			o_sram_read_n	=> o_sram_read_n,
+			o_sram_write_n	=> o_sram_write_n,
+			o_sram_addr		=> o_sram_addr,
+			io_sram_data	=> io_sram_data,
 
 -- Ethmac B100 MAC to PHY Interface
 			mtx_clk_pad_i	=> i_mtx_clk_pad_i,

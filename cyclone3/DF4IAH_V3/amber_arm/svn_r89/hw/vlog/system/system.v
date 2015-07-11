@@ -90,6 +90,15 @@ inout                       md_pad_io,
 output                      mdc_pad_o,
 output                      phy_reset_n,
 
+`ifdef ALTERA_FPGA
+// Altera SRAM 2Mx8 Interface
+output  [3:0]               o_sram_cs_n,
+output                      o_sram_read_n,
+output                      o_sram_write_n,
+output  [20:0]              o_sram_addr,
+inout   [7:0]               io_sram_data,
+`endif
+
 output  [3:0]               led
 );
 
@@ -120,6 +129,18 @@ assign phy_init_done = 1'd1;
 wire            phy_init_done;
 wire            test_mem_ctrl;
 wire            system_rdy;
+
+
+// ======================================
+// Altera SRAM 2Mx8 Interface
+// ======================================
+`ifdef ALTERA_FPGA
+//wire  [3:0]     o_sram_cs_n;
+//wire            o_sram_read_n;
+//wire            o_sram_write_n;
+//wire  [20:0]    o_sram_addr;
+//wire  [7:0]     io_sram_data;
+`endif
 
 
 // ======================================
@@ -625,8 +646,35 @@ u_interrupt_controller (
                .c3_p0_rd_error          (                       )
        );
 
-`elsif ALTERA_CYCLONE3_FPGA
+`elsif NOTYET__ALTERA_CYCLONE3_FPGA
+    // ======================================
+    // Instantiate static RAM - 2Mx8 of external SRAM
+    // ======================================
+    wb_sram_bridge #(
+                .WB_DWIDTH             ( WB_DWIDTH             ),
+                .WB_SWIDTH             ( WB_SWIDTH             ),
+                .SRAM_ADR_L            ( 21                    ),
+                .SRAM_DATA_L           ( 8                     )
+    	 )
+    u_wb_sram_2m08b_bridge (
+                .i_wb_clk              ( sys_clk               ),
 
+                .o_sram_cs_n           ( o_sram_cs_n           ),
+                .o_sram_read_n         ( o_sram_read_n         ),
+                .o_sram_write_n        ( o_sram_write_n        ),
+                .o_sram_addr           ( o_sram_addr           ),
+                .io_sram_data          ( io_sram_data          ),
+
+                .i_wb_adr              ( s_wb_adr  [2]         ),
+                .i_wb_sel              ( s_wb_sel  [2]         ),
+                .i_wb_we               ( s_wb_we   [2]         ),
+                .o_wb_dat              ( s_wb_dat_r[2]         ),
+                .i_wb_dat              ( s_wb_dat_w[2]         ),
+                .i_wb_cyc              ( s_wb_cyc  [2]         ),
+                .i_wb_stb              ( s_wb_stb  [2]         ),
+                .o_wb_ack              ( s_wb_ack  [2]         ),
+                .o_wb_err              ( s_wb_err  [2]         )
+             );
 `endif
 
 

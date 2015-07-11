@@ -5,6 +5,7 @@ top.done
 top.jdi
 top.pin
 top.sof
+*.bak
 *.qws
 *.rpt
 *.smsg
