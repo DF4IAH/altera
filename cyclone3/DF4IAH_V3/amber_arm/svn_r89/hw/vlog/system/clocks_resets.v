@@ -53,7 +53,7 @@ input                       i_brd_clk_p,
 input                       i_ddr_calib_done,
 output                      o_sys_rst,
 output                      o_sys_clk,
-output                      o_clk_200
+output                      o_ram_clk
 
 );
 
@@ -91,7 +91,7 @@ assign o_sys_rst = rst0 || !calib_done_33mhz;
          
     assign rst0             = rst0_sync_r[RST_SYNC_NUM-1];
     assign calib_done_33mhz = ddr_calib_done_sync_r[RST_SYNC_NUM-1];
-    assign o_clk_200        = brd_clk_ibufg;
+    assign o_ram_clk        = brd_clk_ibufg;
 
 
     `ifdef XILINX_SPARTAN6_FPGA
@@ -256,7 +256,7 @@ assign o_sys_rst = rst0 || !calib_done_33mhz;
     //wire                        c0 = sub_wire4;
     //wire                        c1 = sub_wire5;
 
-    assign o_clk_200            = sub_wire3[0:0];
+    assign o_ram_clk            = sub_wire3[0:0];
     assign pll_clk              = sub_wire3[1:1];
     assign rst0                 = rst0_sync_r[RST_SYNC_NUM-1];
     assign calib_done_33mhz     = ddr_calib_done_sync_r[RST_SYNC_NUM-1];
@@ -486,7 +486,7 @@ always @( pll_clk_beh )
 assign o_sys_clk        = sys_clk_beh;
 assign rst0             = i_brd_rst;
 assign calib_done_33mhz = 1'd1;
-assign o_clk_200        = i_brd_clk_p;
+assign o_ram_clk        = i_brd_clk_p;
 
 `endif
 

@@ -103,9 +103,9 @@ output  [3:0]               led
 );
 
 
-wire            sys_clk;    // System clock
+wire            sys_clk;    //  40 MHz System clock
+wire            ram_clk;    // 180 MHz to be used for the external SRAM access
 wire            sys_rst;    // Active high reset, synchronous to sys_clk
-wire            clk_200;    // 200MHz from board
 
 
 // ======================================
@@ -233,7 +233,7 @@ clocks_resets u_clocks_resets (
     .i_ddr_calib_done   ( phy_init_done     ),
     .o_sys_rst          ( sys_rst           ),
     .o_sys_clk          ( sys_clk           ),
-    .o_clk_200          ( clk_200           )
+    .o_ram_clk          ( ram_clk           )
 );
 
 
@@ -334,7 +334,7 @@ generic_iobuf u_iobuf (
 assign system_rdy = phy_init_done && !sys_rst;
 
 // -------------------------------------------------------------
-// Instantiate Boot Memory - 8KBytes of Embedded SRAM
+// Instantiate Boot Memory - 16 KBytes of Embedded SRAM  (4096 DWORDS)
 // -------------------------------------------------------------
 
 generate
@@ -646,7 +646,7 @@ u_interrupt_controller (
                .c3_p0_rd_error          (                       )
        );
 
-`elsif NOTYET__ALTERA_CYCLONE3_FPGA
+`elsif ALTERA_CYCLONE3_FPGA
     // ======================================
     // Instantiate static RAM - 2Mx8 of external SRAM
     // ======================================
@@ -657,7 +657,9 @@ u_interrupt_controller (
                 .SRAM_DATA_L           ( 8                     )
     	 )
     u_wb_sram_2m08b_bridge (
+                .i_sys_rst             ( sys_rst               ),
                 .i_wb_clk              ( sys_clk               ),
+                .i_ram_clk             ( ram_clk               ),
 
                 .o_sram_cs_n           ( o_sram_cs_n           ),
                 .o_sram_read_n         ( o_sram_read_n         ),
