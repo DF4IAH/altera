@@ -185,15 +185,18 @@ always @( posedge i_wb_clk )
 // ------------------------------------------------------
 // External SRAM FSM
 // ------------------------------------------------------
+localparam SRAM_CYC_CTR_VALUE           = 'd5;
 localparam SRAM_FSM_INIT_STATE          = 3'd0;
 localparam SRAM_FSM_READY_STATE         = 3'd1;
-localparam SRAM_FSM_WRITE_BYTE_STATE    = 3'd2;
-localparam SRAM_FSM_WRITE_LOOP_STATE    = 3'd3;
-localparam SRAM_FSM_WRITE_END_STATE     = 3'd4;
-//localparam SRAM_FSM_READ_XXX_STATE    = 3'd5;
+localparam SRAM_FSM_WRITE_BYTE_SU_STATE = 3'd2;
+localparam SRAM_FSM_WRITE_BYTE_HD_STATE = 3'd3;
+localparam SRAM_FSM_WRITE_LOOP_STATE    = 3'd4;
+localparam SRAM_FSM_WRITE_END_STATE     = 3'd5;
 //localparam SRAM_FSM_READ_XXX_STATE    = 3'd6;
 //localparam SRAM_FSM_READ_XXX_STATE    = 3'd7;
+//localparam SRAM_FSM_READ_XXX_STATE    = 3'd8;
 reg [2:0] sram_state                    = SRAM_FSM_INIT_STATE;
+reg [2:0] sram_cyc_ctr                  = 'd0;
 
 always @( posedge i_ram_clk )
     if ( i_sys_rst )
@@ -210,6 +213,7 @@ always @( posedge i_ram_clk )
 		ram_adr_r               <= 'd0;
 		ram_sel_write_r         <= 'd0;
 		ram_dat_write_r         <= 'd0;
+        sram_cyc_ctr            <= 'd0;
 		end
     else
         case ( sram_state )
@@ -227,6 +231,7 @@ always @( posedge i_ram_clk )
                 ram_adr_r               <= 'd0;
                 ram_sel_write_r         <= 'd0;
                 ram_dat_write_r         <= 'd0;
+                sram_cyc_ctr            <= 'd0;
                 end
 				
             SRAM_FSM_READY_STATE:
@@ -235,7 +240,8 @@ always @( posedge i_ram_clk )
                     if ( wb_sel_write_r[0] == 1 )
                         begin
                         // data w/o shift available
-                        sram_state 	    <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state 	    <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <=  4'b1110;
                         o_sram_addr     <= wb_adr_r[SRAM_ADR_L-1:0];
                         io_sram_data_l  <= wb_dat_write_r[ 7: 0];
@@ -246,7 +252,8 @@ always @( posedge i_ram_clk )
                         end
                     else if ( wb_sel_write_r[1] == 1 )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <= 4'b1110;
                         o_sram_addr     <= wb_adr_r + 1;
                         io_sram_data_l  <= wb_dat_write_r[15: 8];
@@ -257,7 +264,8 @@ always @( posedge i_ram_clk )
                         end
                     else if ( wb_sel_write_r[2] == 1 )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <= 4'b1110;
                         o_sram_addr     <= wb_adr_r + 2;
                         io_sram_data_l  <= wb_dat_write_r[23:16];
@@ -268,7 +276,8 @@ always @( posedge i_ram_clk )
                         end
                     else if ( wb_sel_write_r[3] == 1 )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <= 4'b1110;
                         o_sram_addr     <= wb_adr_r + 3;
                         io_sram_data_l  <= wb_dat_write_r[31:24];
@@ -291,17 +300,41 @@ always @( posedge i_ram_clk )
                         end
                     end
 						
-                SRAM_FSM_WRITE_BYTE_STATE:
+                SRAM_FSM_WRITE_BYTE_SU_STATE:
                     begin
-                    sram_state          <= SRAM_FSM_WRITE_LOOP_STATE;
-                    o_sram_write_n      <= 'd0;
+                    if ( sram_cyc_ctr == 0 )
+                        begin
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_HD_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
+                        o_sram_write_n  <= 'd0;
+                        end
+                    else
+                        begin
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= sram_cyc_ctr - 1;
+                        end
                     end
 					
+                SRAM_FSM_WRITE_BYTE_HD_STATE:
+                    begin
+                    if ( sram_cyc_ctr == 0 )
+                        begin
+                        sram_state      <= SRAM_FSM_WRITE_LOOP_STATE;
+                        o_sram_write_n  <= 'd1;
+                        end
+                    else
+                        begin
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_HD_STATE;
+                        sram_cyc_ctr    <= sram_cyc_ctr - 1;
+                        end
+                    end
+
                 SRAM_FSM_WRITE_LOOP_STATE:
                     begin
                     if ( ram_sel_write_r[0] == 1 )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_addr     <= ram_adr_r[SRAM_ADR_L-1:0];
                         io_sram_data_l  <= ram_dat_write_r[ 7: 0];
                         io_sram_data_e  <= 'd1;
@@ -312,7 +345,8 @@ always @( posedge i_ram_clk )
                         end
                     else if ( wb_sel_write_r[1] == 1 )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_addr     <= ram_adr_r + 1;
                         io_sram_data_l  <= ram_dat_write_r[15: 8];
                         io_sram_data_e  <= 'd1;
@@ -323,7 +357,8 @@ always @( posedge i_ram_clk )
                         end
                     else if ( wb_sel_write_r[2] == 1 )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_addr     <= ram_adr_r + 2;
                         io_sram_data_l  <= ram_dat_write_r[23:16];
                         io_sram_data_e  <= 'd1;
@@ -334,7 +369,8 @@ always @( posedge i_ram_clk )
                         end
                     else if ( wb_sel_write_r[3] == 1 )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_STATE;
+                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_addr     <= ram_adr_r + 3;
                         io_sram_data_l  <= ram_dat_write_r[31:24];
                         io_sram_data_e  <= 'd1;

@@ -54,6 +54,12 @@ output                      o_uart0_rx,
 output                      o_uart0_cts,
 input                       i_uart0_tx,
 
+// UART 1 Interface
+input                       i_uart1_rts,
+output                      o_uart1_rx,
+output                      o_uart1_cts,
+input                       i_uart1_tx,
+
 // Xilinx Spartan 6 MCB DDR3 Interface
 inout  [15:0]               ddr3_dq,
 output [12:0]               ddr3_addr,
@@ -410,12 +416,10 @@ u_uart1 (
 
     .o_uart_int             ( uart1_int      ),
 
-    // These are not connected. ONly pins for 1 UART
-    // on my development board
-    .i_uart_cts_n           ( 1'd1           ),
-    .o_uart_txd             (                ),
-    .o_uart_rts_n           (                ),
-    .i_uart_rxd             ( 1'd1           ),
+    .i_uart_cts_n           ( i_uart1_rts    ),
+    .o_uart_txd             ( o_uart1_rx     ),
+    .o_uart_rts_n           ( o_uart1_cts    ),
+    .i_uart_rxd             ( i_uart1_tx     ),
 
     .i_wb_adr               ( s_wb_adr  [4]  ),
     .i_wb_sel               ( s_wb_sel  [4]  ),
