@@ -6,12 +6,8 @@
 
 
 # Specify the clock period
-#set period __period
-#set period  25.000
 # 20 MHz
 set period  50.000
-# 200 MHz
-#set period  5.000
 
 # Specify the maximum external clock delay from the external device
 #set CLKs_max __CLKsMaxValue
@@ -69,10 +65,11 @@ set_time_format -unit ns -decimal_places 3
 #**************************************************************
 # Create Clock
 #**************************************************************
-#create_clock -name {clk0}         -period $period -waveform { 0.000 12.500 } [get_ports {C_40MHZ}]
+#create_clock -name {clk0}         -period $period -waveform { 0.000 12.500 } [get_ports {C_20MHZ}]
 #create_clock -name {clk0_virtual} -period $period -waveform { 0.000 12.500 }
-create_clock -name {clk0}         -period $period [get_ports {i_brd_clk_p,i_brd_clk_n}]
+create_clock -name {clk0}         -period $period [get_ports i_brd_clk_*]
 create_clock -name {clk0_virtual} -period $period
+create_clock -name {clk_sram_virtual} -period 11.111
 
 
 #**************************************************************
@@ -98,14 +95,16 @@ derive_clock_uncertainty
 # Set Input Delay
 #**************************************************************
 # Create the input maximum delay for the data input to the FPGA that accounts for all delays specified
-set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports i_*]
-set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports io_*]
+set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports i_uart*]
+set_input_delay -clock clk_sram_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports i_sram_*]
+set_input_delay -clock clk_sram_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports io_sram_*]
 #set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports amber_i_*]
 #set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports wb_i_*]
 
 # Create the input minimum delay for the data input to the FPGA that accounts for all delays specified
-set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports i_*]
-set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports io_*]
+set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports i_uart*]
+set_input_delay -clock clk_sram_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports i_sram_*]
+set_input_delay -clock clk_sram_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports io_sram_*]
 #set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports amber_i_*]
 #set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports wb_i_*]
 
@@ -114,13 +113,17 @@ set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - 
 # Set Output Delay
 #**************************************************************
 # Create the output maximum delay for the data output from the FPGA that accounts for all delays specified
-set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports o_*]
-set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports io_*]
+set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports o_uart*]
+set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports o_led*]
+set_output_delay -clock clk_sram_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports o_sram_*]
+set_output_delay -clock clk_sram_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports io_sram_*]
 #set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports wb_o_*]
 
 # Create the output minimum delay for the data output from the FPGA that accounts for all delays specified
-set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports o_*]
-set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports io_*]
+set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports o_uart*]
+set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports o_led*]
+set_output_delay -clock clk_sram_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports o_sram_*]
+set_output_delay -clock clk_sram_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports io_sram_*]
 #set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports wb_o_*]
 
 

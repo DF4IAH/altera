@@ -64,11 +64,11 @@ output                          o_wb_ack,
 output                          o_wb_err,
 
 // SRAM Interface
-output reg  [3:0]               o_sram_cs_n,             // ChipSelect#
-output reg                      o_sram_read_n,           // Read#
-output reg                      o_sram_write_n,          // Write#
-output reg  [SRAM_ADR_L-1:0]    o_sram_addr,             // Addressbus
-inout       [SRAM_DATA_L-1:0]   io_sram_data             // Databus
+output reg  [3:0]               o_sram_cs_n         = 'd0,      // ChipSelect#
+output reg                      o_sram_read_n       = 'd0,      // Read#
+output reg                      o_sram_write_n      = 'd0,      // Write#
+output reg  [SRAM_ADR_L-1:0]    o_sram_addr         = 'd0,      // Addressbus
+inout       [SRAM_DATA_L-1:0]   io_sram_data                    // Databus
 
 );
 
@@ -76,26 +76,11 @@ inout       [SRAM_DATA_L-1:0]   io_sram_data             // Databus
 // Wishbone signals
 wire                    write_request;
 wire                    read_request;
-reg                     write_ready_r               = 'd0;
-reg                     read_ready_r                = 'd0;
-reg                     write_final_r               = 'd0;
-reg                     read_final_r                = 'd0;
-//reg                     write_request_r;
-//reg                     read_request_r;
-
-reg  [SRAM_ADR_L-1:0]   wb_adr_r;
-reg  [WB_DWIDTH-1:0]    wb_dat_write_r;
-reg  [WB_SWIDTH-1:0]    wb_sel_write_r;
-reg  [SRAM_ADR_L-1:0]   ram_adr_r;
-reg  [WB_DWIDTH-1:0]    ram_dat_write_r;
-reg  [WB_SWIDTH-1:0]    ram_sel_write_r;
-
 
 // SRAM signals
 reg  [7:0]              io_sram_data_l              = 'd0;
 reg                     io_sram_data_e              = 'd0;
 assign io_sram_data     = (io_sram_data_e) ?  io_sram_data_l : { SRAM_DATA_L{1'bz }};
-
 
 // Wishbone async signals
 assign write_request    = i_wb_stb &&  i_wb_we && write_ready_r;
@@ -126,36 +111,44 @@ localparam WB_FSM_INIT_STATE    = 2'd0;
 localparam WB_FSM_READY_STATE   = 2'd1;
 localparam WB_FSM_WRITE_STATE   = 2'd2;
 localparam WB_FSM_READ_STATE    = 2'd3;
-reg [1:0] wb_state              = WB_FSM_READY_STATE;
+reg  [1:0]              wb_state                    = WB_FSM_READY_STATE;
+reg                     write_ready_r               = 'd0;
+reg                     read_ready_r                = 'd0;
+reg  [SRAM_ADR_L-1:0]   wb_adr_r                    = 'd0;
+reg  [WB_DWIDTH-1:0]    wb_dat_r                    = 'd0;
+reg  [WB_SWIDTH-1:0]    wb_sel_r                    = 'd0;
 
 always @( posedge i_wb_clk )
     if ( i_sys_rst )
         begin
-        wb_state        <= WB_FSM_INIT_STATE;
-        write_ready_r   <= 'd0;
-        read_ready_r    <= 'd0;
-        wb_adr_r        <= 'd0;
-        wb_dat_write_r  <= 'd0;
-        wb_sel_write_r  <= 'd0;
+        wb_state            <= WB_FSM_INIT_STATE;
+        write_ready_r       <= 'd0;
+        read_ready_r        <= 'd0;
+        wb_adr_r            <= 'd0;
+        wb_dat_r            <= 'd0;
+        wb_sel_r            <= 'd0;
         end
     else
         case ( wb_state )
             WB_FSM_INIT_STATE:
                 begin
                 wb_state            <= WB_FSM_READY_STATE;
-                write_ready_r       <= 'd1;
-                read_ready_r        <= 'd1;
+                write_ready_r       <= 'd0;
+                read_ready_r        <= 'd0;
+                wb_adr_r            <= 'd0;
+                wb_dat_r            <= 'd0;
+                wb_sel_r            <= 'd0;
                 end
 
             WB_FSM_READY_STATE:
                 if ( write_request )
                     begin
                     wb_state        <= WB_FSM_WRITE_STATE;
-                    wb_adr_r        <= i_wb_adr[SRAM_ADR_L-1:0];      // latch data to avoid wait state "wss"
-                    wb_dat_write_r  <= i_wb_dat;
-                    wb_sel_write_r  <= i_wb_sel;
                     write_ready_r   <= 'd0;				
                     read_ready_r    <= 'd0;
+                    wb_adr_r        <= i_wb_adr[SRAM_ADR_L-1:0];      // latch data to avoid wait state "WSS"
+                    wb_dat_r        <= i_wb_dat;
+                    wb_sel_r        <= i_wb_sel;
                     end
                 else if ( read_request )
                     begin
@@ -165,7 +158,7 @@ always @( posedge i_wb_clk )
                     end
 
             WB_FSM_WRITE_STATE:
-                if ( write_final_r )
+                if ( write_final_r && !i_wb_stb )
                     begin
                     wb_state        <= WB_FSM_READY_STATE;
                     write_ready_r   <= 'd1;
@@ -173,35 +166,43 @@ always @( posedge i_wb_clk )
                     end
 
             WB_FSM_READ_STATE:
-                if ( read_final_r )
+                if ( read_final_r && !i_wb_stb )
                     begin
                     wb_state        <= WB_FSM_READY_STATE;
                     write_ready_r   <= 'd1;
                     read_ready_r    <= 'd1;
                     end
-	     endcase
+        endcase
 
 
 // ------------------------------------------------------
 // External SRAM FSM
 // ------------------------------------------------------
 localparam SRAM_CYC_CTR_VALUE           = 'd5;
-localparam SRAM_FSM_INIT_STATE          = 3'd0;
-localparam SRAM_FSM_READY_STATE         = 3'd1;
-localparam SRAM_FSM_WRITE_BYTE_SU_STATE = 3'd2;
-localparam SRAM_FSM_WRITE_BYTE_HD_STATE = 3'd3;
-localparam SRAM_FSM_WRITE_LOOP_STATE    = 3'd4;
-localparam SRAM_FSM_WRITE_END_STATE     = 3'd5;
-//localparam SRAM_FSM_READ_XXX_STATE    = 3'd6;
-//localparam SRAM_FSM_READ_XXX_STATE    = 3'd7;
-//localparam SRAM_FSM_READ_XXX_STATE    = 3'd8;
-reg [2:0] sram_state                    = SRAM_FSM_INIT_STATE;
-reg [2:0] sram_cyc_ctr                  = 'd0;
+localparam SRAM_FSM_INIT_STATE          = 4'd0;
+localparam SRAM_FSM_READY_STATE         = 4'd1;
+localparam SRAM_FSM_WRITE_BYTE_SU_STATE = 4'd2;
+localparam SRAM_FSM_WRITE_BYTE_HD_STATE = 4'd3;
+localparam SRAM_FSM_WRITE_LOOP_STATE    = 4'd4;
+localparam SRAM_FSM_WRITE_END_STATE     = 4'd5;
+localparam SRAM_FSM_READ_BYTE_SU_STATE  = 4'd6;
+localparam SRAM_FSM_READ_BYTE_HD_STATE  = 4'd7;
+localparam SRAM_FSM_READ_LOOP_STATE     = 4'd8;
+localparam SRAM_FSM_READ_END_STATE      = 4'd9;
+reg  [3:0]              sram_state      = SRAM_FSM_INIT_STATE;
+reg                     write_final_r   = 'd0;
+reg                     read_final_r    = 'd0;
+reg  [SRAM_ADR_L-1:0]   ram_adr_r       = 'd0;
+reg  [WB_DWIDTH-1:0]    ram_dat_r       = 'd0;
+reg  [WB_SWIDTH-1:0]    ram_sel_r       = 'd0;
+reg  [1:0]              ram_read_pos    = 'd0;
+reg  [2:0]              ram_cyc_ctr     = 'd0;
 
 always @( posedge i_ram_clk )
     if ( i_sys_rst )
         begin
         sram_state              <= SRAM_FSM_INIT_STATE;
+        o_wb_dat                <= 'd0;
         o_sram_cs_n             <= 4'b1111;
         o_sram_read_n           <= 'd1;
 		o_sram_write_n          <= 'd1;
@@ -211,15 +212,16 @@ always @( posedge i_ram_clk )
         write_final_r           <= 'd0;
         read_final_r            <= 'd0;
 		ram_adr_r               <= 'd0;
-		ram_sel_write_r         <= 'd0;
-		ram_dat_write_r         <= 'd0;
-        sram_cyc_ctr            <= 'd0;
+		ram_sel_r               <= 'd0;
+		ram_dat_r               <= 'd0;
+        ram_cyc_ctr             <= 'd0;
 		end
     else
         case ( sram_state )
             SRAM_FSM_INIT_STATE:
                 begin
                 sram_state              <= SRAM_FSM_READY_STATE;
+                o_wb_dat                <= 'd0;
                 o_sram_cs_n		        <= 4'b1111;
                 o_sram_read_n           <= 'd1;
                 o_sram_write_n	        <= 'd1;
@@ -229,65 +231,66 @@ always @( posedge i_ram_clk )
                 write_final_r           <= 'd0;
                 read_final_r            <= 'd0;
                 ram_adr_r               <= 'd0;
-                ram_sel_write_r         <= 'd0;
-                ram_dat_write_r         <= 'd0;
-                sram_cyc_ctr            <= 'd0;
+                ram_sel_r               <= 'd0;
+                ram_read_pos            <= 'd0;
+                ram_dat_r               <= 'd0;
+                ram_cyc_ctr             <= 'd0;
                 end
 				
             SRAM_FSM_READY_STATE:
                 if ( wb_state == WB_FSM_WRITE_STATE )
                     begin
-                    if ( wb_sel_write_r[0] == 1 )
+                    if ( wb_sel_r[0] )
                         begin
                         // data w/o shift available
                         sram_state 	    <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <=  4'b1110;
-                        o_sram_addr     <= wb_adr_r[SRAM_ADR_L-1:0];
-                        io_sram_data_l  <= wb_dat_write_r[ 7: 0];
+                        o_sram_addr     <= wb_adr_r;
+                        io_sram_data_l  <= wb_dat_r[ 7: 0];
                         io_sram_data_e  <= 'd1;
                         ram_adr_r       <= wb_adr_r + 1;
-                        ram_sel_write_r <= { 1'd0,wb_sel_write_r[WB_SWIDTH-1: 1] };		// Litte Endian
-                        ram_dat_write_r <= { 8'd0,wb_dat_write_r[WB_DWIDTH-1: 8] };
+                        ram_sel_r       <= {  1'd0,wb_sel_r[WB_SWIDTH-1: 1] };		// Litte Endian
+                        ram_dat_r       <= {  8'd0,wb_dat_r[WB_DWIDTH-1: 8] };
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
                         end
-                    else if ( wb_sel_write_r[1] == 1 )
+                    else if ( wb_sel_r[1] )
                         begin
                         sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <= 4'b1110;
                         o_sram_addr     <= wb_adr_r + 1;
-                        io_sram_data_l  <= wb_dat_write_r[15: 8];
+                        io_sram_data_l  <= wb_dat_r[15: 8];
                         io_sram_data_e  <= 'd1;
                         ram_adr_r       <= wb_adr_r + 2;
-                        ram_sel_write_r <= {  2'd0,wb_sel_write_r[WB_SWIDTH-1: 2] };
-                        ram_dat_write_r <= { 16'd0,wb_dat_write_r[WB_DWIDTH-1:16] };
+                        ram_sel_r       <= {  2'd0,wb_sel_r[WB_SWIDTH-1: 2] };
+                        ram_dat_r       <= { 16'd0,wb_dat_r[WB_DWIDTH-1:16] };
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
                         end
-                    else if ( wb_sel_write_r[2] == 1 )
+                    else if ( wb_sel_r[2] )
                         begin
                         sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <= 4'b1110;
                         o_sram_addr     <= wb_adr_r + 2;
-                        io_sram_data_l  <= wb_dat_write_r[23:16];
+                        io_sram_data_l  <= wb_dat_r[23:16];
                         io_sram_data_e  <= 'd1;
                         ram_adr_r       <= wb_adr_r + 3;
-                        ram_sel_write_r <= {  3'd0,wb_sel_write_r[WB_SWIDTH-1: 3] };
-                        ram_dat_write_r <= { 24'd0,wb_dat_write_r[WB_DWIDTH-1:24] };
+                        ram_sel_r       <= {  3'd0,wb_sel_r[WB_SWIDTH-1: 3] };
+                        ram_dat_r       <= { 24'd0,wb_dat_r[WB_DWIDTH-1:24] };
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
                         end
-                    else if ( wb_sel_write_r[3] == 1 )
+                    else if ( wb_sel_r[3] )
                         begin
                         sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
                         o_sram_cs_n     <= 4'b1110;
                         o_sram_addr     <= wb_adr_r + 3;
-                        io_sram_data_l  <= wb_dat_write_r[31:24];
+                        io_sram_data_l  <= wb_dat_r[31:24];
                         io_sram_data_e  <= 'd1;
                         ram_adr_r       <= 'd0;
-                        ram_sel_write_r <= 'd0;
-                        ram_dat_write_r <= 'd0;
+                        ram_sel_r       <= 'd0;
+                        ram_dat_r       <= 'd0;
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
                         end
 `ifdef AMBER_A25_CORE
-                    else if ( wb_sel_write_r[WB_SWIDTH-1] == 1 )
+                    else if ( wb_sel_r[WB_SWIDTH-1] )
 `endif
                     else
                         begin
@@ -299,106 +302,245 @@ always @( posedge i_ram_clk )
                         write_final_r   <= 'd1;
                         end
                     end
-						
-                SRAM_FSM_WRITE_BYTE_SU_STATE:
+                else if ( wb_state == WB_FSM_READ_STATE )
                     begin
-                    if ( sram_cyc_ctr == 0 )
+                    if ( wb_sel_r[0] )
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_HD_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
-                        o_sram_write_n  <= 'd0;
+                        // first LB-Byte available
+                        sram_state 	    <= SRAM_FSM_READ_BYTE_SU_STATE;
+                        o_sram_cs_n     <=  4'b1110;
+                        o_sram_addr     <= wb_adr_r;
+                        io_sram_data_e  <= 'd0;
+                        ram_adr_r       <= wb_adr_r + 1;
+                        ram_sel_r       <= { 1'd0,wb_sel_r[WB_SWIDTH-1: 1] };		// Litte Endian
+                        ram_read_pos    <= 'd0;
+                        ram_dat_r       <= 'd0;
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                        end
+                    else if ( wb_sel_r[1] )
+                        begin
+                        sram_state 	    <= SRAM_FSM_READ_BYTE_SU_STATE;
+                        o_sram_cs_n     <=  4'b1110;
+                        o_sram_addr     <= wb_adr_r + 1;
+                        io_sram_data_e  <= 'd0;
+                        ram_adr_r       <= wb_adr_r + 2;
+                        ram_sel_r       <= { 2'd0,wb_sel_r[WB_SWIDTH-1: 2] };
+                        ram_read_pos    <= 'd1;
+                        ram_dat_r       <= 'd0;
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                        end
+                    else if ( wb_sel_r[2] )
+                        begin
+                        sram_state 	    <= SRAM_FSM_READ_BYTE_SU_STATE;
+                        o_sram_cs_n     <=  4'b1110;
+                        o_sram_addr     <= wb_adr_r + 2;
+                        io_sram_data_e  <= 'd0;
+                        ram_adr_r       <= wb_adr_r + 3;
+                        ram_sel_r       <= { 3'd0,wb_sel_r[WB_SWIDTH-1: 3] };
+                        ram_read_pos    <= 'd2;
+                        ram_dat_r       <= 'd0;
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                        end
+                    else if ( wb_sel_r[3] )
+                        begin
+                        sram_state 	    <= SRAM_FSM_READ_BYTE_SU_STATE;
+                        o_sram_cs_n     <=  4'b1110;
+                        o_sram_addr     <= wb_adr_r + 3;
+                        io_sram_data_e  <= 'd0;
+                        ram_adr_r       <= 'd0;
+                        ram_sel_r       <= 'd0;
+                        ram_read_pos    <= 'd3;
+                        ram_dat_r       <= 'd0;
+                        ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
                         end
                     else
                         begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= sram_cyc_ctr - 1;
-                        end
-                    end
-					
-                SRAM_FSM_WRITE_BYTE_HD_STATE:
-                    begin
-                    if ( sram_cyc_ctr == 0 )
-                        begin
-                        sram_state      <= SRAM_FSM_WRITE_LOOP_STATE;
-                        o_sram_write_n  <= 'd1;
-                        end
-                    else
-                        begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_HD_STATE;
-                        sram_cyc_ctr    <= sram_cyc_ctr - 1;
+                        sram_state      <= SRAM_FSM_READ_END_STATE;
+                        o_sram_cs_n     <= 4'b1111;
+                        o_sram_addr     <= 'd0;
+                        io_sram_data_l  <= 'd0;
+                        io_sram_data_e  <= 'd0;
+                        o_wb_dat        <= 'd0;     // reading w/o any selected bytes
+                        read_final_r    <= 'd1;
                         end
                     end
 
-                SRAM_FSM_WRITE_LOOP_STATE:
+            SRAM_FSM_WRITE_BYTE_SU_STATE:
+                begin
+                if ( ram_cyc_ctr == 0 )
                     begin
-                    if ( ram_sel_write_r[0] == 1 )
-                        begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
-                        o_sram_addr     <= ram_adr_r[SRAM_ADR_L-1:0];
-                        io_sram_data_l  <= ram_dat_write_r[ 7: 0];
-                        io_sram_data_e  <= 'd1;
-                        o_sram_write_n  <= 'd1;
-                        ram_adr_r       <= ram_adr_r + 1;
-                        ram_sel_write_r <= { 1'd0,ram_sel_write_r[WB_SWIDTH-1: 1] };
-                        ram_dat_write_r <= { 8'd0,ram_dat_write_r[WB_DWIDTH-1: 8] };
-                        end
-                    else if ( wb_sel_write_r[1] == 1 )
-                        begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
-                        o_sram_addr     <= ram_adr_r + 1;
-                        io_sram_data_l  <= ram_dat_write_r[15: 8];
-                        io_sram_data_e  <= 'd1;
-                        o_sram_write_n  <= 'd1;
-                        ram_adr_r       <= ram_adr_r + 2;
-                        ram_sel_write_r <= { 2'd0,ram_sel_write_r[WB_SWIDTH-1: 2] };
-                        ram_dat_write_r <= {16'd0,ram_dat_write_r[WB_DWIDTH-1:16] };
-                        end
-                    else if ( wb_sel_write_r[2] == 1 )
-                        begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
-                        o_sram_addr     <= ram_adr_r + 2;
-                        io_sram_data_l  <= ram_dat_write_r[23:16];
-                        io_sram_data_e  <= 'd1;
-                        o_sram_write_n  <= 'd1;
-                        ram_adr_r       <= ram_adr_r + 3;
-                        ram_sel_write_r <= { 3'd0,ram_sel_write_r[WB_SWIDTH-1: 3] };
-                        ram_dat_write_r <= {24'd0,ram_dat_write_r[WB_DWIDTH-1:24] };
-                        end
-                    else if ( wb_sel_write_r[3] == 1 )
-                        begin
-                        sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
-                        sram_cyc_ctr    <= SRAM_CYC_CTR_VALUE;
-                        o_sram_addr     <= ram_adr_r + 3;
-                        io_sram_data_l  <= ram_dat_write_r[31:24];
-                        io_sram_data_e  <= 'd1;
-                        o_sram_write_n  <= 'd1;
-                        end
-`ifdef AMBER_A25_CORE
-                    else if ( wb_sel_write_r[WB_SWIDTH-1] == 1 )
-`endif
-                    else
-                        begin
-                        sram_state      <= SRAM_FSM_WRITE_END_STATE;
-                        write_final_r   <= 'd1;
-                        end
+                    sram_state      <= SRAM_FSM_WRITE_BYTE_HD_STATE;
+                    o_sram_write_n  <= 'd0;
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
                     end
+                else
+                    begin
+                    sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                    ram_cyc_ctr     <= ram_cyc_ctr - 1;
+                    end
+                end
 					
-                SRAM_FSM_WRITE_END_STATE:
-                    if ( !i_wb_stb )
-                        begin
-                        sram_state      <= SRAM_FSM_READY_STATE;
-                        write_final_r   <= 'd0;
-                        o_sram_cs_n     <= 4'b1111;
-                        o_sram_read_n   <= 'd1;
-                        o_sram_write_n	<= 'd1;
-                        o_sram_addr     <= 'd0;
-                        io_sram_data_e  <= 'd0;
-                        end
-						
-				// TODO: READ	
+            SRAM_FSM_WRITE_BYTE_HD_STATE:
+                begin
+                if ( ram_cyc_ctr == 0 )
+                    begin
+                    sram_state      <= SRAM_FSM_WRITE_LOOP_STATE;
+                    o_sram_write_n  <= 'd1;
+                    end
+                else
+                    begin
+                    sram_state      <= SRAM_FSM_WRITE_BYTE_HD_STATE;
+                    ram_cyc_ctr     <= ram_cyc_ctr - 1;
+                    end
+                end
+
+            SRAM_FSM_WRITE_LOOP_STATE:
+                begin
+                if ( ram_sel_r[0] )
+                    begin
+                    sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                    o_sram_addr     <= ram_adr_r;
+                    io_sram_data_l  <= ram_dat_r[ 7: 0];
+                    io_sram_data_e  <= 'd1;
+                    o_sram_write_n  <= 'd1;
+                    ram_adr_r       <= ram_adr_r + 1;
+                    ram_sel_r       <= {  1'd0,ram_sel_r[WB_SWIDTH-1: 1] };
+                    ram_dat_r       <= {  8'd0,ram_dat_r[WB_DWIDTH-1: 8] };
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                    end
+                else if ( ram_sel_r[1] )
+                    begin
+                    sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                    o_sram_addr     <= ram_adr_r + 1;
+                    io_sram_data_l  <= ram_dat_r[15: 8];
+                    io_sram_data_e  <= 'd1;
+                    o_sram_write_n  <= 'd1;
+                    ram_adr_r       <= ram_adr_r + 2;
+                    ram_sel_r       <= {  2'd0,ram_sel_r[WB_SWIDTH-1: 2] };
+                    ram_dat_r       <= { 16'd0,ram_dat_r[WB_DWIDTH-1:16] };
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                    end
+                else if ( ram_sel_r[2] )
+                    begin
+                    sram_state      <= SRAM_FSM_WRITE_BYTE_SU_STATE;
+                    o_sram_addr     <= ram_adr_r + 2;
+                    io_sram_data_l  <= ram_dat_r[23:16];
+                    io_sram_data_e  <= 'd1;
+                    o_sram_write_n  <= 'd1;
+                    ram_adr_r       <= ram_adr_r + 3;
+                    ram_sel_r       <= {  3'd0,ram_sel_r[WB_SWIDTH-1: 3] };
+                    ram_dat_r       <= { 24'd0,ram_dat_r[WB_DWIDTH-1:24] };
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                    end
+`ifdef AMBER_A25_CORE
+                else if ( ram_sel_r[WB_SWIDTH-2] )
+`endif
+                else
+                    begin
+                    sram_state      <= SRAM_FSM_WRITE_END_STATE;
+                    write_final_r   <= 'd1;
+                    end
+                end
+					
+            SRAM_FSM_WRITE_END_STATE:
+                if ( wb_state == WB_FSM_READY_STATE )
+                    begin
+                    sram_state      <= SRAM_FSM_READY_STATE;
+                    write_final_r   <= 'd0;
+                    o_sram_cs_n     <= 4'b1111;
+                    o_sram_read_n   <= 'd1;
+                    o_sram_write_n	<= 'd1;
+                    o_sram_addr     <= 'd0;
+                    io_sram_data_l  <= 'd0;
+                    io_sram_data_e  <= 'd0;
+                    end
+
+            SRAM_FSM_READ_BYTE_SU_STATE:
+                begin
+                if ( ram_cyc_ctr == 0 )
+                    begin
+                    sram_state      <= SRAM_FSM_READ_BYTE_HD_STATE;
+                    o_sram_read_n   <= 'd0;
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                    end
+                else
+                    begin
+                    sram_state      <= SRAM_FSM_READ_BYTE_SU_STATE;
+                    ram_cyc_ctr     <= ram_cyc_ctr - 1;
+                    end
+                end
+
+            SRAM_FSM_READ_BYTE_HD_STATE:
+                begin
+                if ( ram_cyc_ctr == 0 )
+                    begin
+                    sram_state      <= SRAM_FSM_READ_LOOP_STATE;
+                    o_sram_read_n   <= 'd1;
+                    ram_dat_r       <= ram_dat_r | (io_sram_data << (ram_read_pos << 3));
+                    end
+                else
+                    begin
+                    sram_state      <= SRAM_FSM_READ_BYTE_HD_STATE;
+                    ram_cyc_ctr     <= ram_cyc_ctr - 1;
+                    end
+                end
+
+            SRAM_FSM_READ_LOOP_STATE:
+                begin
+                if ( ram_sel_r[0] )
+                    begin
+                    sram_state      <= SRAM_FSM_READ_BYTE_SU_STATE;
+                    o_sram_addr     <= ram_adr_r;
+                    o_sram_read_n   <= 'd1;
+                    ram_adr_r       <= ram_adr_r + 1;
+                    ram_sel_r       <= {  1'd0,ram_sel_r[WB_SWIDTH-1: 1] };
+                    ram_read_pos    <= ram_read_pos + 1;
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                    end
+                else if ( ram_sel_r[1] )
+                    begin
+                    sram_state      <= SRAM_FSM_READ_BYTE_SU_STATE;
+                    o_sram_addr     <= ram_adr_r + 1;
+                    o_sram_read_n   <= 'd1;
+                    ram_adr_r       <= ram_adr_r + 2;
+                    ram_sel_r       <= {  2'd0,ram_sel_r[WB_SWIDTH-1: 2] };
+                    ram_read_pos    <= ram_read_pos + 2;
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                    end
+                else if ( ram_sel_r[2] )
+                    begin
+                    sram_state      <= SRAM_FSM_READ_BYTE_SU_STATE;
+                    o_sram_addr     <= ram_adr_r + 2;
+                    o_sram_read_n   <= 'd1;
+                    ram_adr_r       <= ram_adr_r + 3;
+                    ram_sel_r       <= {  3'd0,ram_sel_r[WB_SWIDTH-1: 3] };
+                    ram_read_pos    <= ram_read_pos + 3;
+                    ram_cyc_ctr     <= SRAM_CYC_CTR_VALUE;
+                    end
+`ifdef AMBER_A25_CORE
+                else if ( ram_sel_r[WB_SWIDTH-2] )
+`endif
+                else
+                    begin
+                    sram_state      <= SRAM_FSM_READ_END_STATE;
+                    o_wb_dat        <= ram_dat_r;
+                    read_final_r    <= 'd1;
+                    end
+                end
+
+            SRAM_FSM_READ_END_STATE:
+                if ( wb_state == WB_FSM_READY_STATE )
+                    begin
+                    sram_state      <= SRAM_FSM_READY_STATE;
+                    read_final_r    <= 'd0;
+                    o_sram_cs_n     <= 4'b1111;
+                    o_sram_read_n   <= 'd1;
+                    o_sram_write_n	<= 'd1;
+                    o_sram_addr     <= 'd0;
+                    io_sram_data_l  <= 'd0;
+                    io_sram_data_e  <= 'd0;
+                    end
+
         endcase
 	  
 endmodule

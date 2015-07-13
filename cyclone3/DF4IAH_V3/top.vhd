@@ -75,7 +75,7 @@ entity top is
 		io_sram_data		: inout std_logic_vector (7 downto 0);
 
 -- Ethmac B100 MAC to PHY Interface
-		i_mtx_clk_pad_i	: in std_logic;
+		i_mtx_clk_pad_i	    : in std_logic;
 		o_mtxd_pad_o		: out std_logic_vector (3 downto 0);
 		o_mtxen_pad_o		: out std_logic;
 		o_mtxerr_pad_o		: out std_logic;
