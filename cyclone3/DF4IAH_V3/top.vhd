@@ -30,8 +30,9 @@ entity top is
 		i_reset_n			: in std_logic;
 
 -- Clock from oscillator
-		i_brd_clk_p			: in std_logic;
-		i_brd_clk_n			: in std_logic;
+		i_brd_clk			: in std_logic;
+--		i_brd_clk_p			: in std_logic;
+--		i_brd_clk_n			: in std_logic;
 
 -- Status LEDs
 		o_led				: out std_logic_vector (3 downto 0);
@@ -47,6 +48,16 @@ entity top is
 --		o_uart1_rx			: out std_logic;
 --		i_uart1_rts			: in std_logic;
 --		o_uart1_cts			: out std_logic;
+
+-- I2C Master 0 Master Interface
+        o_i2c0_scl          : out std_logic;
+        io_i2c0_sda         : inout std_logic;
+
+-- SPI Master 0 Interface
+        o_spi0_sclk         : out std_logic;
+        o_spi0_mosi         : out std_logic;
+        i_spi0_miso         : in std_logic;
+        o_spi0_ss_n         : out std_logic;
 
 -- Xilinx Spartan 6 MCB DDR3 Interface
 --		io_ddr3_dq			: inout std_logic_vector (15 downto 0);
@@ -87,7 +98,13 @@ entity top is
 		i_mcrs_pad_i		: in std_logic;
 		io_md_pad_io		: inout std_logic;
 		o_mdc_pad_o			: out std_logic;
-		o_phy_reset_n		: out std_logic
+		o_phy_reset_n		: out std_logic;
+        
+-- JTAG Interface
+        altera_reserved_tck : in std_logic;
+        altera_reserved_tdi : in std_logic;
+        altera_reserved_tms : in std_logic;
+        altera_reserved_tdo : out std_logic
 
 -- {ALTERA_IO_END} DO NOT REMOVE THIS LINE!
 	);
@@ -104,8 +121,9 @@ architecture HIERARCHICAL of top is
 		port (
 -- BOARD
 			brd_rst			: in std_logic;
-			brd_clk_p		: in std_logic;
-			brd_clk_n		: in std_logic;
+			brd_clk 		: in std_logic;
+--			brd_clk_p		: in std_logic;
+--			brd_clk_n		: in std_logic;
 
 -- UART 0 Interface
 			i_uart0_rts		: in std_logic;
@@ -118,6 +136,16 @@ architecture HIERARCHICAL of top is
 			o_uart1_rx		: out std_logic;
 			o_uart1_cts		: out std_logic;
 			i_uart1_tx		: in std_logic;
+
+-- I2C Master 0 Master Interface
+            o_i2c0_scl      : out std_logic;
+            io_i2c0_sda     : inout std_logic;
+
+-- SPI Master 0 Interface
+            o_spi0_sclk     : out std_logic;
+            o_spi0_mosi     : out std_logic;
+            i_spi0_miso     : in std_logic;
+            o_spi0_ss_n     : out std_logic;
 
 -- Xilinx Spartan 6 MCB DDR3 Interface
 			ddr3_dq			: inout std_logic_vector (15 downto 0);
@@ -183,15 +211,21 @@ architecture HIERARCHICAL of top is
 --			i_wb_err		: in std_logic
 --		);
 --	end component;
+
+
+    signal          brd_rst : std_logic;
+    signal      i_reset_n_r : std_logic;
+    
 -- {ALTERA_COMPONENTS_END} DO NOT REMOVE THIS LINE!
 begin
 -- {ALTERA_INSTANTIATION_BEGIN} DO NOT REMOVE THIS LINE!
 	system_0: system
 		port map (
 -- BOARD
-			brd_rst			=> i_reset_n,
-			brd_clk_p		=> i_brd_clk_p,
-			brd_clk_n		=> i_brd_clk_n,
+			brd_rst			=> brd_rst,
+			brd_clk		    => i_brd_clk,
+--			brd_clk_p		=> i_brd_clk_p,
+--			brd_clk_n		=> i_brd_clk_n,
 
 -- UART 0 Interface
 			i_uart0_tx		=> i_uart0_tx,
@@ -204,6 +238,16 @@ begin
 			o_uart1_rx		=> open,
 			i_uart1_rts		=> '1',
 			o_uart1_cts		=> open,
+
+-- I2C Master 0 Master Interface
+            o_i2c0_scl      => o_i2c0_scl,
+            io_i2c0_sda     => io_i2c0_sda,
+
+-- SPI Master 0 Interface
+            o_spi0_sclk     => o_spi0_sclk,
+            o_spi0_mosi     => o_spi0_mosi,
+            i_spi0_miso     => i_spi0_miso,
+            o_spi0_ss_n     => o_spi0_ss_n,
 
 -- Xilinx Spartan 6 MCB DDR3 Interface
 			ddr3_dq			=> open,
@@ -282,6 +326,18 @@ begin
 --			i_wb_ack		=>	wb_i_ack,
 --			i_wb_err		=>	wb_i_err
 --	);
+
+
+    -- Synchronizing reset
+    --
+    reset_proc : process (i_brd_clk)
+    begin
+        if (rising_edge(i_brd_clk)) then
+            brd_rst     <= i_reset_n_r;
+            i_reset_n_r <= i_reset_n;
+        end if;
+    end process reset_proc;
+
 -- {ALTERA_INSTANTIATION_END} DO NOT REMOVE THIS LINE!
 
 end;

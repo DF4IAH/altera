@@ -48,8 +48,9 @@
 
 module clocks_resets  (
 input                       i_brd_rst,
-input                       i_brd_clk_n,  
-input                       i_brd_clk_p,  
+input                       i_brd_clk,  
+//input                       i_brd_clk_p,  
+//input                       i_brd_clk_n,  
 input                       i_ddr_calib_done,
 output                      o_sys_rst,
 output                      o_sys_clk,
@@ -262,16 +263,17 @@ assign o_sys_rst = rst0 || !calib_done_33mhz;
     assign calib_done_33mhz     = ddr_calib_done_sync_r[RST_SYNC_NUM-1];
     assign pll_locked           = sub_wire6;
 
-    cycloneiii_io_ibuf #(
-         .bus_hold                    ( "false"                  ),
-         .differential_mode           ( "true"                   ),
-         .lpm_type                    ( "cycloneiii_io_ibuf"     ))  // SP605 on chip termination of LVDS clock
-         u_ibufgds_brd
-        ( 
-         .i                           ( i_brd_clk_p              ),
-         .ibar                        ( i_brd_clk_n              ),
-         .o                           ( brd_clk_ibufg            )
-         );
+//    cycloneiii_io_ibuf #(
+//         .bus_hold                    ( "false"                  ),
+//         .differential_mode           ( "true"                   ),
+//         .lpm_type                    ( "cycloneiii_io_ibuf"     ))  // SP605 on chip termination of LVDS clock
+//         u_ibufgds_brd
+//        ( 
+//         .i                           ( i_brd_clk_p              ),
+//         .ibar                        ( i_brd_clk_n              ),
+//         .o                           ( brd_clk_ibufg            )
+//         );
+    assign brd_clk_ibufg        = i_brd_clk;                            // avoid using LVDS clock pair
 
     altpll #(
              .bandwidth_type          ( "AUTO"                   ),

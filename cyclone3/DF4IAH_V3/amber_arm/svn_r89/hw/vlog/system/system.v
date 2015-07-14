@@ -44,8 +44,9 @@
 module system
 (
 input                       brd_rst,
-input                       brd_clk_n,
-input                       brd_clk_p,
+input                       brd_clk,
+//input                       brd_clk_p,
+//input                       brd_clk_n,
 
 
 // UART 0 Interface
@@ -59,6 +60,16 @@ input                       i_uart1_rts,
 output                      o_uart1_rx,
 output                      o_uart1_cts,
 input                       i_uart1_tx,
+
+// I2C Master 0 Master Interface
+output                      o_i2c0_scl,
+inout                       io_i2c0_sda,
+
+// SPI Master 0 Interface
+output                      o_spi0_sclk,
+output                      o_spi0_mosi,
+input                       i_spi0_miso,
+output                      o_spi0_ss_n,
 
 // Xilinx Spartan 6 MCB DDR3 Interface
 inout  [15:0]               ddr3_dq,
@@ -112,6 +123,16 @@ output  [3:0]               led
 wire            sys_clk;    //  40 MHz System clock
 wire            ram_clk;    // 180 MHz to be used for the external SRAM access
 wire            sys_rst;    // Active high reset, synchronous to sys_clk
+
+
+// I2C Interface
+assign o_i2c0_scl   = 1'b1;
+assign io_i2c0_sda  = 1'bz;
+
+// SPI Interface
+assign o_spi0_sclk  = 1'b0;
+assign o_spi0_mosi  = 1'b0;
+assign o_spi0_ss_n  = 1'b1;
 
 
 // ======================================
@@ -234,8 +255,9 @@ wire      [2:0]             timer_int;
 // ======================================
 clocks_resets u_clocks_resets (
     .i_brd_rst          ( brd_rst           ),
-    .i_brd_clk_n        ( brd_clk_n         ),
-    .i_brd_clk_p        ( brd_clk_p         ),
+    .i_brd_clk          ( brd_clk           ),
+//    .i_brd_clk_p        ( brd_clk_p         ),
+//    .i_brd_clk_n        ( brd_clk_n         ),
     .i_ddr_calib_done   ( phy_init_done     ),
     .o_sys_rst          ( sys_rst           ),
     .o_sys_clk          ( sys_clk           ),
