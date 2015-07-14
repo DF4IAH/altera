@@ -99,7 +99,7 @@ entity top is
 		io_md_pad_io		: inout std_logic;
 		o_mdc_pad_o			: out std_logic;
 		o_phy_reset_n		: out std_logic;
-        
+
 -- JTAG Interface
         altera_reserved_tck : in std_logic;
         altera_reserved_tdi : in std_logic;
