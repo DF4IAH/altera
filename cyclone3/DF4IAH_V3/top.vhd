@@ -15,8 +15,8 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-library altera;
-use altera.altera_syn_attributes.all;
+-- library altera;
+-- use altera.altera_syn_attributes.all;
 
 -- use work.amber_types.all;
 
