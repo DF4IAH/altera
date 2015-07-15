@@ -114,13 +114,22 @@ generate
             .byteena_a (i_byte_enable),
             .byteena_b (i_byte_enable),
             .clock0 (i_clk),
+//          .clock1 (1'b0),
             .clocken0 (1'b1),
+//          .clocken1 (1'b0),
+//          .clocken2 (1'b0),
+//          .clocken3 (1'b0),
             .data_a (i_write_data),
             .data_b ({DATA_WIDTH{1'b0}}),
             .q_a (),
             .q_b (sub_wire),
+//          .rden_a (1'b0),
+//          .rden_b (1'b1),
             .wren_a (i_write_enable),
             .wren_b (1'b0)
+//          .aclr0 (1'b0),
+//          .aclr1 (1'b0),
+//          .eccstatus ()
 		  );
 
     end

@@ -8,7 +8,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-
+`include "amber_arm/svn_r89/hw/vlog/tb/global_timescale.vh"
 `include "amber_arm/svn_r89/hw/vlog/system/system_config_defines.vh"
 
 
@@ -106,18 +106,18 @@ wire                            i_uart1_rts;
 wire                            o_uart1_rx;
 wire                            o_uart1_cts;
 wire                            i_uart1_tx;
-wire                            ddr3_dq;
-wire                            ddr3_addr;
-wire                            ddr3_ba;
+wire        [15:0]              ddr3_dq;
+wire        [12:0]              ddr3_addr;
+wire        [ 2:0]              ddr3_ba;
 wire                            ddr3_ras_n;
 wire                            ddr3_cas_n;
 wire                            ddr3_we_n;
 wire                            ddr3_odt;
 wire                            ddr3_reset_n;
 wire                            ddr3_cke;
-wire                            ddr3_dm;
-wire                            ddr3_dqs_p;
-wire                            ddr3_dqs_n;
+wire        [ 1:0]              ddr3_dm;
+wire        [ 1:0]              ddr3_dqs_p;
+wire        [ 1:0]              ddr3_dqs_n;
 wire                            ddr3_ck_p;
 wire                            ddr3_ck_n;
 `ifdef XILINX_SPARTAN6_FPGA
@@ -173,14 +173,14 @@ system u_system (
     .i_uart1_tx         ( i_uart1_tx        ),
 
 // I2C Master 0 Master Interface
-//  .o_i2c0_scl         ( o_i2c0_scl        ),
-//  .io_i2c0_sda        ( io_i2c0_sda       ),
+    .o_i2c0_scl         ( o_i2c0_scl        ),
+    .io_i2c0_sda        ( io_i2c0_sda       ),
 
 // SPI Master 0 Interface
-//  .o_spi0_sclk        ( o_spi0_sclk       ),
-//  .o_spi0_mosi        ( o_spi0_mosi       ),
-//  .i_spi0_miso        ( i_spi0_miso       ),
-//  .o_spi0_ss_n        ( o_spi0_ss_n       ),
+    .o_spi0_sclk        ( o_spi0_sclk       ),
+    .o_spi0_mosi        ( o_spi0_mosi       ),
+    .i_spi0_miso        ( i_spi0_miso       ),
+    .o_spi0_ss_n        ( o_spi0_ss_n       ),
 
 // Xilinx Spartan 6 MCB DDR3 Interface
     .ddr3_dq            ( ddr3_dq           ),
@@ -199,7 +199,7 @@ system u_system (
     .ddr3_ck_n          ( ddr3_ck_n         ),
 
 `ifdef XILINX_SPARTAN6_FPGA
-    .mcb3_rzq           ( mcb3_rzq          ),
+//  .mcb3_rzq           ( mcb3_rzq          ),
 `endif
 
 

@@ -164,7 +164,7 @@ always @( posedge i_clk )
                 default: 
                     begin
                     //synopsys translate_off
-                    `TB_ERROR_MESSAGE
+//                    `TB_ERROR_MESSAGE
                     $write("unknown Timer Module Prescale Value %d for Timer 0", 
                            timer0_ctrl_reg[3:2]);
                     //synopsys translate_on
@@ -198,7 +198,7 @@ always @( posedge i_clk )
                 default: 
                     begin
                     //synopsys translate_off
-                    `TB_ERROR_MESSAGE
+//                    `TB_ERROR_MESSAGE
                     $write("unknown Timer Module Prescale Value %d for Timer 1", 
                            timer1_ctrl_reg[3:2]);
                     //synopsys translate_on
@@ -233,7 +233,7 @@ always @( posedge i_clk )
                 default: 
                     begin
                     //synopsys translate_off
-                    `TB_ERROR_MESSAGE
+//                    `TB_ERROR_MESSAGE
                     $write("unknown Timer Module Prescale Value %d for Timer 2", 
                            timer2_ctrl_reg[3:2]);
                     //synopsys translate_on

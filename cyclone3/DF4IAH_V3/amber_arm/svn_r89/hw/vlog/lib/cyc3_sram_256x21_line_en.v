@@ -115,24 +115,33 @@ generate
             .byteena_a ({32/8{1'b1}}),
             .byteena_b ({32/8{1'b1}}),
             .clock0 (i_clk),
+//          .clock1 (1'b0),
             .clocken0 (1'b1),
+//          .clocken1 (1'b0),
+//          .clocken2 (1'b0),
+//          .clocken3 (1'b0),
             .data_a ({{11'b0},i_write_data}),
             .data_b ({32{1'b0}}),
             .q_a (),
             .q_b (sub_wire),
+//          .rden_a (1'b0),
+//          .rden_b (1'b1),
             .wren_a (i_write_enable),
             .wren_b (1'b0)
+//          .aclr0 (1'b0),
+//          .aclr1 (1'b0),
+//          .eccstatus ()
 		  );
 
     end
 endgenerate
 
 //synopsys translate_off
-initial
-    begin
-    if ( DATA_WIDTH    != 128 ) $display("%M Warning: Incorrect parameter DATA_WIDTH");
-    if ( ADDRESS_WIDTH != 8   ) $display("%M Warning: Incorrect parameter ADDRESS_WIDTH");
-    end
+//initial
+//    begin
+//    if ( DATA_WIDTH    != 128 ) $display("%M Warning: Incorrect parameter DATA_WIDTH");
+//    if ( ADDRESS_WIDTH != 8   ) $display("%M Warning: Incorrect parameter ADDRESS_WIDTH");
+//    end
 //synopsys translate_on
 
 endmodule

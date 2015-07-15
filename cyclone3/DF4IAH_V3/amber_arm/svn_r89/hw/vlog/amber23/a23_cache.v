@@ -831,84 +831,84 @@ endgenerate
 // Debug WB bus - not synthesizable
 // ========================================================
 //synopsys translate_off
-wire    [(6*8)-1:0]     xSOURCE_SEL;
-wire    [(20*8)-1:0]    xC_STATE;
-
-assign xSOURCE_SEL = source_sel[C_CORE]            ? "C_CORE"           :
-                     source_sel[C_INIT]            ? "C_INIT"           :
-                     source_sel[C_FILL]            ? "C_FILL"           :
-                     source_sel[C_INVA]            ? "C_INVA"           :
-                                                     "UNKNON"           ;
- 
-assign xC_STATE    = c_state == CS_INIT            ? "CS_INIT"          :
-                     c_state == CS_IDLE            ? "CS_IDLE"          :
-                     c_state == CS_FILL1           ? "CS_FILL1"         :
-                     c_state == CS_FILL2           ? "CS_FILL2"         :
-                     c_state == CS_FILL3           ? "CS_FILL3"         :
-                     c_state == CS_FILL4           ? "CS_FILL4"         :
-                     c_state == CS_FILL_COMPLETE   ? "CS_FILL_COMPLETE" :
-                     c_state == CS_EX_DELETE       ? "CS_EX_DELETE"     :
-                     c_state == CS_TURN_AROUND     ? "CS_TURN_AROUND"   :
-                     c_state == CS_WRITE_HIT1      ? "CS_WRITE_HIT1"    :
-                                                     "UNKNOWN"          ;
-
-
-generate
-if ( WAYS == 2 ) begin : check_hit_2ways
-
-    always @( posedge i_clk )
-        if ( (data_hit_way[0] + data_hit_way[1] ) > 4'd1 )
-            begin
-            `TB_ERROR_MESSAGE
-            $display("Hit in more than one cache ways!");                                                  
-            end
-                                                      
-end
-else if ( WAYS == 3 ) begin : check_hit_3ways
-
-    always @( posedge i_clk )
-        if ( (data_hit_way[0] + data_hit_way[1] + data_hit_way[2] ) > 4'd1 )
-            begin
-            `TB_ERROR_MESSAGE
-            $display("Hit in more than one cache ways!");                                                  
-            end
-                           
-end
-else if ( WAYS == 4 ) begin : check_hit_4ways
-
-    always @( posedge i_clk )
-        if ( (data_hit_way[0] + data_hit_way[1] + 
-              data_hit_way[2] + data_hit_way[3] ) > 4'd1 )
-            begin
-            `TB_ERROR_MESSAGE
-            $display("Hit in more than one cache ways!");                                                  
-            end
-                           
-end
-else if ( WAYS == 8 )  begin : check_hit_8ways
-
-    always @( posedge i_clk )
-        if ( (data_hit_way[0] + data_hit_way[1] + 
-              data_hit_way[2] + data_hit_way[3] +
-              data_hit_way[4] + data_hit_way[5] +
-              data_hit_way[6] + data_hit_way[7] ) > 4'd1 )
-            begin
-            `TB_ERROR_MESSAGE
-            $display("Hit in more than one cache ways!");                                                  
-            end
-                           
-end
-else begin : check_hit_nways
-
-    initial
-        begin
-        `TB_ERROR_MESSAGE
-        $display("Unsupported number of ways %0d", WAYS);
-        $display("Set A23_CACHE_WAYS in a23_config_defines.v to either 2,3,4 or 8");
-        end
-
-end
-endgenerate
+//wire    [(6*8)-1:0]     xSOURCE_SEL;
+//wire    [(20*8)-1:0]    xC_STATE;
+//
+//assign xSOURCE_SEL = source_sel[C_CORE]            ? "C_CORE"           :
+//                     source_sel[C_INIT]            ? "C_INIT"           :
+//                     source_sel[C_FILL]            ? "C_FILL"           :
+//                     source_sel[C_INVA]            ? "C_INVA"           :
+//                                                     "UNKNON"           ;
+// 
+//assign xC_STATE    = c_state == CS_INIT            ? "CS_INIT"          :
+//                     c_state == CS_IDLE            ? "CS_IDLE"          :
+//                     c_state == CS_FILL1           ? "CS_FILL1"         :
+//                     c_state == CS_FILL2           ? "CS_FILL2"         :
+//                     c_state == CS_FILL3           ? "CS_FILL3"         :
+//                     c_state == CS_FILL4           ? "CS_FILL4"         :
+//                     c_state == CS_FILL_COMPLETE   ? "CS_FILL_COMPLETE" :
+//                     c_state == CS_EX_DELETE       ? "CS_EX_DELETE"     :
+//                     c_state == CS_TURN_AROUND     ? "CS_TURN_AROUND"   :
+//                     c_state == CS_WRITE_HIT1      ? "CS_WRITE_HIT1"    :
+//                                                     "UNKNOWN"          ;
+//
+//
+//generate
+//if ( WAYS == 2 ) begin : check_hit_2ways
+//
+//    always @( posedge i_clk )
+//        if ( (data_hit_way[0] + data_hit_way[1] ) > 4'd1 )
+//            begin
+//            `TB_ERROR_MESSAGE
+//            $display("Hit in more than one cache ways!");                                                  
+//            end
+//                                                      
+//end
+//else if ( WAYS == 3 ) begin : check_hit_3ways
+//
+//    always @( posedge i_clk )
+//        if ( (data_hit_way[0] + data_hit_way[1] + data_hit_way[2] ) > 4'd1 )
+//            begin
+//            `TB_ERROR_MESSAGE
+//            $display("Hit in more than one cache ways!");                                                  
+//            end
+//                           
+//end
+//else if ( WAYS == 4 ) begin : check_hit_4ways
+//
+//    always @( posedge i_clk )
+//        if ( (data_hit_way[0] + data_hit_way[1] + 
+//              data_hit_way[2] + data_hit_way[3] ) > 4'd1 )
+//            begin
+//            `TB_ERROR_MESSAGE
+//            $display("Hit in more than one cache ways!");                                                  
+//            end
+//                           
+//end
+//else if ( WAYS == 8 )  begin : check_hit_8ways
+//
+//    always @( posedge i_clk )
+//        if ( (data_hit_way[0] + data_hit_way[1] + 
+//              data_hit_way[2] + data_hit_way[3] +
+//              data_hit_way[4] + data_hit_way[5] +
+//              data_hit_way[6] + data_hit_way[7] ) > 4'd1 )
+//            begin
+//            `TB_ERROR_MESSAGE
+//            $display("Hit in more than one cache ways!");                                                  
+//            end
+//                           
+//end
+//else begin : check_hit_nways
+//
+//    initial
+//        begin
+//        `TB_ERROR_MESSAGE
+//        $display("Unsupported number of ways %0d", WAYS);
+//        $display("Set A23_CACHE_WAYS in a23_config_defines.v to either 2,3,4 or 8");
+//        end
+//
+//end
+//endgenerate
     
 //synopsys translate_on
     

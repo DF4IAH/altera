@@ -8,6 +8,8 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
+`include "amber_arm/svn_r89/hw/vlog/tb/global_timescale.vh"
+
 
 module tb_top #(
 parameter NONE  = 0
@@ -47,7 +49,7 @@ output      [15:0]              o_monitor
 wire                            i_uart0_tx;
 wire                            i_uart0_rts;
 wire                            i_spi0_miso;
-wire                            i_mrxd;
+wire        [ 3:0]              i_mrxd;
 wire                            i_mrxdv;
 wire                            i_mcoll;
 wire                            i_mcrs;
