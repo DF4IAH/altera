@@ -38,7 +38,7 @@
 // from http://www.opencores.org/lgpl.shtml                     //
 //                                                              //
 //////////////////////////////////////////////////////////////////
-`include "global_defines.vh"
+`include "../tb/global_defines.vh"
 
 module wb_sram_bridge #(
 parameter WB_DWIDTH   = 32,
@@ -73,20 +73,17 @@ inout       [SRAM_DATA_L-1:0]   io_sram_data                    // Databus
 );
 
 
-// Wishbone signals
-wire                    write_request;
-wire                    read_request;
-
 // SRAM signals
 reg  [7:0]              io_sram_data_l              = 'd0;
 reg                     io_sram_data_e              = 'd0;
-assign io_sram_data     = (io_sram_data_e) ?  io_sram_data_l : { SRAM_DATA_L{1'bz }};
 
 // Wishbone async signals
-assign write_request    = i_wb_stb &&  i_wb_we && write_ready_r;
-assign read_request     = i_wb_stb && !i_wb_we && read_ready_r;
-assign o_wb_ack         = i_wb_stb && (write_request || read_final_r);
-assign o_wb_err         = 'd0;
+reg                     write_ready_r               = 'd0;
+reg                     read_ready_r                = 'd0;
+reg                     write_final_r               = 'd0;
+reg                     read_final_r                = 'd0;
+assign write_request                                = i_wb_stb &&  i_wb_we && write_ready_r;
+assign read_request                                 = i_wb_stb && !i_wb_we && read_ready_r;
 
 
 // ------------------------------------------------------
@@ -112,8 +109,6 @@ localparam WB_FSM_READY_STATE   = 2'd1;
 localparam WB_FSM_WRITE_STATE   = 2'd2;
 localparam WB_FSM_READ_STATE    = 2'd3;
 reg  [1:0]              wb_state                    = WB_FSM_READY_STATE;
-reg                     write_ready_r               = 'd0;
-reg                     read_ready_r                = 'd0;
 reg  [SRAM_ADR_L-1:0]   wb_adr_r                    = 'd0;
 reg  [WB_DWIDTH-1:0]    wb_dat_r                    = 'd0;
 reg  [WB_SWIDTH-1:0]    wb_sel_r                    = 'd0;
@@ -190,8 +185,6 @@ localparam SRAM_FSM_READ_BYTE_HD_STATE  = 4'd7;
 localparam SRAM_FSM_READ_LOOP_STATE     = 4'd8;
 localparam SRAM_FSM_READ_END_STATE      = 4'd9;
 reg  [3:0]              sram_state      = SRAM_FSM_INIT_STATE;
-reg                     write_final_r   = 'd0;
-reg                     read_final_r    = 'd0;
 reg  [SRAM_ADR_L-1:0]   ram_adr_r       = 'd0;
 reg  [WB_DWIDTH-1:0]    ram_dat_r       = 'd0;
 reg  [WB_SWIDTH-1:0]    ram_sel_r       = 'd0;
@@ -542,5 +535,13 @@ always @( posedge i_ram_clk )
                     end
 
         endcase
+
+        
+// SRAM signals
+assign io_sram_data                                 = (io_sram_data_e) ?  io_sram_data_l : { SRAM_DATA_L{1'bz }};
+
+// Wishbone async signals
+assign o_wb_ack                                     = i_wb_stb && (write_request || read_final_r);
+assign o_wb_err                                     = 'd0;
 	  
 endmodule

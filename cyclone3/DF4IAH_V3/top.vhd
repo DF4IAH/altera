@@ -1,23 +1,19 @@
--- Copyright (C) 1991-2015 Altera Corporation. All rights reserved.
--- Your use of Altera Corporation's design tools, logic functions 
--- and other software and tools, and its AMPP partner logic 
--- functions, and any output files from any of the foregoing 
--- (including device programming or simulation files), and any 
--- associated documentation or information are expressly subject 
--- to the terms and conditions of the Altera Program License 
--- Subscription Agreement, the Altera Quartus II License Agreement,
--- the Altera MegaCore Function License Agreement, or other 
--- applicable license agreement, including, without limitation, 
--- that your use is for the sole purpose of programming logic 
--- devices manufactured by Altera and sold by Altera or its 
--- authorized distributors.  Please refer to the applicable 
--- agreement for further details.
+-- This is the VHDL top entity for the DF4IAH_V3 FPGA project
+--
+-- VHDL variant
+--
+--  Author(s):
+--      - Ulrich Habel, espero7757 at gmx.net
+--
+
 
 library ieee;
 use ieee.std_logic_1164.all;
--- library altera;
--- use altera.altera_syn_attributes.all;
 
+library altera;
+use altera.altera_syn_attributes.all;
+
+-- use work.all;
 -- use work.amber_types.all;
 
 
@@ -86,31 +82,34 @@ entity top is
 		io_sram_data		: inout std_logic_vector (7 downto 0);
 
 -- Ethmac B100 MAC to PHY Interface
-		i_mtx_clk_pad_i	    : in std_logic;
-		o_mtxd_pad_o		: out std_logic_vector (3 downto 0);
-		o_mtxen_pad_o		: out std_logic;
-		o_mtxerr_pad_o		: out std_logic;
-		i_mrx_clk_pad_i	    : in std_logic;
-		i_mrxd_pad_i		: in std_logic_vector (3 downto 0);
-		i_mrxdv_pad_i		: in std_logic;
-		i_mrxerr_pad_i		: in std_logic;
-		i_mcoll_pad_i		: in std_logic;
-		i_mcrs_pad_i		: in std_logic;
-		io_md_pad_io		: inout std_logic;
-		o_mdc_pad_o			: out std_logic;
-		o_phy_reset_n		: out std_logic;
+		i_mtx_clk_pad       : in std_logic;
+		o_mtxd              : out std_logic_vector (3 downto 0);
+		o_mtxen             : out std_logic;
+		o_mtxerr            : out std_logic;
+		i_mrx_clk           : in std_logic;
+		i_mrxd              : in std_logic_vector (3 downto 0);
+		i_mrxdv             : in std_logic;
+		i_mrxerr            : in std_logic;
+		i_mcoll             : in std_logic;
+		i_mcrs              : in std_logic;
+		io_md               : inout std_logic;
+		o_mdc               : out std_logic;
+		o_phy_reset_n       : out std_logic;
 
 -- JTAG Interface
         altera_reserved_tck : in std_logic;
         altera_reserved_tdi : in std_logic;
         altera_reserved_tms : in std_logic;
-        altera_reserved_tdo : out std_logic
+        altera_reserved_tdo : out std_logic;
 
+        o_monitor           : out std_logic_vector (15 downto 0)
 -- {ALTERA_IO_END} DO NOT REMOVE THIS LINE!
 	);
 
 -- {ALTERA_ATTRIBUTE_BEGIN} DO NOT REMOVE THIS LINE!
 --	signal ddr3_dq_top	: std_logic_vector (15 downto 0);
+
+    signal monitor : std_logic_vector (15 downto 0);
 -- {ALTERA_ATTRIBUTE_END} DO NOT REMOVE THIS LINE!
 end top;
 
@@ -290,18 +289,18 @@ begin
 			io_sram_data	=> io_sram_data,
 
 -- Ethmac B100 MAC to PHY Interface
-			mtx_clk_pad_i	=> i_mtx_clk_pad_i,
-			mtxd_pad_o		=> o_mtxd_pad_o,
-			mtxen_pad_o		=> o_mtxen_pad_o,
-			mtxerr_pad_o	=> o_mtxerr_pad_o,
-			mrx_clk_pad_i	=> i_mrx_clk_pad_i,
-			mrxd_pad_i		=> i_mrxd_pad_i,
-			mrxdv_pad_i		=> i_mrxdv_pad_i,
-			mrxerr_pad_i	=> i_mrxerr_pad_i,
-			mcoll_pad_i		=> i_mcoll_pad_i,
-			mcrs_pad_i		=> i_mcrs_pad_i,
-			md_pad_io		=> io_md_pad_io,
-			mdc_pad_o		=> o_mdc_pad_o,
+			mtx_clk_pad_i	=> i_mtx_clk,
+			mtxd_pad_o		=> o_mtxd,
+			mtxen_pad_o		=> o_mtxen,
+			mtxerr_pad_o	=> o_mtxerr,
+			mrx_clk_pad_i	=> i_mrx_clk,
+			mrxd_pad_i		=> i_mrxd,
+			mrxdv_pad_i		=> i_mrxdv,
+			mrxerr_pad_i	=> i_mrxerr,
+			mcoll_pad_i		=> i_mcoll,
+			mcrs_pad_i		=> i_mcrs,
+			md_pad_io		=> io_md,
+			mdc_pad_o		=> o_mdc,
 			phy_reset_n		=> o_phy_reset_n,
 
 			led				=> o_led
@@ -312,7 +311,7 @@ begin
 --			i_clk			=>	C_40MHZ,
 --			i_irq			=>	amber_i_irq,				-- Interrupt request, active high
 --			i_firq			=>	amber_i_firq,				-- Fast Interrupt request, active high
---			i_system_rdy	=>	amber_i_system_rdy,		-- Amber is stalled when this is low
+--			i_system_rdy	=>	amber_i_system_rdy,		    -- Amber is stalled when this is low
 --
 --			-- Wishbone Master I/F
 --			o_wb_adr(31 downto 8)	=>	open,
@@ -333,10 +332,15 @@ begin
     reset_proc : process (i_brd_clk)
     begin
         if (rising_edge(i_brd_clk)) then
-            brd_rst     <= i_reset_n_r;
-            i_reset_n_r <= i_reset_n;
+            brd_rst     <= i_reset_n_r;             monitor(2) <= i_reset_n_r;
+            i_reset_n_r <= i_reset_n;               monitor(1) <= i_reset_n;
         end if;
     end process reset_proc;
+    
+    -- Monitoring
+    --
+    monitor(0)          <= i_reset_n;
+    o_monitor           <= monitor;
 
 -- {ALTERA_INSTANTIATION_END} DO NOT REMOVE THIS LINE!
 

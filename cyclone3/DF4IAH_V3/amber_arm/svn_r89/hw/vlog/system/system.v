@@ -135,6 +135,11 @@ assign o_spi0_mosi  = 1'b0;
 assign o_spi0_ss_n  = 1'b1;
 
 
+wire            phy_init_done;
+wire            test_mem_ctrl;
+wire            system_rdy;
+
+
 // ======================================
 // Xilinx MCB DDR3 Controller connections
 // ======================================
@@ -152,10 +157,6 @@ wire            c3_p0_wr_full;
 `else
 assign phy_init_done = 1'd1;
 `endif
-
-wire            phy_init_done;
-wire            test_mem_ctrl;
-wire            system_rdy;
 
 
 // ======================================

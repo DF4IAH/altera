@@ -40,8 +40,8 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-`include "global_timescale.vh"
-`include "global_defines.vh"
+`include "../tb/global_timescale.vh"
+`include "../tb/global_defines.vh"
 `include "a23_config_defines.vh"
 
 module a23_decompile

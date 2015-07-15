@@ -1,36 +1,50 @@
+-- This is the VHDL test bench for the DF4IAH_V3 FPGA project
 --
--- TestBench
+-- VHDL variant
 --
+--  Author(s):
+--      - Ulrich Habel, espero7757 at gmx.net
+--
+
 
 library ieee;
 use ieee.std_logic_1164.all;
--- library altera;
--- use altera.altera_syn_attributes.all;
+
+-- use work.all;
+
 
 entity tb_top is
 	port
 	(
 -- Outputs and Inouts
-            o_led               : out   std_logic_vector( 3 downto 0);
+            o_led               : out   std_logic_vector ( 3 downto 0);
+
             o_uart0_rx          : out   std_logic;
             o_uart0_cts         : out   std_logic;
+
             o_i2c0_scl          : out   std_logic;
             io_i2c0_sda         : inout std_logic;
+
             o_spi0_sclk         : out   std_logic;
             o_spi0_mosi         : out   std_logic;
             o_spi0_ss_n         : out   std_logic;
-            o_sram_cs_n         : out   std_logic_vector( 3 downto 0);
+
+            o_sram_cs_n         : out   std_logic_vector ( 3 downto 0);
             o_sram_read_n       : out   std_logic;
             o_sram_write_n      : out   std_logic;
-            o_sram_addr         : out   std_logic_vector(20 downto 0);
-            io_sram_data        : inout std_logic_vector( 7 downto 0);
-            o_mtxd_pad_o        : out   std_logic_vector( 3 downto 0);
-            o_mtxen_pad_o       : out   std_logic;
-            o_mtxerr_pad_o      : out   std_logic;
-            io_md_pad_io        : inout std_logic;
-            o_mdc_pad_o         : out   std_logic;
+            o_sram_addr         : out   std_logic_vector (20 downto 0);
+            io_sram_data        : inout std_logic_vector ( 7 downto 0);
+
+            o_mtxd              : out   std_logic_vector ( 3 downto 0);
+            o_mtxen             : out   std_logic;
+            o_mtxerr            : out   std_logic;
+            io_md               : inout std_logic;
+            o_mdc               : out   std_logic;
             o_phy_reset_n       : out   std_logic;
-            altera_reserved_tdo : out   std_logic
+
+            altera_reserved_tdo : out   std_logic;
+
+            o_monitor           : out   std_logic_vector (15 downto 0)
 	);
 end tb_top;
 
@@ -90,32 +104,34 @@ architecture HIERARCHICAL of tb_top is
 -- endif
 
 -- Altera SRAM 2Mx8 Interface
-			o_sram_cs_n		: out std_logic_vector (3 downto 0);
-			o_sram_read_n	: out std_logic;
-			o_sram_write_n	: out std_logic;
-			o_sram_addr		: out std_logic_vector (20 downto 0);
-			io_sram_data	: inout std_logic_vector (7 downto 0);
+			o_sram_cs_n     : out std_logic_vector (3 downto 0);
+			o_sram_read_n   : out std_logic;
+			o_sram_write_n  : out std_logic;
+			o_sram_addr     : out std_logic_vector (20 downto 0);
+			io_sram_data    : inout std_logic_vector (7 downto 0);
 
 -- Ethmac B100 MAC to PHY Interface
-            i_mtx_clk_pad_i	: in std_logic;
-            o_mtxd_pad_o	: out std_logic_vector (3 downto 0);
-            o_mtxen_pad_o	: out std_logic;
-            o_mtxerr_pad_o	: out std_logic;
-            i_mrx_clk_pad_i	: in std_logic;
-            i_mrxd_pad_i	: in std_logic_vector (3 downto 0);
-            i_mrxdv_pad_i	: in std_logic;
-            i_mrxerr_pad_i	: in std_logic;
-            i_mcoll_pad_i	: in std_logic;
-            i_mcrs_pad_i	: in std_logic;
-            io_md_pad_io	: inout std_logic;
-            o_mdc_pad_o		: out std_logic;
-            o_phy_reset_n	: out std_logic;
+            i_mtx_clk       : in std_logic;
+            o_mtxd          : out std_logic_vector (3 downto 0);
+            o_mtxen         : out std_logic;
+            o_mtxerr        : out std_logic;
+            i_mrx_clk       : in std_logic;
+            i_mrxd          : in std_logic_vector (3 downto 0);
+            i_mrxdv         : in std_logic;
+            i_mrxerr        : in std_logic;
+            i_mcoll         : in std_logic;
+            i_mcrs          : in std_logic;
+            io_md           : inout std_logic;
+            o_mdc           : out std_logic;
+            o_phy_reset_n   : out std_logic;
 
 -- JTAG Interface
         altera_reserved_tck : in std_logic;
         altera_reserved_tdi : in std_logic;
         altera_reserved_tms : in std_logic;
-        altera_reserved_tdo : out std_logic
+        altera_reserved_tdo : out std_logic;
+
+        o_monitor           : out std_logic_vector (15 downto 0)
 	);
 	end component;
 
@@ -126,41 +142,23 @@ architecture HIERARCHICAL of tb_top is
     signal i_uart0_tx                   : std_logic;
     signal i_uart0_rts                  : std_logic;
     signal i_spi0_miso                  : std_logic;
-    signal i_mtx_clk_pad_i              : std_logic;
-    signal i_mrx_clk_pad_i              : std_logic;
-    signal i_mrxd_pad_i                 : std_logic_vector( 3 downto 0);
-    signal i_mrxdv_pad_i                : std_logic;
-    signal i_mrxerr_pad_i               : std_logic;
-    signal i_mcoll_pad_i                : std_logic;
-    signal i_mcrs_pad_i                 : std_logic;
+    signal i_mtx_clk                    : std_logic;
+    signal i_mrx_clk                    : std_logic;
+    signal i_mrxd                       : std_logic_vector ( 3 downto 0);
+    signal i_mrxdv                      : std_logic;
+    signal i_mrxerr                     : std_logic;
+    signal i_mcoll                      : std_logic;
+    signal i_mcrs                       : std_logic;
     signal altera_reserved_tck          : std_logic;
     signal altera_reserved_tdi          : std_logic;
     signal altera_reserved_tms          : std_logic;
 
-    -- Outputs and Inouts
---    signal o_led                        : std_logic_vector( 3 downto 0);
---    signal o_uart0_rx                   : std_logic;
---    signal o_uart0_cts                  : std_logic;
---    signal o_i2c0_scl                   : std_logic;
---    signal io_i2c0_sda                  : std_logic;
---    signal o_spi0_sclk                  : std_logic;
---    signal o_spi0_mosi                  : std_logic;
---    signal o_spi0_ss_n                  : std_logic;
---    signal o_sram_cs_n                  : std_logic_vector( 3 downto 0);
---    signal o_sram_read_n                : std_logic;
---    signal o_sram_write_n               : std_logic;
---    signal o_sram_addr                  : std_logic_vector(20 downto 0);
---    signal io_sram_data                 : std_logic_vector( 7 downto 0);
---    signal o_mtxd_pad_o                 : std_logic_vector( 3 downto 0);
---    signal o_mtxen_pad_o                : std_logic;
---    signal o_mtxerr_pad_o               : std_logic;
---    signal io_md_pad_io                 : std_logic;
---    signal o_mdc_pad_o                  : std_logic;
---    signal o_phy_reset_n                : std_logic;
---    signal altera_reserved_tdo          : std_logic;
 
     -- Clock period definitions
-    constant i_brd_clk_period           : time := 40 ns;
+    constant i_brd_clk_period           : time := 50 ns;    -- 20 MHz
+
+    constant i_mtx_mrx_clk_period       : time := 40 ns;    -- 25 MHz
+    constant i_mtx_mrx_offset           : time :=  1 ns;
 
 BEGIN
 
@@ -228,49 +226,50 @@ BEGIN
 		io_sram_data		=> io_sram_data,
 
 -- Ethmac B100 MAC to PHY Interface
-		i_mtx_clk_pad_i	    => i_mtx_clk_pad_i,
-		o_mtxd_pad_o		=> o_mtxd_pad_o,
-		o_mtxen_pad_o		=> o_mtxen_pad_o,
-		o_mtxerr_pad_o		=> o_mtxerr_pad_o,
-		i_mrx_clk_pad_i	    => i_mrx_clk_pad_i,
-		i_mrxd_pad_i		=> i_mrxd_pad_i,
-		i_mrxdv_pad_i		=> i_mrxdv_pad_i,
-		i_mrxerr_pad_i		=> i_mrxerr_pad_i,
-		i_mcoll_pad_i		=> i_mcoll_pad_i,
-		i_mcrs_pad_i		=> i_mcrs_pad_i,
-		io_md_pad_io		=> io_md_pad_io,
-		o_mdc_pad_o			=> o_mdc_pad_o,
-		o_phy_reset_n		=> o_phy_reset_n,
+		i_mtx_clk           => i_mtx_clk,
+		o_mtxd              => o_mtxd,
+		o_mtxen             => o_mtxen,
+		o_mtxerr            => o_mtxerr,
+		i_mrx_clk           => i_mrx_clk,
+		i_mrxd              => i_mrxd,
+		i_mrxdv             => i_mrxdv,
+		i_mrxerr            => i_mrxerr,
+		i_mcoll             => i_mcoll,
+		i_mcrs              => i_mcrs,
+		io_md               => io_md,
+		o_mdc               => o_mdc,
+		o_phy_reset_n       => o_phy_reset_n,
 
 -- JTAG Interface
         altera_reserved_tck => altera_reserved_tck,
         altera_reserved_tdi => altera_reserved_tdi,
         altera_reserved_tms => altera_reserved_tms,
-        altera_reserved_tdo => altera_reserved_tdo
+        altera_reserved_tdo => altera_reserved_tdo,
+
+        o_monitor           => o_monitor
     );
 
     -- Clock process definitions
     brd_clk_proc: process
     begin
         i_brd_clk <= '0';
---      wait for i_brd_clk_period/2;
-        wait for 25 ns;
+        wait for i_brd_clk_period/2;
         i_brd_clk <= '1';
-        wait for 25 ns;
+        wait for i_brd_clk_period/2;
     end process brd_clk_proc;
 
     -- MII clock process definitions
     mii_clk_proc: process
     begin
-		i_mtx_clk_pad_i	    <= '0';
-        wait for 0.2 ns;
-		i_mrx_clk_pad_i	    <= '0';
-        wait for 19.8 ns;
+		i_mtx_clk           <= '0';
+        wait for i_mtx_mrx_offset;
+		i_mrx_clk           <= '0';
+        wait for i_mtx_mrx_clk_period/2 - i_mtx_mrx_offset;
 
-		i_mtx_clk_pad_i	    <= '1';
-        wait for 0.2 ns;
-		i_mrx_clk_pad_i	    <= '1';
-        wait for 19.8 ns;
+		i_mtx_clk           <= '1';
+        wait for i_mtx_mrx_offset;
+		i_mrx_clk           <= '1';
+        wait for i_mtx_mrx_clk_period/2 - i_mtx_mrx_offset;
     end process mii_clk_proc;
 
     -- Stimulus process
@@ -288,12 +287,12 @@ BEGIN
 
   		io_sram_data		<= "XXXXXXXX";
 
-		i_mrxd_pad_i		<= "0000";
-		i_mrxdv_pad_i		<= '0';
-		i_mrxerr_pad_i		<= '0';
-		i_mcoll_pad_i		<= '0';
-		i_mcrs_pad_i		<= '0';
-		io_md_pad_io		<= 'H';
+		i_mrxd              <= "0000";
+		i_mrxdv             <= '0';
+		i_mrxerr            <= '0';
+		i_mcoll             <= '0';
+		i_mcrs              <= '0';
+		io_md               <= 'H';
 
         altera_reserved_tck <= 'H';
         altera_reserved_tdi <= 'H';

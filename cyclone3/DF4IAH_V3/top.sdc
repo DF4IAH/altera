@@ -74,7 +74,7 @@ create_clock -name {clk_eth_tx}          -period 40.000 -waveform { 0.000 20.000
 create_clock -name {clk_eth_tx_virtual}  -period 40.000 -waveform { 0.000 20.000 }
 create_clock -name {clk_eth_rx}          -period 40.000 -waveform { 0.000 20.000 } [get_ports i_mrx_clk*]
 create_clock -name {clk_eth_rx_virtual}  -period 40.000 -waveform { 0.000 20.000 }
-create_clock -name {clk_eth_mgt}         -period 40.000 -waveform { 0.000 20.000 } [get_ports o_mdc_*]
+create_clock -name {clk_eth_mgt}         -period 40.000 -waveform { 0.000 20.000 } [get_ports o_mdc*]
 create_clock -name {clk_eth_mgt_virtual} -period 40.000 -waveform { 0.000 20.000 }
 #create_clock -name {clk_sram}            -period 11.111 -waveform { 0.000  5.555 } [get_nodes ]
 create_clock -name {clk_sram_virtual}    -period 11.111 -waveform { 0.000  5.555 }
@@ -105,7 +105,7 @@ derive_clock_uncertainty
 # Create the input maximum delay for the data input to the FPGA that accounts for all delays specified
 set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports { i_uart* io_i2c* i_spi* }]
 set_input_delay -clock clk_eth_rx_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports { i_mrx* i_mcoll* i_mcrs* }]
-set_input_delay -clock clk_eth_mgt_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports io_md_*]
+set_input_delay -clock clk_eth_mgt_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports io_md*]
 set_input_delay -clock clk_sram_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports { io_sram_* }]
 #set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports amber_i_*]
 #set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports wb_i_*]
@@ -113,7 +113,7 @@ set_input_delay -clock clk_sram_virtual -max [expr $CLKs_max + $tCO_max + $BD_ma
 # Create the input minimum delay for the data input to the FPGA that accounts for all delays specified
 set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports { i_uart* io_i2c* i_spi* }]
 set_input_delay -clock clk_eth_rx_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports { i_mrx* i_mcoll* i_mcrs* }]
-set_input_delay -clock clk_eth_mgt_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports io_md_*]
+set_input_delay -clock clk_eth_mgt_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports io_md*]
 set_input_delay -clock clk_sram_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports { io_sram_* }]
 #set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports amber_i_*]
 #set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports wb_i_*]
@@ -143,8 +143,8 @@ set_output_delay -clock clk_sram_virtual -min [expr $CLKs_min + $BD_min - $tH - 
 #**************************************************************
 # Set False Path
 #**************************************************************
-set_false_path -from [get_ports { i_reset_n io_md_pad_io }] -to [all_registers]
-set_false_path -from [all_registers] -to [get_ports { o_mdc_pad_o io_md_pad_io o_phy_reset_n }]
+set_false_path -from [get_ports { i_reset_n io_md }] -to [all_registers]
+set_false_path -from [all_registers] -to [get_ports { o_mdc io_md o_phy_reset_n }]
 
 
 #**************************************************************
