@@ -102,7 +102,28 @@ output      [15:0]              o_monitor
 );
 
 
-wire        [15:0]              monitor;
+wire                            i_uart1_rts;
+wire                            o_uart1_rx;
+wire                            o_uart1_cts;
+wire                            i_uart1_tx;
+wire                            ddr3_dq;
+wire                            ddr3_addr;
+wire                            ddr3_ba;
+wire                            ddr3_ras_n;
+wire                            ddr3_cas_n;
+wire                            ddr3_we_n;
+wire                            ddr3_odt;
+wire                            ddr3_reset_n;
+wire                            ddr3_cke;
+wire                            ddr3_dm;
+wire                            ddr3_dqs_p;
+wire                            ddr3_dqs_n;
+wire                            ddr3_ck_p;
+wire                            ddr3_ck_n;
+`ifdef XILINX_SPARTAN6_FPGA
+wire                            mcb3_rzq;
+`endif
+
 reg                             i_reset_n_r     = 'd0;
 reg                             brd_rst         = 'd0;
 
@@ -133,7 +154,7 @@ reg                             brd_rst         = 'd0;
 // System Module
 // ======================================
 system u_system (
-    .brd_rst            ( i_reset_n         ),
+    .brd_rst            ( brd_rst           ),
     .brd_clk            ( i_brd_clk         ),
 //  .brd_clk_p          ( i_brd_clk_p       ),
 //  .brd_clk_n          ( i_brd_clk_n       ),
@@ -208,6 +229,10 @@ system u_system (
 
     .led                ( o_led             )
 );
+
+
+wire        [15:0]      monitor = 16'bz;
+
 
 
 // Synchronizing reset

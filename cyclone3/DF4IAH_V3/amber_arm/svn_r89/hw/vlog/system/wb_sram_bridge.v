@@ -82,6 +82,9 @@ reg                     write_ready_r               = 'd0;
 reg                     read_ready_r                = 'd0;
 reg                     write_final_r               = 'd0;
 reg                     read_final_r                = 'd0;
+wire                    write_request;
+wire                    read_request;
+
 assign write_request                                = i_wb_stb &&  i_wb_we && write_ready_r;
 assign read_request                                 = i_wb_stb && !i_wb_we && read_ready_r;
 

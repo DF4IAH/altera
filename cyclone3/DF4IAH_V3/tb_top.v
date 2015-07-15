@@ -44,6 +44,17 @@ output      [15:0]              o_monitor
 );
 
 
+wire                            i_uart0_tx;
+wire                            i_uart0_rts;
+wire                            i_spi0_miso;
+wire                            i_mrxd;
+wire                            i_mrxdv;
+wire                            i_mcoll;
+wire                            i_mcrs;
+wire                            altera_reserved_tck;
+wire                            altera_reserved_tdi;
+wire                            altera_reserved_tms;
+
 reg                             i_reset_n;
 reg                             i_brd_clk;
 reg                             i_mtx_clk;
