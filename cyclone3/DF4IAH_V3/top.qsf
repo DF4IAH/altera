@@ -124,11 +124,11 @@ set_location_assignment PIN_196 -to i_uart0_rts
 set_location_assignment PIN_189 -to i_uart0_tx
 set_location_assignment PIN_194 -to o_uart0_cts
 set_location_assignment PIN_195 -to o_uart0_rx
-set_global_assignment -name SEARCH_PATH \\\\psf\\home\\documents\\altera\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\lib
-set_global_assignment -name SEARCH_PATH \\\\psf\\home\\documents\\altera\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\ethmac
-set_global_assignment -name SEARCH_PATH \\\\psf\\home\\documents\\altera\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\system
-set_global_assignment -name SEARCH_PATH \\\\psf\\home\\documents\\altera\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\amber23
-set_global_assignment -name SEARCH_PATH \\\\psf\\home\\documents\\altera\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\tb
+set_global_assignment -name SEARCH_PATH \\\\psf\\Home\\Documents\\Altera\\DF4IAH_V3\\amber_arm\\svn_r89\\hw\\vlog\\lib
+set_global_assignment -name SEARCH_PATH \\\\psf\\Home\\Documents\\Altera\\DF4IAH_V3\\amber_arm\\svn_r89\\hw\\vlog\\ethmac
+set_global_assignment -name SEARCH_PATH \\\\psf\\Home\\Documents\\Altera\\DF4IAH_V3\\amber_arm\\svn_r89\\hw\\vlog\\system
+set_global_assignment -name SEARCH_PATH \\\\psf\\Home\\Documents\\Altera\\DF4IAH_V3\\amber_arm\\svn_r89\\hw\\vlog\\amber23
+set_global_assignment -name SEARCH_PATH \\\\psf\\Home\\Documents\\Altera\\DF4IAH_V3\\amber_arm\\svn_r89\\hw\\vlog\\tb
 set_location_assignment PIN_31 -to i_brd_clk
 set_location_assignment PIN_21 -to o_i2c0_scl
 set_location_assignment PIN_22 -to io_i2c0_sda
