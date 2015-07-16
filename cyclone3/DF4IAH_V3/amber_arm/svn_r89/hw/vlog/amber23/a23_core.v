@@ -43,6 +43,7 @@
 module a23_core
 (
 input                       i_clk,
+input                       i_rst,
 
 input                       i_irq,              // Interrupt request, active high
 input                       i_firq,             // Fast Interrupt request, active high
@@ -268,6 +269,7 @@ a23_decode u_decode (
 
 a23_execute u_execute (
     .i_clk                              ( i_clk                             ),
+    .i_rst                              ( i_rst                             ),
     
     .i_read_data                        ( read_data_s2                      ),
     .i_read_data_alignment              ( read_data_alignment               ), 

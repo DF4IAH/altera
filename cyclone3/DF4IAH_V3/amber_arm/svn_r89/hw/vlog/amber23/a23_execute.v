@@ -47,6 +47,7 @@
 module a23_execute (
 
 input                       i_clk,
+input                       i_rst,
 input       [31:0]          i_read_data,
 input       [4:0]           i_read_data_alignment,  // 2 LSBs of address in [4:3], appended 
                                                     // with 3 zeros
@@ -460,7 +461,7 @@ always @( posedge i_clk )
     o_data_access           <= data_access_update             ? i_data_access_exec           : o_data_access;
     o_write_enable          <= write_enable_update            ? write_enable_nxt             : o_write_enable;
     o_write_data            <= write_data_update              ? write_data_nxt               : o_write_data; 
-    address_r               <= address_update                 ? o_address_nxt                : address_r;    
+    address_r               <= i_rst ?  'd0 :  address_update ? o_address_nxt                : address_r;
     o_adex                  <= address_update                 ? adex_nxt                     : o_adex;    
     o_address_valid         <= address_update                 ? 1'd1                         : o_address_valid;
     o_byte_enable           <= byte_enable_update             ? byte_enable_nxt              : o_byte_enable;

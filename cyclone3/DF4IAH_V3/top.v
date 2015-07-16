@@ -239,14 +239,14 @@ wire        [15:0]      monitor = 16'bz;
 //
 always @ ( posedge i_brd_clk )
     begin
-    brd_rst     <= i_reset_n_r;
-    i_reset_n_r <= i_reset_n;
+    brd_rst     <= !i_reset_n_r;
+    i_reset_n_r <=  i_reset_n;
     end
 
 // Monitoring
 //
-assign monitor[2] = i_reset_n_r;
-assign monitor[1] = i_reset_n;
+assign monitor[2] = brd_rst;
+assign monitor[1] = i_reset_n_r;
 assign monitor[0] = i_reset_n;
 assign o_monitor  = monitor;
 

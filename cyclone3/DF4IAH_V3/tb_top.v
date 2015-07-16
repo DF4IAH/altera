@@ -157,7 +157,7 @@ initial
     i_mtx_clk = 0;
     i_mrx_clk = 0;
 
-    #10000  i_reset_n = 1;
+    #100000  i_reset_n = 1;                 // 100 ns
     end
 
 
