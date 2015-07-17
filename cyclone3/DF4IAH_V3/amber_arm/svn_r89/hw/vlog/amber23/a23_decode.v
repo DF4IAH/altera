@@ -44,6 +44,7 @@
 module a23_decode
 (
 input                       i_clk,
+input                       i_system_rdy,
 input       [31:0]          i_read_data,
 input                       i_fetch_stall,                  // stall all stages of the cpu at the same time
 input                       i_irq,                          // interrupt request
@@ -62,8 +63,8 @@ input                       i_multiply_done,                // multiply unit is 
 // --------------------------------------------------
 // Control signals to execute stage
 // --------------------------------------------------
-output reg  [31:0]          o_read_data = 1'd0,
-output reg  [4:0]           o_read_data_alignment = 1'd0,  // 2 LSBs of read address used for calculating shift in LDRB ops
+output reg  [31:0]          o_read_data = 'd0,
+output reg  [4:0]           o_read_data_alignment = 'd0,  // 2 LSBs of read address used for calculating shift in LDRB ops
 
 output reg  [31:0]          o_imm32 = 'd0,
 output reg  [4:0]           o_imm_shift_amount = 'd0,
@@ -1555,7 +1556,63 @@ assign instruction_valid = (control_state == EXECUTE || control_state == PRE_FET
 // Register Update
 // ========================================================
 always @ ( posedge i_clk )
-    if (!i_fetch_stall)
+    if (!i_system_rdy)
+        begin
+        o_read_data                 <= 'd0;
+        o_read_data_alignment       <= 'd0;
+        abt_address_reg             <= 'd0;
+        iabt_reg                    <= 'd0;
+        adex_reg                    <= 'd0;
+        abt_status_reg              <= 'd0;
+        status_bits_mode_r          <= 'd0;
+        status_bits_irq_mask_r      <= 'd0;
+        status_bits_firq_mask_r     <= 'd0;
+        o_imm32                     <= 'd0;
+        o_imm_shift_amount          <= 'd0;
+        o_shift_imm_zero            <= 'd0;
+        condition_r                 <= 'd0;
+        o_exclusive_exec            <= 'd0;
+        o_data_access_exec          <= 'd0;
+        o_rm_sel                    <= 'd0;
+        o_rds_sel                   <= 'd0;
+        o_rn_sel                    <= 'd0;
+        o_barrel_shift_amount_sel   <= 'd0;
+        o_barrel_shift_data_sel     <= 'd0;
+        o_barrel_shift_function     <= 'd0;
+        o_alu_function              <= 'd0;
+        o_use_carry_in              <= 'd0;
+        o_multiply_function         <= 'd0;
+        o_interrupt_vector_sel      <= 'd0;
+        address_sel_r               <= 'd0;
+        pc_sel_r                    <= 'd0;
+        o_byte_enable_sel           <= 'd0;
+        o_status_bits_sel           <= 'd0;
+        o_reg_write_sel             <= 'd0;
+        o_user_mode_regs_load       <= 'd0;
+        o_firq_not_user_mode        <= 'd0;
+        o_write_data_wen            <= 'd0;
+        o_base_address_wen          <= 'd0;
+        pc_wen_r                    <= 'd0;
+        o_reg_bank_wsel             <= 'd0;
+        o_reg_bank_wen              <= 'd0;
+        o_status_bits_flags_wen     <= 'd0;
+        o_status_bits_mode_wen      <= 'd0;
+        o_status_bits_irq_mask_wen  <= 'd0;
+        o_status_bits_firq_mask_wen <= 'd0;
+        o_copro_opcode1             <= 'd0;
+        o_copro_opcode2             <= 'd0;
+        o_copro_crn                 <= 'd0;
+        o_copro_crm                 <= 'd0;
+        o_copro_num                 <= 'd0;
+        o_copro_operation           <= 'd0;
+        o_copro_write_data_wen      <= 'd0;
+        mtrans_r15                  <= 'd0;
+        restore_base_address        <= 'd0;
+        control_state               <= 'd0;
+        mtrans_reg_d1               <= 'd0;
+        mtrans_reg_d2               <= 'd0;
+        end
+    else if (!i_fetch_stall)
         begin
         o_read_data                 <= i_read_data;
         o_read_data_alignment       <= {i_execute_address[1:0], 3'd0};
@@ -1623,7 +1680,20 @@ always @ ( posedge i_clk )
 
 
 always @ ( posedge i_clk )
-    if ( !i_fetch_stall )
+    if ( !i_system_rdy )
+        begin
+        saved_current_instruction              <= 'd0;
+        saved_current_instruction_iabt         <= 'd0;
+        saved_current_instruction_adex         <= 'd0;
+        saved_current_instruction_address      <= 'd0;
+        saved_current_instruction_iabt_status  <= 'd0;
+        pre_fetch_instruction                  <= 'd0;
+        pre_fetch_instruction_iabt             <= 'd0;
+        pre_fetch_instruction_adex             <= 'd0;
+        pre_fetch_instruction_address          <= 'd0;
+        pre_fetch_instruction_iabt_status      <= 'd0;
+        end
+    else if ( !i_fetch_stall )
         begin
         // sometimes this is a pre-fetch instruction
         // e.g. two ldr instructions in a row. The second ldr will be saved
@@ -1660,7 +1730,14 @@ always @ ( posedge i_clk )
 
 
 always @ ( posedge i_clk )
-    if ( !i_fetch_stall )
+    if ( !i_system_rdy )
+        begin
+        irq         <= 'd0;
+        firq        <= 'd0;
+        dabt_reg    <= 'd0;
+        dabt_reg_d1 <= 'd0;
+        end
+    else if ( !i_fetch_stall )
         begin
         irq   <= i_irq;
         firq  <= i_firq;
@@ -1745,5 +1822,3 @@ assign dabt = dabt_reg || i_dabt;
 //synopsys translate_on
 
 endmodule
-
-

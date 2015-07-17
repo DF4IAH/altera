@@ -114,6 +114,7 @@ assign o_fetch_stall     = !i_system_rdy || wb_stall || cache_stall;
 // ======================================
 a23_cache u_cache (
     .i_clk                      ( i_clk                 ),
+    .i_system_rdy               ( i_system_rdy          ),
      
     .i_select                   ( sel_cache             ),
     .i_exclusive                ( i_exclusive           ),
@@ -142,6 +143,7 @@ a23_cache u_cache (
 a23_wishbone u_wishbone (
     // CPU Side
     .i_clk                      ( i_clk                 ),
+    .i_system_rdy               ( i_system_rdy          ),
     
     // Core Accesses to Wishbone bus
     .i_select                   ( sel_wb                ),
@@ -170,4 +172,3 @@ a23_wishbone u_wishbone (
 
 
 endmodule
-

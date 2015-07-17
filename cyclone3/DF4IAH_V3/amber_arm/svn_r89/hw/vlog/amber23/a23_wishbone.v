@@ -58,6 +58,7 @@
 module a23_wishbone
 (
 input                       i_clk,
+input                       i_system_rdy,
 
 // Core Accesses to Wishbone bus
 input                       i_select,
@@ -146,7 +147,13 @@ assign byte_enable          = wbuf_busy_r                                   ? wb
 
 
 always @( posedge i_clk )
-    if ( wb_wait && !wbuf_busy_r && (core_write_request || cache_write_request) )
+    if ( !i_system_rdy )
+        begin
+        wbuf_addr_r <= 1'd0;
+        wbuf_sel_r  <= 1'd0;
+        wbuf_busy_r <= 1'd0;
+        end
+    else if ( wb_wait && !wbuf_busy_r && (core_write_request || cache_write_request) )
         begin
         wbuf_addr_r <= i_address;
         wbuf_sel_r  <= i_byte_enable;
@@ -159,7 +166,9 @@ always @( posedge i_clk )
 // Register Accesses
 // ======================================
 always @( posedge i_clk )
-    if ( start_access )
+    if ( !i_system_rdy )
+        o_wb_dat <= 'd0;
+    else if ( start_access )
         o_wb_dat <= i_write_data;
 
 
@@ -167,7 +176,17 @@ assign wait_write_ack = o_wb_stb && o_wb_we && !i_wb_ack;
 
 
 always @( posedge i_clk )
-    case ( wishbone_st )
+    if ( !i_system_rdy )
+        begin
+        o_wb_stb            <=  1'd0; 
+        o_wb_cyc            <=  1'd0; 
+        o_wb_sel            <=  4'hf;
+        o_wb_we             <=  1'd0;
+        o_wb_adr[31:2]      <= 30'd0;
+        servicing_cache     <=  1'd0;
+        wishbone_st         <= WB_IDLE;
+        end
+    else case ( wishbone_st )
         WB_IDLE :
             begin 
                 
@@ -176,6 +195,8 @@ always @( posedge i_clk )
                 o_wb_stb            <= 1'd1; 
                 o_wb_cyc            <= 1'd1; 
                 o_wb_sel            <= byte_enable;
+                wishbone_st      <= WB_WAIT_ACK;
+                exclusive_access    <= 1'd0;
                 end
             else if ( !wait_write_ack )
                 begin
@@ -301,4 +322,3 @@ assign xAS_STATE  = wishbone_st == WB_IDLE       ? "WB_IDLE"       :
 //synopsys translate_on
     
 endmodule
-

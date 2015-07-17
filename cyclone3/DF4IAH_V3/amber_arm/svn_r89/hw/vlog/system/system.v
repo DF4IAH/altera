@@ -277,7 +277,6 @@ a25_core u_amber (
 a23_core u_amber (
 `endif
     .i_clk          ( sys_clk         ),
-    .i_rst          ( sys_rst         ),
     
 
     .i_irq          ( amber_irq       ),
@@ -893,9 +892,4 @@ u_ethmac_wb (
     .i_s_wb_err             ( ems_wb_err        )
 );
 
-
-
-
 endmodule
-
-

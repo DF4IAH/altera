@@ -50,6 +50,7 @@ input       [3:0]           i_copro_num,
 input       [1:0]           i_copro_operation,
 input       [31:0]          i_copro_write_data,
 
+input                       i_system_rdy,
 input                       i_fault,          // high to latch the fault address and status
 input       [7:0]           i_fault_status,
 input       [31:0]          i_fault_address,  // the address that caused the fault
@@ -117,7 +118,14 @@ always @ ( posedge i_clk )
 // Register Writes
 // ---------------------------
 always @ ( posedge i_clk )
-    if ( !i_fetch_stall )         
+    if ( !i_system_rdy )
+        begin
+        cache_control   <= 'd0;
+        cacheable_area  <= 'd0;
+        updateable_area <= 'd0;
+        disruptive_area <= 'd0;
+        end
+    else if ( !i_fetch_stall )         
         begin
         if ( i_copro_operation == 2'd2 )
             case ( i_copro_crn )
@@ -135,8 +143,12 @@ assign copro15_reg1_write = !i_fetch_stall && i_copro_operation == 2'd2 && i_cop
 // ---------------------------
 // Register Reads   
 // ---------------------------
-always @ ( posedge i_clk )        
-    if ( !i_fetch_stall )
+always @ ( posedge i_clk )
+    if ( !i_system_rdy )
+        begin
+        o_copro_read_data <= 32'd0;
+        end
+    else if ( !i_fetch_stall )
         case ( i_copro_crn )
             // ID Register - [31:24] Company id, [23:16] Manuf id, [15:8] Part type, [7:0] revision
             4'd0:    o_copro_read_data <= 32'h4156_0300;
@@ -161,7 +173,12 @@ reg [1:0]  copro_operation_d1;
 reg [3:0]  copro_crn_d1;
 
 always @( posedge i_clk )
-    if ( !i_fetch_stall )
+    if ( !i_system_rdy )
+        begin
+        copro_operation_d1  <= 'd0;
+        copro_crn_d1        <= 'd0;
+        end
+    else if ( !i_fetch_stall )
         begin
         copro_operation_d1  <= i_copro_operation;
         copro_crn_d1        <= i_copro_crn;

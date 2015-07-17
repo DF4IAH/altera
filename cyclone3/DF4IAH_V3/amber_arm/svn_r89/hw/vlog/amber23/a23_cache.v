@@ -83,6 +83,7 @@ parameter WORD_SEL_LSB      =                  2                           // = 
 
 (
 input                               i_clk,
+input                               i_system_rdy,
 
 // Read / Write requests from core
 input                               i_select,
@@ -219,7 +220,13 @@ assign o_wb_req        = (( read_miss || write_miss ) && c_state == CS_IDLE ) ||
 
 // Little State Machine to Flush Tag RAMS
 always @ ( posedge i_clk )
-    if ( i_cache_flush )
+    if ( !i_system_rdy )
+        begin
+        c_state     <= CS_INIT;
+        source_sel  <= 1'd1 << C_INIT;
+        init_count  <= 'd0;
+        end
+    else if ( i_cache_flush )
         begin
         c_state     <= CS_INIT;
         source_sel  <= 1'd1 << C_INIT;
@@ -353,7 +360,9 @@ always @ ( posedge i_clk )
 // Capture WB Block Read - burst of 4 words
 // ======================================
 always @ ( posedge i_clk )
-    if ( !i_wb_stall )
+    if ( !i_system_rdy )
+        wb_rdata_burst <= 'd0;
+    else if ( !i_wb_stall )
         wb_rdata_burst <= {i_wb_read_data, wb_rdata_burst[127:32]};
 
 
@@ -361,8 +370,13 @@ always @ ( posedge i_clk )
 // WB Read Buffer
 // ======================================
 always @ ( posedge i_clk )
-    begin
-    if ( c_state == CS_FILL1 || c_state == CS_FILL2 || 
+    if ( !i_system_rdy )
+        begin
+        wb_read_buf_valid   <= 1'd0;
+        wb_read_buf_address <=  'd0;
+        wb_read_buf_data    <=  'd0;
+        end
+    else if ( c_state == CS_FILL1 || c_state == CS_FILL2 || 
          c_state == CS_FILL3 || c_state == CS_FILL4 )
         begin
         if ( !i_wb_stall )
@@ -374,14 +388,15 @@ always @ ( posedge i_clk )
         end
     else    
         wb_read_buf_valid   <= 1'd0;
-    end
         
 
 // ======================================
 // Miss Address
 // ======================================
 always @ ( posedge i_clk )
-    if ( o_wb_req )
+    if ( !i_system_rdy )
+        miss_address <= 'd0;
+    else if ( o_wb_req )
         miss_address <= i_address;
         
 
@@ -391,7 +406,12 @@ always @ ( posedge i_clk )
 assign ex_read_hit_clear = c_state == CS_EX_DELETE;
 
 always @ ( posedge i_clk )
-    if ( ex_read_hit_clear )
+    if ( !i_system_rdy )
+        begin
+        ex_read_hit_r   <= 1'd0;
+        ex_read_hit_way <= 'd0;
+        end
+    else if ( ex_read_hit_clear )
         begin
         ex_read_hit_r   <= 1'd0;
         ex_read_hit_way <= 'd0;
@@ -412,7 +432,9 @@ always @ ( posedge i_clk )
 
         
 always @ (posedge i_clk)
-    if ( ex_read_hit )
+    if ( !i_system_rdy )
+        ex_read_address <= 'd0;
+    else if ( ex_read_hit )
         ex_read_address <= i_address[CACHE_ADDR32_MSB:CACHE_ADDR32_LSB];
 
 
@@ -593,7 +615,9 @@ generate
 if ( WAYS == 2 ) begin : valid_bits_2ways
 
     always @ ( posedge i_clk )
-        if ( c_state == CS_IDLE )
+        if ( !i_system_rdy )
+            valid_bits_r <= 'd0;
+        else if ( c_state == CS_IDLE )
             valid_bits_r <= {tag_rdata_way[1][TAG_WIDTH-1], 
                              tag_rdata_way[0][TAG_WIDTH-1]};
                            
@@ -601,7 +625,9 @@ end
 else if ( WAYS == 3 ) begin : valid_bits_3ways
 
     always @ ( posedge i_clk )
-        if ( c_state == CS_IDLE )
+        if ( !i_system_rdy )
+            valid_bits_r <= 'd0;
+        else if ( c_state == CS_IDLE )
             valid_bits_r <= {tag_rdata_way[2][TAG_WIDTH-1], 
                              tag_rdata_way[1][TAG_WIDTH-1], 
                              tag_rdata_way[0][TAG_WIDTH-1]};
@@ -610,7 +636,9 @@ end
 else if ( WAYS == 4 ) begin : valid_bits_4ways
 
     always @ ( posedge i_clk )
-        if ( c_state == CS_IDLE )
+        if ( !i_system_rdy )
+            valid_bits_r <= 'd0;
+        else if ( c_state == CS_IDLE )
             valid_bits_r <= {tag_rdata_way[3][TAG_WIDTH-1], 
                              tag_rdata_way[2][TAG_WIDTH-1], 
                              tag_rdata_way[1][TAG_WIDTH-1], 
@@ -620,7 +648,9 @@ end
 else begin : valid_bits_8ways
 
     always @ ( posedge i_clk )
-        if ( c_state == CS_IDLE )
+        if ( !i_system_rdy )
+            valid_bits_r <= 'd0;
+        else if ( c_state == CS_IDLE )
             valid_bits_r <= {tag_rdata_way[7][TAG_WIDTH-1], 
                              tag_rdata_way[6][TAG_WIDTH-1], 
                              tag_rdata_way[5][TAG_WIDTH-1], 
@@ -795,16 +825,16 @@ else begin : pick_way_8ways
             // way 3 not occupied so use it
             pick_way     = 8'b00001000;
         else if ( valid_bits[4] == 1'd0 )
-            // way 3 not occupied so use it
+            // way 4 not occupied so use it
             pick_way     = 8'b00010000;
         else if ( valid_bits[5] == 1'd0 )
-            // way 3 not occupied so use it
+            // way 5 not occupied so use it
             pick_way     = 8'b00100000;
         else if ( valid_bits[6] == 1'd0 )
-            // way 3 not occupied so use it
+            // way 6 not occupied so use it
             pick_way     = 8'b01000000;
         else if ( valid_bits[7] == 1'd0 )
-            // way 3 not occupied so use it
+            // way 7 not occupied so use it
             pick_way     = 8'b10000000;
         else
             begin
@@ -913,4 +943,3 @@ endgenerate
 //synopsys translate_on
     
 endmodule
-

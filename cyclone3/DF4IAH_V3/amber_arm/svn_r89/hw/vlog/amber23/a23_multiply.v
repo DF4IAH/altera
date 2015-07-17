@@ -55,6 +55,7 @@
 
 module a23_multiply (
 input                       i_clk,
+input                       i_system_rdy,
 input                       i_fetch_stall,
 
 input       [31:0]          i_a_in,         // Rds
@@ -64,7 +65,7 @@ input                       i_execute,
 
 output      [31:0]          o_out,
 output      [1:0]           o_flags,        // [1] = N, [0] = Z
-output reg                  o_done = 'd0    // goes high 2 cycles before completion                                          
+output reg                  o_done = 1'd0   // goes high 2 cycles before completion                                          
 );
 
 
@@ -75,9 +76,9 @@ wire [33:0] multiplier_bar;
 wire [33:0] sum;
 wire [33:0] sum34_b;
 
-reg  [5:0]  count = 'd0;
+reg  [5:0]  count = 6'd0;
 reg  [5:0]  count_nxt;
-reg  [67:0] product = 'd0;
+reg  [67:0] product = 68'd0;
 reg  [67:0] product_nxt;
 reg  [1:0]  flags_nxt;
 wire [32:0] sum_acc1;           // the MSB is the carry out for the upper 32 bit addition
@@ -184,7 +185,13 @@ always @*
 
 
 always @ ( posedge i_clk )
-    if ( !i_fetch_stall )
+    if ( !i_system_rdy )
+        begin
+        count           <=  6'd0;
+        product         <= 68'd0;
+        o_done          <=  1'd0;
+        end
+    else if ( !i_fetch_stall )
         begin
         count           <= i_execute ? count_nxt          : count;           
         product         <= i_execute ? product_nxt        : product;        

@@ -44,6 +44,7 @@
 module a23_ram_register_bank (
 
 input                       i_clk,
+input                       i_system_rdy,
 input                       i_fetch_stall,
 
 input       [1:0]           i_mode_exec,            // registered cpu mode from execution stage
@@ -181,8 +182,25 @@ assign o_rn =	rn_15  ?			r15_out_rn :
 // ========================================================
 // Register Update
 // ========================================================
+integer loc_addr;
 always @ ( posedge i_clk )
-    if (!i_fetch_stall)
+    if (!i_system_rdy)
+        begin
+        for (loc_addr = 0; loc_addr < 16; loc_addr = loc_addr + 1)
+            begin  
+            reg_ram_n[loc_addr]     <= 32'd0;
+            reg_ram_m[loc_addr]     <= 32'd0;
+            reg_ram_ds[loc_addr]    <= 32'd0;
+            end
+        r15                     <= 24'd0;
+        rn_addr_reg             <=  5'd0;
+        rm_addr_reg             <=  5'd0;
+        rds_addr_reg            <=  5'd0;
+        rn_15                   <=  1'd0;
+        rm_15                   <=  1'd0;
+        rds_15                  <=  1'd0;
+        end
+    else if (!i_fetch_stall)
         begin
 
         // Register write.
@@ -320,5 +338,3 @@ assign r14_out = reg_ram_m[reg_addr(mode_exec, 14)];
 // synthesis translate_on
 
 endmodule
-
-

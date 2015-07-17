@@ -44,6 +44,7 @@
 module a23_register_bank (
 
 input                       i_clk,
+input                       i_system_rdy,
 input                       i_fetch_stall,
 
 input       [1:0]           i_mode_idec,            // user, supervisor, irq_idec, firq_idec etc.
@@ -171,7 +172,44 @@ assign firq_exec = i_mode_exec == FIRQ;
 // Register Update
 // ========================================================
 always @ ( posedge i_clk )
-    if (!i_fetch_stall)
+    if (!i_system_rdy)
+        begin                   // synchronious register reset
+        r0       <=  32'd0;
+        r1       <=  32'd0;
+        r2       <=  32'd0;
+        r3       <=  32'd0;
+        r4       <=  32'd0;
+        r5       <=  32'd0;
+        r6       <=  32'd0;
+        r7       <=  32'd0;
+        
+        r8       <=  32'd0;
+        r9       <=  32'd0;
+        r10      <=  32'd0;
+        r11      <=  32'd0;
+        r12      <=  32'd0;
+        
+        r8_firq  <=  32'd0;
+        r9_firq  <=  32'd0;
+        r10_firq <=  32'd0;
+        r11_firq <=  32'd0;
+        r12_firq <=  32'd0;
+
+        r13      <=  32'd0;
+        r14      <=  32'd0;
+     
+        r13_svc  <=  32'd0;
+        r14_svc  <=  32'd0;
+       
+        r13_irq  <=  32'd0;
+        r14_irq  <=  32'd0;
+      
+        r13_firq <=  32'd0;
+        r14_firq <=  32'd0;
+        
+        r15      <=  24'd0;
+        end
+    else if (!i_fetch_stall)
         begin
         r0       <=  i_reg_bank_wen[0 ]              ? i_reg : r0;  
         r1       <=  i_reg_bank_wen[1 ]              ? i_reg : r1;  
@@ -370,5 +408,3 @@ assign o_rn = i_rn_sel == 4'd0  ? r0_out  :
 
 
 endmodule
-
-

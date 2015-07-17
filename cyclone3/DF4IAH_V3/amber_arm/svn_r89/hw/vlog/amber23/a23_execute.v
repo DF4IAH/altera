@@ -47,7 +47,7 @@
 module a23_execute (
 
 input                       i_clk,
-input                       i_rst,
+input                       i_system_rdy,
 input       [31:0]          i_read_data,
 input       [4:0]           i_read_data_alignment,  // 2 LSBs of address in [4:3], appended 
                                                     // with 3 zeros
@@ -154,7 +154,7 @@ wire                barrel_shift_carry;
 wire                barrel_shift_carry_alu;
 
 wire [3:0]          status_bits_flags_nxt;
-reg  [3:0]          status_bits_flags = 'd0;
+reg  [3:0]          status_bits_flags = 4'd0;
 wire [1:0]          status_bits_mode_nxt;
 wire [1:0]          status_bits_mode_nr;
 reg  [1:0]          status_bits_mode = SVC;
@@ -455,27 +455,50 @@ assign status_bits_mode_nr             =  status_bits_mode_update        ? statu
                                                                            status_bits_mode         ;
 
 always @( posedge i_clk )
-    begin                                                                                                             
-    o_priviledged           <= priviledged_update             ? priviledged_nxt              : o_priviledged;
-    o_exclusive             <= exclusive_update               ? i_exclusive_exec             : o_exclusive;
-    o_data_access           <= data_access_update             ? i_data_access_exec           : o_data_access;
-    o_write_enable          <= write_enable_update            ? write_enable_nxt             : o_write_enable;
-    o_write_data            <= write_data_update              ? write_data_nxt               : o_write_data; 
-    address_r               <= i_rst ?  'd0 :  address_update ? o_address_nxt                : address_r;
-    o_adex                  <= address_update                 ? adex_nxt                     : o_adex;    
-    o_address_valid         <= address_update                 ? 1'd1                         : o_address_valid;
-    o_byte_enable           <= byte_enable_update             ? byte_enable_nxt              : o_byte_enable;
-    o_copro_write_data      <= copro_write_data_update        ? write_data_nxt               : o_copro_write_data; 
+    if (!i_system_rdy)
+        begin
+        o_priviledged           <=  1'd0;
+        o_exclusive             <=  1'd0;
+        o_data_access           <=  1'd0;
+        o_write_enable          <=  1'd0;
+        o_write_data            <= 32'd0;
+        address_r               <= 32'd0;
+        o_adex                  <=  1'd0;
+        o_address_valid         <=  1'd0;
+        o_byte_enable           <=  4'd0;
+        o_copro_write_data      <= 32'd0;
 
-    base_address            <= base_address_update            ? rn                           : base_address;    
+        base_address            <= 32'd0;
 
-    status_bits_flags       <= status_bits_flags_update       ? status_bits_flags_nxt        : status_bits_flags;
-    status_bits_mode        <=  status_bits_mode_nr;
-    status_bits_mode_rds_oh <= status_bits_mode_rds_oh_update ? status_bits_mode_rds_oh_nxt  : status_bits_mode_rds_oh;
-    status_bits_mode_rds    <= status_bits_mode_rds_nr;
-    status_bits_irq_mask    <= status_bits_irq_mask_update    ? status_bits_irq_mask_nxt     : status_bits_irq_mask;
-    status_bits_firq_mask   <= status_bits_firq_mask_update   ? status_bits_firq_mask_nxt    : status_bits_firq_mask;
-    end
+        status_bits_flags       <=  4'd0;
+        status_bits_mode        <= SVC;
+        status_bits_mode_rds_oh <= (1'd1 << OH_SVC);
+        status_bits_mode_rds    <=  2'd0;
+        status_bits_irq_mask    <=  1'd1;
+        status_bits_firq_mask   <=  1'd1;
+        end
+    else 
+        begin                                                                                                             
+        o_priviledged           <= priviledged_update             ? priviledged_nxt              : o_priviledged;
+        o_exclusive             <= exclusive_update               ? i_exclusive_exec             : o_exclusive;
+        o_data_access           <= data_access_update             ? i_data_access_exec           : o_data_access;
+        o_write_enable          <= write_enable_update            ? write_enable_nxt             : o_write_enable;
+        o_write_data            <= write_data_update              ? write_data_nxt               : o_write_data; 
+        address_r               <= address_update                 ? o_address_nxt                : address_r;
+        o_adex                  <= address_update                 ? adex_nxt                     : o_adex;    
+        o_address_valid         <= address_update                 ? 1'd1                         : o_address_valid;
+        o_byte_enable           <= byte_enable_update             ? byte_enable_nxt              : o_byte_enable;
+        o_copro_write_data      <= copro_write_data_update        ? write_data_nxt               : o_copro_write_data; 
+
+        base_address            <= base_address_update            ? rn                           : base_address;    
+
+        status_bits_flags       <= status_bits_flags_update       ? status_bits_flags_nxt        : status_bits_flags;
+        status_bits_mode        <= status_bits_mode_nr;
+        status_bits_mode_rds_oh <= status_bits_mode_rds_oh_update ? status_bits_mode_rds_oh_nxt  : status_bits_mode_rds_oh;
+        status_bits_mode_rds    <= status_bits_mode_rds_nr;
+        status_bits_irq_mask    <= status_bits_irq_mask_update    ? status_bits_irq_mask_nxt     : status_bits_irq_mask;
+        status_bits_firq_mask   <= status_bits_firq_mask_update   ? status_bits_firq_mask_nxt    : status_bits_firq_mask;
+        end
 
 assign o_address = address_r;
 
@@ -526,6 +549,7 @@ a23_alu u_alu (
 // ========================================================
 a23_multiply u_multiply (
     .i_clk          ( i_clk                 ),
+    .i_system_rdy   ( i_system_rdy          ),
     .i_fetch_stall  ( i_fetch_stall         ),
     .i_a_in         ( rs                    ),
     .i_b_in         ( rm                    ),
@@ -543,6 +567,7 @@ a23_multiply u_multiply (
 `ifndef A23_RAM_REGISTER_BANK
 a23_register_bank u_register_bank(
     .i_clk                   ( i_clk                     ),
+    .i_system_rdy            ( i_system_rdy              ),
     .i_fetch_stall           ( i_fetch_stall             ),
     .i_rm_sel                ( i_rm_sel                  ),
     .i_rds_sel               ( i_rds_sel                 ),
@@ -574,6 +599,7 @@ a23_register_bank u_register_bank(
 `else
 a23_ram_register_bank u_register_bank(
     .i_clk                   ( i_clk                     ),
+    .i_system_rdy            ( i_system_rdy              ),
     .i_fetch_stall           ( i_fetch_stall             ),
     .i_rm_sel                ( i_rm_sel_nxt              ),
     .i_rds_sel               ( i_rds_sel_nxt             ),
@@ -635,5 +661,3 @@ assign  xMODE  =  status_bits_mode == SVC  ? "SVC"  :
 //synopsys translate_on
 
 endmodule
-
-
