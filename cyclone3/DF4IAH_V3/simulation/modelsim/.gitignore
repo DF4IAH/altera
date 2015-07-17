@@ -1,5 +1,6 @@
 *.bak*
 bootmem.hex
+gate_work
 modelsim.ini
 msim_transcript
 rtl_work
@@ -12,7 +13,9 @@ top_8_1200mv_85c_v_slow.sdo
 top_min_1200mv_0c_fast.vo
 top_min_1200mv_0c_v_fast.sdo
 top_modelsim.xrf
+top_run_msim_gate_verilog.do
 top_run_msim_rtl_verilog.do
 top_v.sdo
+top_v.sdo_typ.csd
 vsim.wlf
 wlft*
