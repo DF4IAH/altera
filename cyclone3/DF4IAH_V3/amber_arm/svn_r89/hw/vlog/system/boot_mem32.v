@@ -1,13 +1,13 @@
 //////////////////////////////////////////////////////////////////
 //                                                              //
-//  8KBytes SRAM configured with boot software                  //
+//  16 KBytes SRAM configured with boot software                //
 //                                                              //
 //  This file is part of the Amber project                      //
 //  http://www.opencores.org/project,amber                      //
 //                                                              //
 //  Description                                                 //
 //  Holds just enough software to get the system going.         //
-//  The boot loader fits into this 8KB embedded SRAM on the     //
+//  The boot loader fits into this 16 KB embedded SRAM on the   //
 //  FPGA and enables it to load large applications via the      //
 //  serial port (UART) into the DDR3 memory                     //
 //                                                              //
@@ -111,7 +111,8 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
 `ifdef AMBER_WISHBONE_DEBUG
     assign o_wb_ack    = i_wb_stb && ( start_write || start_read_r[jitter_r[1]] );
 `else
-    assign o_wb_ack    = i_wb_stb && ( start_write || start_read_r );
+//    assign o_wb_ack    = i_wb_stb && ( start_write || start_read_r );
+    assign o_wb_ack    = 'd0;
 `endif
 
 // ------------------------------------------------------
@@ -137,7 +138,8 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
     `endif
 `endif 
 )
-`elsif ALTERA_CYCLONE3_FPGA
+`elsif ALTERA_FPGA
+`ifdef ALTERA_CYCLONE3_FPGA
     cyc3_sram_4096x32_byte_en
 `elsif ALTERA_MAX10_FPGA
     max10_sram_4096x32_byte_en
@@ -145,8 +147,9 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
     generic_sram_byte_en
 `endif 
 #(
-    .DATA_WIDTH     ( WB_DWIDTH             ),
-    .ADDRESS_WIDTH  ( MADDR_WIDTH           )
+    .DATA_WIDTH     ( WB_DWIDTH            ),
+    .ADDRESS_WIDTH  ( MADDR_WIDTH          ),
+    .INIT_FILE      ( "bootmem.hex"        )
 )
 u_mem (
     .i_clk          ( i_wb_clk             ),
@@ -156,6 +159,7 @@ u_mem (
     .o_read_data    ( read_data            ),
     .i_write_data   ( write_data           )
 );
+`endif 
 
 
 // =======================================================================================
@@ -175,5 +179,3 @@ u_mem (
 //synopsys translate_on
     
 endmodule
-
-

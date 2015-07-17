@@ -47,7 +47,7 @@ module cyc3_sram_256x128_byte_en
 parameter DATA_WIDTH         = 128,
 parameter ADDRESS_WIDTH      = 8,
 parameter BLOCK_WIDTH        = 128,
-parameter INIT_FILE          = "cyc3_byte_cache_init.hex"
+parameter INIT_FILE          = "none.hex"
 )
 
 (

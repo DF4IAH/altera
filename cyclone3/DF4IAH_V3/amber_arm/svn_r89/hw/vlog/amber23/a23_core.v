@@ -191,7 +191,6 @@ a23_fetch u_fetch (
 
 a23_decode u_decode (
     .i_clk                              ( i_clk                             ),
-    .i_system_rdy                       ( i_system_rdy                      ),
     
     // Instruction fetch or data read signals
     .i_read_data                        ( read_data                         ),                                          

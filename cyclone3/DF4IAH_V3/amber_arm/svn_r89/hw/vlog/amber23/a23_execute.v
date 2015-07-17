@@ -455,7 +455,7 @@ assign status_bits_mode_nr             =  status_bits_mode_update        ? statu
                                                                            status_bits_mode         ;
 
 always @( posedge i_clk )
-    if (!i_system_rdy)
+    if ( !i_system_rdy )
         begin
         o_priviledged           <=  1'd0;
         o_exclusive             <=  1'd0;

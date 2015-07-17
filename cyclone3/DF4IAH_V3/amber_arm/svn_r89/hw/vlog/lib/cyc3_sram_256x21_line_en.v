@@ -50,7 +50,7 @@ parameter DATA_WIDTH         = 21,
 parameter INITIALIZE_TO_ZERO = 0,
 parameter ADDRESS_WIDTH      = 8,
 parameter BLOCK_WIDTH        = 32,
-parameter INIT_FILE          = "cyc3_line_cache_init.hex"
+parameter INIT_FILE          = "none.hex"
 )
 
 (

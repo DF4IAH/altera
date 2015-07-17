@@ -47,7 +47,7 @@ module cyc3_sram_1024x128_byte_en
 parameter DATA_WIDTH         = 128,
 parameter ADDRESS_WIDTH      = 10,
 parameter BLOCK_WIDTH        = 128,
-parameter INIT_FILE          = "bootram.hex"
+parameter INIT_FILE          = "none.hex"
 )
 
 (
