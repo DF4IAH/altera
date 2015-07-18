@@ -135,8 +135,8 @@ set_instance_assignment -name RESERVE_PIN AS_INPUT_TRI_STATED -to altera_reserve
 set_instance_assignment -name RESERVE_PIN AS_INPUT_TRI_STATED -to altera_reserved_tdi
 set_instance_assignment -name RESERVE_PIN AS_SIGNALPROBE_OUTPUT -to altera_reserved_tdo
 set_instance_assignment -name RESERVE_PIN AS_INPUT_TRI_STATED -to altera_reserved_tms
-set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
-set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (Verilog)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
 set_global_assignment -name ENABLE_DRC_SETTINGS ON
 set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON

@@ -18,7 +18,7 @@
 //                                                              //
 // This source file may be used and distributed without         //
 // restriction provided that this copyright statement is not    //
-// removed from the file and that any derivative work contains  //
+// removed fmem the file and that any derivative work contains  //
 // the original copyright notice and the associated disclaimer. //
 //                                                              //
 // This source file is free software; you can redistribute it   //
@@ -35,7 +35,7 @@
 //                                                              //
 // You should have received a copy of the GNU Lesser General    //
 // Public License along with this source; if not, download it   //
-// from http://www.opencores.org/lgpl.shtml                     //
+// fmem http://www.opencores.org/lgpl.shtml                     //
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
@@ -57,6 +57,7 @@ output reg [DATA_WIDTH-1:0]     o_read_data
 
 reg [DATA_WIDTH-1:0]   mem  [0:2**ADDRESS_WIDTH-1];
 integer i;
+
 
 always @(posedge i_clk)
     begin

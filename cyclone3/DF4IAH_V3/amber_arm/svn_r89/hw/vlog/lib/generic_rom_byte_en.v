@@ -57,7 +57,8 @@ output reg [DATA_WIDTH-1:0]     o_read_data
     
 reg         [DATA_WIDTH-1:0]    rom [0:2**ADDRESS_WIDTH-1];
 
-initial begin
+initial 
+    begin
     rom['h 000] = 32'h 0C94_6F00;
     rom['h 001] = 32'h 0C94_5603;
     rom['h 002] = 32'h 0C94_8C00;
@@ -74,11 +75,11 @@ initial begin
     rom['h 00d] = 32'h 0C94_2501;
     rom['h 00e] = 32'h 0C94_8C00;
     rom['h 00f] = 32'h 0C94_8C00;
-    rom['h 010] = 32'h 0C94_6F00; 
+    rom['h 010] = 32'h 0C94_6F00;
     rom['h 011] = 32'h 0C94_5603;
     rom['h 012] = 32'h 0C94_8C00;
     rom['h 013] = 32'h 0C94_8C00;
-    rom['h 014] = 32'h 0C94_8C00; 
+    rom['h 014] = 32'h 0C94_8C00;
     rom['h 015] = 32'h 0C94_8C00;
     rom['h 016] = 32'h 0C94_8C00;
     rom['h 017] = 32'h 0C94_8C00;
@@ -94,9 +95,7 @@ initial begin
     rom['h 021] = 32'h 7300_2E00;
     rom['h 022] = 32'h 6E00_6500;
     rom['h 023] = 32'h 7400_2203;
-    
-//    rom['h 0xx] = 32'h xxxx_xxxx;
-    end     
+    end
 
 
 //assign o_read_data = i_write_enable ? {DATA_WIDTH{1'bx}} : rom[i_address];
