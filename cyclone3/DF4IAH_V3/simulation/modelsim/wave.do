@@ -430,9 +430,9 @@ add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM
 add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/io_sram_data
 add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/io_sram_data_l
 add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/io_sram_data_e
-add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/o_sram_cs_n
-add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/o_sram_read_n
-add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/o_sram_write_n
+add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/o_sram_cs
+add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/o_sram_read
+add wave -noupdate -group SRAM_Bridge__S2 -expand -group I/O -expand -group SRAM /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/o_sram_write
 add wave -noupdate -group SRAM_Bridge__S2 -expand -group Internal -expand -group State -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/sram_state
 add wave -noupdate -group SRAM_Bridge__S2 -expand -group Internal -expand -group State -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_cyc_ctr
 add wave -noupdate -group SRAM_Bridge__S2 -expand -group Internal -expand -group State /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_request
