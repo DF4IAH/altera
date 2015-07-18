@@ -111,9 +111,9 @@ output                      phy_reset_n,
 
 `ifdef ALTERA_FPGA
 // Altera SRAM 2Mx8 Interface
-output  [3:0]               o_sram_cs_n,
-output                      o_sram_read_n,
-output                      o_sram_write_n,
+output  [3:0]               o_sram_cs,
+output                      o_sram_read,
+output                      o_sram_write,
 output  [20:0]              o_sram_addr,
 inout   [7:0]               io_sram_data,
 `endif
@@ -691,9 +691,9 @@ u_interrupt_controller (
                 .i_wb_clk              ( sys_clk               ),
                 .i_ram_clk             ( ram_clk               ),
 
-                .o_sram_cs_n           ( o_sram_cs_n           ),
-                .o_sram_read_n         ( o_sram_read_n         ),
-                .o_sram_write_n        ( o_sram_write_n        ),
+                .o_sram_cs             ( o_sram_cs             ),
+                .o_sram_read           ( o_sram_read           ),
+                .o_sram_write          ( o_sram_write          ),
                 .o_sram_addr           ( o_sram_addr           ),
                 .io_sram_data          ( io_sram_data          ),
 

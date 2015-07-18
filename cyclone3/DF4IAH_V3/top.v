@@ -220,9 +220,9 @@ system u_system (
 
 `ifdef ALTERA_FPGA
 // Altera SRAM 2Mx8 Interface
-    .o_sram_cs_n        ( o_sram_cs_n       ),
-    .o_sram_read_n      ( o_sram_read_n     ),
-    .o_sram_write_n     ( o_sram_write_n    ),
+    .o_sram_cs          ( !o_sram_cs_n      ),
+    .o_sram_read        ( !o_sram_read_n    ),
+    .o_sram_write       ( !o_sram_write_n   ),
     .o_sram_addr        ( o_sram_addr       ),
     .io_sram_data       ( io_sram_data      ),
 `endif
