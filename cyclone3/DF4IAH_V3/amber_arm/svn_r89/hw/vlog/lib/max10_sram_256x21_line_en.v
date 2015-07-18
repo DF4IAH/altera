@@ -74,11 +74,11 @@ parameter BLOCK_WIDTH        = 32
 // synopsys translate_on
 `endif
 
-   genvar   i;
 
 	wire [BLOCK_WIDTH-1:0] sub_wire;
 	wire [DATA_WIDTH-1:0] o_read_data = sub_wire[DATA_WIDTH-1:0];
 
+genvar   i;
 generate
     for (i=0;i<1;i=i+1) begin : u_gen
         fiftyfivenm_ram_block #(

@@ -74,11 +74,7 @@ parameter INIT_FILE          = "none.hex"
 // synopsys translate_on
 `endif
 
-   genvar   i;
-
-	wire [DATA_WIDTH-1:0] sub_wire;
-	wire [DATA_WIDTH-1:0] o_read_data = sub_wire[DATA_WIDTH-1:0];
-
+genvar   i;
 generate
     for (i=0;i<1;i=i+1) begin : u_gen
         altsyncram #(
@@ -122,9 +118,9 @@ generate
             .data_a (i_write_data),
             .data_b ({DATA_WIDTH{1'b0}}),
             .q_a (),
-            .q_b (sub_wire),
-//          .rden_a (1'b0),
-//          .rden_b (1'b1),
+            .q_b (o_read_data),
+            .rden_a (1'b0),
+            .rden_b (1'b1),
             .wren_a (i_write_enable),
             .wren_b (1'b0)
 //          .aclr0 (1'b0),

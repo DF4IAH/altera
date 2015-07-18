@@ -97,7 +97,7 @@ input                           altera_reserved_tdi,
 input                           altera_reserved_tms,
 output                          altera_reserved_tdo,
 
-output      [15:0]              o_monitor
+output      [ 2:0]              o_monitor
 // {ALTERA_IO_END} DO NOT REMOVE THIS LINE!
 );
 
@@ -127,6 +127,14 @@ wire                            mcb3_rzq;
 reg                             i_reset_n_r     = 'd0;
 reg                             brd_rst         = 'd0;
 
+wire        [3:0]               o_sram_cs;
+assign o_sram_cs_n = o_sram_cs ^ 4'b1111;
+
+wire                            o_sram_read;
+assign o_sram_read_n = !o_sram_read;
+
+wire                            o_sram_write;
+assign o_sram_write_n = !o_sram_write;
 
 
 //a23_core u_a23_core_0 ( 
@@ -220,9 +228,9 @@ system u_system (
 
 `ifdef ALTERA_FPGA
 // Altera SRAM 2Mx8 Interface
-    .o_sram_cs          ( !o_sram_cs_n      ),
-    .o_sram_read        ( !o_sram_read_n    ),
-    .o_sram_write       ( !o_sram_write_n   ),
+    .o_sram_cs          ( o_sram_cs         ),
+    .o_sram_read        ( o_sram_read       ),
+    .o_sram_write       ( o_sram_write      ),
     .o_sram_addr        ( o_sram_addr       ),
     .io_sram_data       ( io_sram_data      ),
 `endif
@@ -231,7 +239,7 @@ system u_system (
 );
 
 
-wire        [15:0]      monitor = 16'bz;
+wire        [ 2:0]      monitor = 3'bz;
 
 
 
@@ -245,9 +253,9 @@ always @ ( posedge i_brd_clk )
 
 // Monitoring
 //
-assign monitor[2] = brd_rst;
-assign monitor[1] = i_reset_n_r;
 assign monitor[0] = i_reset_n;
+assign monitor[1] = i_reset_n_r;
+assign monitor[2] = brd_rst;
 assign o_monitor  = monitor;
 
 endmodule

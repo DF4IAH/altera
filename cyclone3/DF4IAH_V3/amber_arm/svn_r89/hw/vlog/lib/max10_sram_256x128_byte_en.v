@@ -74,11 +74,11 @@ parameter INIT_FILE     = "max10_byte_cache_init.hex"
 // synopsys translate_on
 `endif
 
-   genvar   i;
 
 	wire [DATA_WIDTH-1:0] sub_wire;
 	wire [DATA_WIDTH-1:0] o_read_data = sub_wire[DATA_WIDTH-1:0];
 
+genvar   i;
 generate
     for (i=0;i<(DATA_WIDTH/BLOCK_WIDTH);i=i+1) begin : u_gen
         fiftyfivenm_ram_block #(

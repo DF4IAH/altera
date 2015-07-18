@@ -8,7 +8,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-`include "amber_arm/svn_r89/hw/vlog/tb/global_timescale.vh"
+`timescale  1 ps / 1 ps
 
 
 module tb_top #(
@@ -42,7 +42,7 @@ output                          o_phy_reset_n,
 
 output                          altera_reserved_tdo,
 
-output      [15:0]              o_monitor
+output      [ 2:0]              o_monitor
 );
 
 
@@ -157,24 +157,24 @@ initial
     i_mtx_clk = 0;
     i_mrx_clk = 0;
 
-    #100000  i_reset_n = 1;                 // 100 ns
+    #1000000     i_reset_n = 1;                 // 1 us
     end
 
 
 always
     begin
-    #25     i_brd_clk = !i_brd_clk;         // 20 MHz
+    #25000      i_brd_clk = !i_brd_clk;         // 20 MHz
     end
 
 always
     begin
-    #20     i_mtx_clk = !i_mtx_clk;         // 25 MHz MMI @ 100 MBit
+    #20000      i_mtx_clk = !i_mtx_clk;         // 25 MHz MMI @ 100 MBit
     end
 
 always
     begin
-    #0.2    ;
-    #19.8   i_mrx_clk = !i_mrx_clk;         // 25 MHz MMI @ 100 MBit
+      #200      ;
+    #19800      i_mrx_clk = !i_mrx_clk;         // 25 MHz MMI @ 100 MBit
     end
 
 integer             sram_data_ctr = 'd0;
