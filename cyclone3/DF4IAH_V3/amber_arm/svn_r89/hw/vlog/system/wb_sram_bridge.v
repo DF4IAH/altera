@@ -131,8 +131,8 @@ always @( posedge i_wb_clk )
             WB_FSM_INIT_STATE:
                 begin
                 wb_state            <= WB_FSM_READY_STATE;
-                write_ready_r       <= 'd0;
-                read_ready_r        <= 'd0;
+                write_ready_r       <= 'd1;
+                read_ready_r        <= 'd1;
                 wb_adr_r            <= 'd0;
                 wb_dat_r            <= 'd0;
                 wb_sel_r            <= 'd0;
@@ -176,7 +176,7 @@ always @( posedge i_wb_clk )
 // ------------------------------------------------------
 // External SRAM FSM
 // ------------------------------------------------------
-localparam SRAM_CYC_CTR_VALUE           = 'd5;
+localparam SRAM_CYC_CTR_VALUE           = 'd4;
 localparam SRAM_FSM_INIT_STATE          = 4'd0;
 localparam SRAM_FSM_READY_STATE         = 4'd1;
 localparam SRAM_FSM_WRITE_BYTE_SU_STATE = 4'd2;
