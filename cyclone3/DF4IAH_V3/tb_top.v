@@ -151,7 +151,7 @@ top u_dut (
 
 initial 
     begin 
-    i_reset_n = 0; 
+    i_reset_n = 0;
 
     i_brd_clk = 0;
     i_mtx_clk = 0;

@@ -50,7 +50,7 @@
     `define AMBER_TIMEOUT 0
 `endif
 
-`define U_TB                    tb
+`define U_TB                    tb_top.u_dut
 `define U_SYSTEM                `U_TB.u_system
 
 `define U_AMBER                 `U_SYSTEM.u_amber

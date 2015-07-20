@@ -102,6 +102,10 @@ output      [ 2:0]              o_monitor
 );
 
 
+integer                         clk_count;
+integer                         testfail;
+
+
 wire                            i_uart1_rts;
 wire                            o_uart1_rx;
 wire                            o_uart1_cts;
@@ -249,6 +253,8 @@ always @ ( posedge i_brd_clk )
     begin
     brd_rst     <= !i_reset_n_r;
     i_reset_n_r <=  i_reset_n;
+
+    clk_count = clk_count + 1;
     end
 
 // Monitoring
@@ -257,5 +263,13 @@ assign monitor[0] = i_reset_n;
 assign monitor[1] = i_reset_n_r;
 assign monitor[2] = brd_rst;
 assign o_monitor  = monitor;
+
+
+initial 
+    begin 
+    testfail = 1'd0;
+    clk_count = 0;
+    end
+
 
 endmodule
