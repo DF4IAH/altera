@@ -46,7 +46,7 @@ localparam MAIN_MSB             = 24;
 // e.g. 13 for 4k words
 localparam BOOT_MSB             = 13;  
 
-localparam MAIN_BASE            = 32'h0000_0000; /*  Main Memory            */
+localparam MAIN_BASE            = 32'h1000_0000; /*  Main Memory            */
 localparam BOOT_BASE            = 32'h0000_0000; /*  Cachable Boot Memory   */
 localparam AMBER_TM_BASE        = 16'h1300;      /*  Timers Module          */
 localparam AMBER_IC_BASE        = 16'h1400;      /*  Interrupt Controller   */
