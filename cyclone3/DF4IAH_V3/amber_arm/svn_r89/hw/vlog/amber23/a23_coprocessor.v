@@ -127,7 +127,7 @@ always @ ( posedge i_clk )
 `else
         // default: enabled
         cache_control   <= 3'b011;
-        cacheable_area  <= 32'b0000_0000_0000_0000_0000_0001_0000_0001;
+        cacheable_area  <= 32'b0000_0000_0000_0000_0000_0001_0000_0000;
         updateable_area <= 32'b0000_0000_0000_0000_0000_0001_0000_0001;
 `endif
         disruptive_area <= 32'h0;

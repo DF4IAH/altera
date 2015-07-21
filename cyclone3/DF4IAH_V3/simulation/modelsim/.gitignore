@@ -18,4 +18,5 @@ top_run_msim_rtl_verilog.do
 top_v.sdo
 top_v.sdo_typ.csd
 vsim.wlf
+wave.do
 wlft*
