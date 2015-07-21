@@ -1752,6 +1752,7 @@ assign dabt = dabt_reg || i_dabt;
 // ========================================================
 // Decompiler for debugging core - not synthesizable
 // ========================================================
+//synthesis translate_off
 //synopsys translate_off
 
 `include "debug_functions.vh"
@@ -1823,6 +1824,7 @@ always @( posedge i_clk )
         $display("Instruction with x's =%08h", instruction);
         end
 //synopsys translate_on
+//synthesis translate_on
 
 endmodule
 

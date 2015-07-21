@@ -308,6 +308,7 @@ always @( posedge i_clk )
 // ========================================================
 // Debug Wishbone bus - not synthesizable
 // ========================================================
+//synthesis translate_off
 //synopsys translate_off
 wire    [(14*8)-1:0]   xAS_STATE;
 
@@ -320,5 +321,6 @@ assign xAS_STATE  = wishbone_st == WB_IDLE       ? "WB_IDLE"       :
                                                       "UNKNOWN"       ;
 
 //synopsys translate_on
-    
+//synthesis translate_on
+
 endmodule

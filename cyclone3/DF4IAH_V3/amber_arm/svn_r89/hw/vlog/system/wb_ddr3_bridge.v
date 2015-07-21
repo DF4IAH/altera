@@ -163,6 +163,7 @@ assign o_wb_ack = i_wb_stb && ( start_write || read_ack );
 
 // Debug DDR3 - Wishbone Bridge  - not synthesizable
 // ========================================================
+//synthesis translate_off
 //synopsys translate_off
 
 `ifdef LP_MEMIF_DEBUG
@@ -183,7 +184,7 @@ assign o_wb_ack = i_wb_stb && ( start_write || read_ack );
         end
 `endif
 //synopsys translate_on
-
+//synthesis translate_on
     
 endmodule
 

@@ -175,6 +175,7 @@ always @ ( posedge i_clk )
 // ========================================================
 
 `ifdef A23_COPRO15_DEBUG    
+//synthesis translate_off
 //synopsys translate_off
 reg [1:0]  copro_operation_d1;
 reg [3:0]  copro_crn_d1;
@@ -215,6 +216,7 @@ always @( posedge i_clk )
             endcase
     end
 //synopsys translate_on
+//synthesis translate_on
 `endif
 
 endmodule

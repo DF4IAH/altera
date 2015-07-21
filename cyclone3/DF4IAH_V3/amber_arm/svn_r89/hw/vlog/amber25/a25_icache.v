@@ -671,6 +671,7 @@ endgenerate
 // ========================================================
 // Debug WB bus - not synthesizable
 // ========================================================
+//synthesis translate_off
 //synopsys translate_off
 wire    [(6*8)-1:0]     xSOURCE_SEL;
 wire    [(20*8)-1:0]    xC_STATE;
@@ -753,6 +754,7 @@ end
 endgenerate
     
 //synopsys translate_on
-    
+//synthesis translate_on
+
 endmodule
 

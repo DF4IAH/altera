@@ -71,12 +71,14 @@ reg [7:0]       firq_timer          = 'd0;
 reg [7:0]       irq_timer           = 'd0;
 reg [7:0]       random_num          = 8'hf3;
 
+//synthesis translate_off
 //synopsys translate_off
 reg [1:0]       tb_uart_control_reg = 'd0;
 reg [1:0]       tb_uart_status_reg  = 'd0;
 reg             tb_uart_push        = 'd0;
 reg [7:0]       tb_uart_txd_reg     = 'd0;
 //synopsys translate_on
+//synthesis translate_on
 
 reg [2:0]       sim_ctrl_reg        = 'd0; // 0 = fpga, other values for simulations
 reg             mem_ctrl_reg        = 'd0; // 0 = 128MB, 1 = 32MB main memory
@@ -157,11 +159,13 @@ always @( posedge i_clk )
             AMBER_TEST_RANDOM_NUM14: wb_rdata32 <= {24'd0, random_num};
             AMBER_TEST_RANDOM_NUM15: wb_rdata32 <= {24'd0, random_num};
             
+            //synthesis translate_off
             //synopsys translate_off
             AMBER_TEST_UART_CONTROL:     wb_rdata32 <= {30'd0, tb_uart_control_reg};
             AMBER_TEST_UART_STATUS:      wb_rdata32 <= {30'd0, tb_uart_status_reg};
             AMBER_TEST_UART_TXD:         wb_rdata32 <= {24'd0, tb_uart_txd_reg};
             //synopsys translate_on
+            //synthesis translate_on
             
             AMBER_TEST_SIM_CTRL:         wb_rdata32 <= {29'd0, sim_ctrl_reg};
             AMBER_TEST_MEM_CTRL:         wb_rdata32 <= {31'd0, mem_ctrl_reg};
@@ -180,6 +184,7 @@ always @( posedge i_clk )
 
 // This register bit is a 1 in simulation but a 0 in the real fpga
 // Used by software to tell the difference    
+//synthesis translate_off
 //synopsys translate_off
 
 `ifndef AMBER_SIM_CTRL
@@ -192,6 +197,7 @@ always @( posedge i_clk )
     sim_ctrl_reg <= 3'd `AMBER_SIM_CTRL ;
     end
 //synopsys translate_on
+//synthesis translate_on
 
 
 // ======================================
@@ -302,6 +308,7 @@ always @( posedge i_clk )
 // These control the testbench UART, not the real
 // UART in system
 
+//synthesis translate_off
 //synopsys translate_off
 always @( posedge i_clk )
     begin
@@ -315,8 +322,7 @@ always @( posedge i_clk )
         end
     end
 //synopsys translate_on
-
-
+//synthesis translate_on
     
 endmodule
 

@@ -39,9 +39,11 @@
 //////////////////////////////////////////////////////////////////
 
 
-// synopsys translate_off
+//synthesis translate_off
+//synopsys translate_off
 `timescale 1 ps / 1 ps
-// synopsys translate_on
+//synopsys translate_on
+//synthesis translate_on
 module cyc3_sram_4096x32_byte_en
 #(
 parameter DATA_WIDTH         = 32,
@@ -66,12 +68,14 @@ parameter INIT_FILE          = "none.hex"
 	input      [(DATA_WIDTH/8)-1:0] i_byte_enable;
 	output     [DATA_WIDTH-1:0]     o_read_data;
 `ifndef ALTERA_RESERVED_QIS
-// synopsys translate_off
+//synthesis translate_off
+//synopsys translate_off
 `endif
 	tri1	     i_clk;
 	tri0	     i_write_enable;
 `ifndef ALTERA_RESERVED_QIS
-// synopsys translate_on
+//synopsys translate_on
+//synthesis translate_on
 `endif
 
 genvar   i;
@@ -131,6 +135,7 @@ generate
     end
 endgenerate
 
+//synthesis translate_off
 //synopsys translate_off
 initial
     begin
@@ -138,5 +143,6 @@ initial
     if ( ADDRESS_WIDTH != 12  ) $display("%M Warning: Incorrect parameter ADDRESS_WIDTH");
     end
 //synopsys translate_on
+//synthesis translate_on
 
 endmodule

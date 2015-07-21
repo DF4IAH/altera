@@ -75,12 +75,14 @@ always @( posedge i_clk )
 
 
 // Used by a25_decompile.v, so simulation only
+//synthesis translate_off
 //synopsys translate_off    
 reg  [31:0]         daddress_r = 'd0;               // Register read data from Data Cache
 always @( posedge i_clk )
     if ( !i_mem_stall )
         daddress_r              <= i_daddress;
 //synopsys translate_on    
+//synthesis translate_on
 
 endmodule
 

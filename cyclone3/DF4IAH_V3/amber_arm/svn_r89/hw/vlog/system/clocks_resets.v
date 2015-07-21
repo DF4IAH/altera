@@ -390,17 +390,21 @@ assign o_sys_rst = rst0 || !calib_done_33mhz;
          .obar                        (                          ),
          .oe                          ( 1'b1                     )
           `ifndef FORMAL_VERIFICATION
-          // synopsys translate_off
+          //synthesis translate_off
+          //synopsys translate_off
           `endif
           ,
          .seriesterminationcontrol    ( {16{1'b0}}               )
           `ifndef FORMAL_VERIFICATION
-          // synopsys translate_on
+          //synopsys translate_on
+          //synthesis translate_on
           `endif
-          // synopsys translate_off
+          //synthesis translate_off
+          //synopsys translate_off
           ,
          .devoe                       ( 1'b1                     )
-          // synopsys translate_on
+          //synopsys translate_on
+          //synthesis translate_on
          );
 
 

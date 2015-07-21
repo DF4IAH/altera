@@ -39,9 +39,11 @@
 //////////////////////////////////////////////////////////////////
 
 
-// synopsys translate_off
+//synthesis translate_off
+//synopsys translate_off
 `timescale 1 ps / 1 ps
-// synopsys translate_on
+//synopsys translate_on
+//synthesis translate_on
 module max10_sram_1024x128_byte_en
 #(
 parameter DATA_WIDTH    = 128,
@@ -66,12 +68,14 @@ parameter INIT_FILE     = "bootram.hex"
 	input      [(DATA_WIDTH/8)-1:0] i_byte_enable;
 	output     [DATA_WIDTH-1:0]     o_read_data;
 `ifndef ALTERA_RESERVED_QIS
-// synopsys translate_off
+//synthesis translate_off
+//synopsys translate_off
 `endif
 	tri1	     i_clk;
 	tri0	     i_write_enable;
 `ifndef ALTERA_RESERVED_QIS
-// synopsys translate_on
+//synopsys translate_on
+//synthesis translate_on
 `endif
 
 
@@ -123,7 +127,8 @@ generate
             .portbdataout(sub_wire[(BLOCK_WIDTH*(i+1)-1):(BLOCK_WIDTH*i)]),
             .portbre(1'b1)
             `ifndef FORMAL_VERIFICATION
-            // synopsys translate_off
+            //synthesis translate_off
+            //synopsys translate_off
             `endif
             ,
             .clk1(1'b0),
@@ -141,18 +146,22 @@ generate
             .portbdatain({BLOCK_WIDTH{1'b0}}),
             .portbwe(1'b0)
             `ifndef FORMAL_VERIFICATION
-            // synopsys translate_on
+            //synopsys translate_on
+            //synthesis translate_on
             `endif
-            // synopsys translate_off
+            //synthesis translate_off
+            //synopsys translate_off
             ,
             .devclrn(1'b1),
             .devpor(1'b1)
-            // synopsys translate_on
+            //synopsys translate_on
+            //synthesis translate_on
         );
 
     end
 endgenerate
 
+//synthesis translate_off
 //synopsys translate_off
 initial
     begin
@@ -160,5 +169,6 @@ initial
     if ( ADDRESS_WIDTH != 10  ) $display("%M Warning: Incorrect parameter ADDRESS_WIDTH");
     end
 //synopsys translate_on
+//synthesis translate_on
 
 endmodule

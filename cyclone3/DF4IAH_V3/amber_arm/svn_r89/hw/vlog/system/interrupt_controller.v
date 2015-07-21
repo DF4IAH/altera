@@ -230,6 +230,7 @@ always @( posedge i_clk )
 // =======================================================================================
 
 
+//synthesis translate_off
 //synopsys translate_off
 `ifdef AMBER_IC_DEBUG
 
@@ -303,7 +304,7 @@ always @(posedge i_clk)
 `endif
 
 //synopsys translate_on
-
+//synthesis translate_on
 
 endmodule
 

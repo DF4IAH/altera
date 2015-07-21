@@ -163,11 +163,13 @@ always @( posedge i_clk )
                 2'b10:  timer0_value_reg <=  timer0_value_reg               - 1'd1;
                 default: 
                     begin
+                    //synthesis translate_off
                     //synopsys translate_off
-//                    `TB_ERROR_MESSAGE
+                    `TB_ERROR_MESSAGE
                     $write("unknown Timer Module Prescale Value %d for Timer 0", 
                            timer0_ctrl_reg[3:2]);
                     //synopsys translate_on
+                    //synthesis translate_on
                     end
             endcase
         end
@@ -197,11 +199,13 @@ always @( posedge i_clk )
                 2'b10:  timer1_value_reg <=  timer1_value_reg - 1'd1;
                 default: 
                     begin
+                    //synthesis translate_off
                     //synopsys translate_off
-//                    `TB_ERROR_MESSAGE
+                    `TB_ERROR_MESSAGE
                     $write("unknown Timer Module Prescale Value %d for Timer 1", 
                            timer1_ctrl_reg[3:2]);
                     //synopsys translate_on
+                    //synthesis translate_on
                     end
             endcase
         end
@@ -232,11 +236,13 @@ always @( posedge i_clk )
                 2'b10:  timer2_value_reg <=  timer2_value_reg - 1'd1;
                 default: 
                     begin
+                    //synthesis translate_off
                     //synopsys translate_off
-//                    `TB_ERROR_MESSAGE
+                    `TB_ERROR_MESSAGE
                     $write("unknown Timer Module Prescale Value %d for Timer 2", 
                            timer2_ctrl_reg[3:2]);
                     //synopsys translate_on
+                    //synthesis translate_on
                     end
             endcase
         end
@@ -310,6 +316,7 @@ always @( posedge i_clk )
 // =======================================================================================
 
 
+//synthesis translate_off
 //synopsys translate_off
 
 `ifdef AMBER_CT_DEBUG            
@@ -395,7 +402,7 @@ always @(posedge i_clk)
 `endif
 
 //synopsys translate_on
-
+//synthesis translate_on
 
 endmodule
 

@@ -166,6 +166,7 @@ u_mem (
 // =======================================================================================
 
 
+//synthesis translate_off
 //synopsys translate_off
 `ifdef XILINX_SPARTAN6_FPGA
     `ifdef BOOT_MEM128_PARAMS_FILE
@@ -174,6 +175,7 @@ u_mem (
     `endif
 `endif
 //synopsys translate_on
+//synthesis translate_on
     
 endmodule
 

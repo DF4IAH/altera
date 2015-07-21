@@ -41,9 +41,11 @@
 //////////////////////////////////////////////////////////////////
 
 
-// synopsys translate_off
+//synthesis translate_off
+//synopsys translate_off
 `timescale 1 ps / 1 ps
-// synopsys translate_on
+//synopsys translate_on
+//synthesis translate_on
 module cyc3_sram_256x21_line_en
 #(
 parameter DATA_WIDTH         = 21,
@@ -67,12 +69,14 @@ parameter INIT_FILE          = "none.hex"
 	input      [ADDRESS_WIDTH-1:0]  i_address;
 	output     [DATA_WIDTH-1:0]     o_read_data;
 `ifndef ALTERA_RESERVED_QIS
-// synopsys translate_off
+//synthesis translate_off
+//synopsys translate_off
 `endif
 	tri1	     i_clk;
 	tri0	     i_write_enable;
 `ifndef ALTERA_RESERVED_QIS
-// synopsys translate_on
+//synopsys translate_on
+//synthesis translate_on
 `endif
 
 
@@ -136,12 +140,14 @@ generate
     end
 endgenerate
 
+//synthesis translate_off
 //synopsys translate_off
 //initial
 //    begin
-//    if ( DATA_WIDTH    != 128 ) $display("%M Warning: Incorrect parameter DATA_WIDTH");
+//    if ( DATA_WIDTH    != 32  ) $display("%M Warning: Incorrect parameter DATA_WIDTH");
 //    if ( ADDRESS_WIDTH != 8   ) $display("%M Warning: Incorrect parameter ADDRESS_WIDTH");
 //    end
 //synopsys translate_on
+//synthesis translate_on
 
 endmodule

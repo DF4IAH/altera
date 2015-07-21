@@ -662,6 +662,7 @@ a25_register_bank u_register_bank(
 // ========================================================
 // Debug - non-synthesizable code
 // ========================================================
+//synthesis translate_off
 //synopsys translate_off
 
 wire    [(2*8)-1:0]    xCONDITION;
@@ -692,6 +693,7 @@ assign  xMODE  =  status_bits_mode == SVC  ? "SVC"  :
 
 
 //synopsys translate_on
+//synthesis translate_on
 
 endmodule
 

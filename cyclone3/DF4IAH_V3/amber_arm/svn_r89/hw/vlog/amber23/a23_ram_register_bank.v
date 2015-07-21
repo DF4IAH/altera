@@ -250,7 +250,8 @@ begin
 end
 endfunction
 
-// synthesis translate_off
+//synthesis translate_off
+//synthesis translate_off
 // To be used as probes...
 wire [31:0] r0;
 wire [31:0] r1;
@@ -335,6 +336,7 @@ assign r11_out = reg_ram_m[reg_addr(mode_exec, 11)];
 assign r12_out = reg_ram_m[reg_addr(mode_exec, 12)];
 assign r13_out = reg_ram_m[reg_addr(mode_exec, 13)];
 assign r14_out = reg_ram_m[reg_addr(mode_exec, 14)];
-// synthesis translate_on
+//synthesis translate_on
+//synthesis translate_on
 
 endmodule
