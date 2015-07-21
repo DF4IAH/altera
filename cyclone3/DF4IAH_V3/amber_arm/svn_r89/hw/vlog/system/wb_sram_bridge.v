@@ -84,10 +84,6 @@ reg                     read_final_r                = 'd0;
 reg                     write_request_r             = 'd0;
 reg                     read_request_r              = 'd0;
 reg                     wb_dat_out_r                = 'd0;
-reg     [31:0]          wb_adr_in_r                 = 'd0;
-reg     [WB_SWIDTH-1:0] wb_sel_in_r                 = 'd0;
-reg                     wb_we_in_r                  = 'd0;
-reg     [WB_DWIDTH-1:0] wb_dat_in_r                 = 'd0;
 wire                    write_request;
 wire                    read_request;
 
@@ -112,22 +108,6 @@ always @( posedge i_wb_clk )
         write_request_r <= write_request;
         read_request_r  <= read_request;
         o_wb_dat        <= wb_dat_out_r;
-        end
-
-always @( posedge i_ram_clk )
-    if ( i_sys_rst )  // reset has to be synced
-        begin
-        wb_adr_in_r     <= 'd0;
-        wb_sel_in_r     <= 'd0;
-        wb_we_in_r      <= 'd0;
-        wb_dat_in_r     <= 'd0;
-        end
-    else
-        begin
-        wb_adr_in_r     <= i_wb_adr;
-        wb_sel_in_r     <= i_wb_sel;
-        wb_we_in_r      <= i_wb_we;
-        wb_dat_in_r     <= i_wb_dat;
         end
 
 
@@ -168,9 +148,9 @@ always @( posedge i_wb_clk )
                     begin
                     wb_state        <= WB_FSM_WRITE_STATE;
                     ready_r         <= 'd0;				
-                    wb_adr_r        <= wb_adr_in_r[SRAM_ADR_L-1:0];      // latch data to avoid wait state "WSS"
-                    wb_dat_r        <= wb_dat_in_r;
-                    wb_sel_r        <= wb_sel_in_r;
+                    wb_adr_r        <= i_wb_adr[SRAM_ADR_L-1:0];      // latch data to avoid wait state "WSS"
+                    wb_dat_r        <= i_wb_dat;
+                    wb_sel_r        <= i_wb_sel;
                     end
                 else if ( read_request_r )
                     begin

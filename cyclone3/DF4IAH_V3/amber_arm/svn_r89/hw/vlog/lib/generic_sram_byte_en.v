@@ -56,20 +56,21 @@ input      [DATA_WIDTH/8-1:0]   i_byte_enable,
 output reg [DATA_WIDTH-1:0]     o_read_data
     );                                                     
 
-reg [DATA_WIDTH-1:0]   mem  [0:2**ADDRESS_WIDTH-1];
-integer i;
+reg      [DATA_WIDTH-1:0]     mem[0:2**ADDRESS_WIDTH-1];
+//(* XXXram_init_file = INIT_FILE *) reg [DATA_WIDTH-1:0]   mem[0:2**ADDRESS_WIDTH-1];
 
 
 //synthesis translate_off
 //synopsys translate_off
-//if (INIT_FILE != "none.hex")
-//    begin
-//    initial $readmemh(INIT_FILE, mem);
-//    end
+if (INIT_FILE != "none.hex")
+    begin
+    initial $readmemh(INIT_FILE, mem);
+    end
 //synopsys translate_on
 //synthesis translate_on
 
 
+integer i;
 always @(posedge i_clk)
     begin
     // read

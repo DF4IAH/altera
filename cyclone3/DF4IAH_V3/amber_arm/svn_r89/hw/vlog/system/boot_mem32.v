@@ -138,7 +138,7 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
         `endif
     `endif 
 )
-`elsif ALTERA_FPGA
+`elsif XXX_ALTERA_FPGA
     `ifdef ALTERA_CYCLONE3_FPGA
         cyc3_sram_4096x32_byte_en
     `elsif ALTERA_MAX10_FPGA
@@ -151,12 +151,16 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
 )
 `else
     generic_sram_byte_en
-//  generic_rom_byte_en
 #(
     .DATA_WIDTH     ( WB_DWIDTH            ),
-    .ADDRESS_WIDTH  ( MADDR_WIDTH          ),
-    .INIT_FILE      ( "bootmem.hex"        )
+    .ADDRESS_WIDTH  ( 5          ),
+    .INIT_FILE      ( "bootmem_h.hex"      )
 )
+//    generic_rom_byte_en
+//#(
+//    .DATA_WIDTH     ( WB_DWIDTH            ),
+//    .ADDRESS_WIDTH  ( MADDR_WIDTH          )
+//)
 `endif 
 u_mem (
     .i_clk          ( i_wb_clk             ),

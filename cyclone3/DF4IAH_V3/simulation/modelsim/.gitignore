@@ -1,4 +1,5 @@
 *.bak*
+amber.dis
 bootmem.hex
 gate_work
 modelsim.ini
