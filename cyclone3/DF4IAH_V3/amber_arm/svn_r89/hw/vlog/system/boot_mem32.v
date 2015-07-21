@@ -153,7 +153,7 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
     generic_sram_byte_en
 #(
     .DATA_WIDTH     ( WB_DWIDTH            ),
-    .ADDRESS_WIDTH  ( 5          ),
+    .ADDRESS_WIDTH  ( 8          ),
     .INIT_FILE      ( "bootmem_h.hex"      )
 )
 //    generic_rom_byte_en

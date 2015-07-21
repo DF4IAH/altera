@@ -120,7 +120,7 @@ always @ ( posedge i_clk )
 always @ ( posedge i_clk )
     if ( !i_system_rdy )
         begin
-`ifdef ORIG
+`ifndef ORIG
         cache_control   <= 3'b000;
         cacheable_area  <= 32'h0;
         updateable_area <= 32'h0;

@@ -15,11 +15,11 @@ add wave -noupdate -expand -group Top -group SPI /tb_top/o_spi0_sclk
 add wave -noupdate -expand -group Top -group SPI /tb_top/o_spi0_ss_n
 add wave -noupdate -expand -group Top -group SPI /tb_top/o_spi0_mosi
 add wave -noupdate -expand -group Top -group SPI /tb_top/i_spi0_miso
-add wave -noupdate -expand -group Top -group SRAM -color {Sky Blue} /tb_top/o_sram_cs_n
-add wave -noupdate -expand -group Top -group SRAM /tb_top/o_sram_read_n
-add wave -noupdate -expand -group Top -group SRAM /tb_top/o_sram_write_n
-add wave -noupdate -expand -group Top -group SRAM /tb_top/o_sram_addr
-add wave -noupdate -expand -group Top -group SRAM /tb_top/io_sram_data
+add wave -noupdate -expand -group Top -expand -group SRAM -color {Sky Blue} /tb_top/o_sram_cs_n
+add wave -noupdate -expand -group Top -expand -group SRAM /tb_top/o_sram_read_n
+add wave -noupdate -expand -group Top -expand -group SRAM /tb_top/o_sram_write_n
+add wave -noupdate -expand -group Top -expand -group SRAM -radix hexadecimal /tb_top/o_sram_addr
+add wave -noupdate -expand -group Top -expand -group SRAM -radix hexadecimal /tb_top/io_sram_data
 add wave -noupdate -expand -group Top -group Ethernet -group Ethernet_Config /tb_top/o_mdc
 add wave -noupdate -expand -group Top -group Ethernet -group Ethernet_Config /tb_top/io_md
 add wave -noupdate -expand -group Top -group Ethernet /tb_top/o_phy_reset_n
@@ -581,8 +581,8 @@ add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_syst
 add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s7_wb_ack
 add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s7_wb_err
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {8221463 ps} 0} {{Cursor 2} {15048159 ps} 0} {{Cursor 3} {19423553 ps} 0}
-quietly wave cursor active 3
+WaveRestoreCursors {{Cursor 1} {10016673 ps} 0} {{Cursor 2} {226000 ps} 0} {{Cursor 3} {19423553 ps} 0}
+quietly wave cursor active 1
 configure wave -namecolwidth 497
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -597,4 +597,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {28250625 ps} {30092178 ps}
+WaveRestoreZoom {30250625 ps} {32092178 ps}
