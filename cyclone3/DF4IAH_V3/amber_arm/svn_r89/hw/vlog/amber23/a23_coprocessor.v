@@ -120,14 +120,14 @@ always @ ( posedge i_clk )
 always @ ( posedge i_clk )
     if ( !i_system_rdy )
         begin
-`ifndef ORIG
+`ifdef ORIG
         cache_control   <= 3'b000;
         cacheable_area  <= 32'h0;
         updateable_area <= 32'h0;
 `else
         // default: enabled
         cache_control   <= 3'b011;
-        cacheable_area  <= 32'b0000_0000_0000_0000_0000_0001_0000_0000;
+        cacheable_area  <= 32'b0000_0000_0000_0000_0000_0001_0000_0001;
         updateable_area <= 32'b0000_0000_0000_0000_0000_0001_0000_0001;
 `endif
         disruptive_area <= 32'h0;
