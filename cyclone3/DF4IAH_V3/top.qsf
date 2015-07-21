@@ -141,13 +141,13 @@ set_global_assignment -name ENABLE_DRC_SETTINGS ON
 set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
 set_global_assignment -name EDA_RUN_TOOL_AUTOMATICALLY ON -section_id eda_simulation
-set_global_assignment -name FLOW_ENABLE_RTL_VIEWER ON
+set_global_assignment -name FLOW_ENABLE_RTL_VIEWER OFF
 set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name SMART_RECOMPILE ON
 set_global_assignment -name PHYSICAL_SYNTHESIS_ASYNCHRONOUS_SIGNAL_PIPELINING ON
 set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_DUPLICATION ON
-set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC ON
-set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING ON
+set_global_assignment -name PHYSICAL_SYNTHESIS_COMBO_LOGIC OFF
+set_global_assignment -name PHYSICAL_SYNTHESIS_REGISTER_RETIMING OFF
 set_global_assignment -name SEARCH_PATH "c:\\altera\\_data\\cyclone3\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\lib"
 set_global_assignment -name SEARCH_PATH "c:\\altera\\_data\\cyclone3\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\ethmac"
 set_global_assignment -name SEARCH_PATH "c:\\altera\\_data\\cyclone3\\df4iah_v3\\amber_arm\\svn_r89\\hw\\vlog\\amber23"

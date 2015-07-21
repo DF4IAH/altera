@@ -1760,8 +1760,6 @@ assign dabt = dabt_reg || i_dabt;
 // ========================================================
 // Decompiler for debugging core - not synthesizable
 // ========================================================
-//synthesis translate_off
-//synopsys translate_off
 
 `include "../tb/debug_functions.vh"
 
@@ -1778,7 +1776,8 @@ a23_decompile  u_decompile (
     .i_pc_sel                   ( pc_sel_r                         ),
     .i_pc_wen                   ( pc_wen_r                         ));
 
-
+//synthesis translate_off
+//synopsys translate_off
 
 wire    [(15*8)-1:0]    xCONTROL_STATE;
 wire    [(15*8)-1:0]    xMODE;

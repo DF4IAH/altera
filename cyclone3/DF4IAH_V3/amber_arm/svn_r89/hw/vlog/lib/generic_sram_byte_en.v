@@ -43,7 +43,8 @@
 module generic_sram_byte_en
 #(
 parameter DATA_WIDTH    = 128,
-parameter ADDRESS_WIDTH = 7
+parameter ADDRESS_WIDTH = 7,
+parameter INIT_FILE     = "none.hex"
 )
 
 (
@@ -57,6 +58,16 @@ output reg [DATA_WIDTH-1:0]     o_read_data
 
 reg [DATA_WIDTH-1:0]   mem  [0:2**ADDRESS_WIDTH-1];
 integer i;
+
+
+//synthesis translate_off
+//synopsys translate_off
+//if (INIT_FILE != "none.hex")
+//    begin
+//    initial $readmemh(INIT_FILE, mem);
+//    end
+//synopsys translate_on
+//synthesis translate_on
 
 
 always @(posedge i_clk)

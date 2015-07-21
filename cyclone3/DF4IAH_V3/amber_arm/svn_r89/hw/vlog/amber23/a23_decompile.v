@@ -60,6 +60,9 @@ input                       i_pc_wen
 
 );
 
+//synthesis translate_off
+//synopsys translate_off
+
 `include "a23_localparams.vh"
         
 `ifdef A23_DECOMPILE
@@ -903,5 +906,7 @@ endfunction
 
 `endif
 
-endmodule
+//synopsys translate_on
+//synthesis translate_on
 
+endmodule

@@ -77,32 +77,59 @@ inout       [SRAM_DATA_L-1:0]   io_sram_data                    // Databus
 reg  [7:0]              io_sram_data_l              = 'd0;
 reg                     io_sram_data_e              = 'd0;
 
-// Wishbone async signals
-reg                     write_ready_r               = 'd0;
-reg                     read_ready_r                = 'd0;
+// Wishbone signals
+reg                     ready_r                     = 'd0;
 reg                     write_final_r               = 'd0;
 reg                     read_final_r                = 'd0;
+reg                     write_request_r             = 'd0;
+reg                     read_request_r              = 'd0;
+reg                     wb_dat_out_r                = 'd0;
+reg     [31:0]          wb_adr_in_r                 = 'd0;
+reg     [WB_SWIDTH-1:0] wb_sel_in_r                 = 'd0;
+reg                     wb_we_in_r                  = 'd0;
+reg     [WB_DWIDTH-1:0] wb_dat_in_r                 = 'd0;
 wire                    write_request;
 wire                    read_request;
 
-assign write_request                                = i_wb_stb &&  i_wb_we && write_ready_r;
-assign read_request                                 = i_wb_stb && !i_wb_we && read_ready_r;
+
+// Wishbone async signals
+assign write_request                                = i_wb_stb &&  i_wb_we && ready_r;
+assign read_request                                 = i_wb_stb && !i_wb_we && ready_r;
 
 
 // ------------------------------------------------------
 // Syncing
 // ------------------------------------------------------
-//always @( posedge i_wb_clk )
-//    if ( i_sys_rst )  // reset has to be synced
-//        begin
-//        write_request_r <= 'd0;
-//        read_request_r  <= 'd0;
-//        end
-//    else
-//        begin
-//        write_request_r <= write_request;
-//        read_request_r  <= read_request;
-//        end
+always @( posedge i_wb_clk )
+    if ( i_sys_rst )  // reset has to be synced
+        begin
+        write_request_r <= 'd0;
+        read_request_r  <= 'd0;
+        o_wb_dat        <= 'd0;
+        end
+    else
+        begin
+        write_request_r <= write_request;
+        read_request_r  <= read_request;
+        o_wb_dat        <= wb_dat_out_r;
+        end
+
+always @( posedge i_ram_clk )
+    if ( i_sys_rst )  // reset has to be synced
+        begin
+        wb_adr_in_r     <= 'd0;
+        wb_sel_in_r     <= 'd0;
+        wb_we_in_r      <= 'd0;
+        wb_dat_in_r     <= 'd0;
+        end
+    else
+        begin
+        wb_adr_in_r     <= i_wb_adr;
+        wb_sel_in_r     <= i_wb_sel;
+        wb_we_in_r      <= i_wb_we;
+        wb_dat_in_r     <= i_wb_dat;
+        end
+
 
 // ------------------------------------------------------
 // Wishbone FSM
@@ -120,8 +147,7 @@ always @( posedge i_wb_clk )
     if ( i_sys_rst )
         begin
         wb_state            <= WB_FSM_INIT_STATE;
-        write_ready_r       <= 'd0;
-        read_ready_r        <= 'd0;
+        ready_r             <= 'd0;
         wb_adr_r            <= 'd0;
         wb_dat_r            <= 'd0;
         wb_sel_r            <= 'd0;
@@ -131,44 +157,39 @@ always @( posedge i_wb_clk )
             WB_FSM_INIT_STATE:
                 begin
                 wb_state            <= WB_FSM_READY_STATE;
-                write_ready_r       <= 'd1;
-                read_ready_r        <= 'd1;
+                ready_r             <= 'd1;
                 wb_adr_r            <= 'd0;
                 wb_dat_r            <= 'd0;
                 wb_sel_r            <= 'd0;
                 end
 
             WB_FSM_READY_STATE:
-                if ( write_request )
+                if ( write_request_r )
                     begin
                     wb_state        <= WB_FSM_WRITE_STATE;
-                    write_ready_r   <= 'd0;				
-                    read_ready_r    <= 'd0;
-                    wb_adr_r        <= i_wb_adr[SRAM_ADR_L-1:0];      // latch data to avoid wait state "WSS"
-                    wb_dat_r        <= i_wb_dat;
-                    wb_sel_r        <= i_wb_sel;
+                    ready_r         <= 'd0;				
+                    wb_adr_r        <= wb_adr_in_r[SRAM_ADR_L-1:0];      // latch data to avoid wait state "WSS"
+                    wb_dat_r        <= wb_dat_in_r;
+                    wb_sel_r        <= wb_sel_in_r;
                     end
-                else if ( read_request )
+                else if ( read_request_r )
                     begin
                     wb_state        <= WB_FSM_READ_STATE;
-                    write_ready_r   <= 'd1;				
-                    read_ready_r    <= 'd0;
+                    ready_r         <= 'd0;
                     end
 
             WB_FSM_WRITE_STATE:
                 if ( write_final_r && !i_wb_stb )
                     begin
                     wb_state        <= WB_FSM_READY_STATE;
-                    write_ready_r   <= 'd1;
-                    read_ready_r    <= 'd1;
+                    ready_r         <= 'd1;
                     end
 
             WB_FSM_READ_STATE:
                 if ( read_final_r && !i_wb_stb )
                     begin
                     wb_state        <= WB_FSM_READY_STATE;
-                    write_ready_r   <= 'd1;
-                    read_ready_r    <= 'd1;
+                    ready_r         <= 'd1;
                     end
         endcase
 
@@ -198,7 +219,7 @@ always @( posedge i_ram_clk )
     if ( i_sys_rst )
         begin
         sram_state              <= SRAM_FSM_INIT_STATE;
-        o_wb_dat                <= 'd0;
+        wb_dat_out_r            <= 'd0;
         o_sram_cs               <= 4'b0000;
         o_sram_read             <= 'd0;
 		o_sram_write            <= 'd0;
@@ -217,7 +238,7 @@ always @( posedge i_ram_clk )
             SRAM_FSM_INIT_STATE:
                 begin
                 sram_state              <= SRAM_FSM_READY_STATE;
-                o_wb_dat                <= 'd0;
+                wb_dat_out_r            <= 'd0;
                 o_sram_cs		        <= 4'b0000;
                 o_sram_read             <= 'd0;
                 o_sram_write	        <= 'd0;
@@ -356,7 +377,7 @@ always @( posedge i_ram_clk )
                         o_sram_addr     <= 'd0;
                         io_sram_data_l  <= 'd0;
                         io_sram_data_e  <= 'd0;
-                        o_wb_dat        <= 'd0;     // reading w/o any selected bytes
+                        wb_dat_out_r    <= 'd0;     // reading w/o any selected bytes
                         read_final_r    <= 'd1;
                         end
                     end
@@ -519,7 +540,7 @@ always @( posedge i_ram_clk )
                 else
                     begin
                     sram_state      <= SRAM_FSM_READ_END_STATE;
-                    o_wb_dat        <= ram_dat_r;
+                    wb_dat_out_r    <= ram_dat_r;
                     read_final_r    <= 'd1;
                     end
                 end
@@ -544,7 +565,7 @@ always @( posedge i_ram_clk )
 assign io_sram_data                                 = (io_sram_data_e) ?  io_sram_data_l : { SRAM_DATA_L{1'bz }};
 
 // Wishbone async signals
-assign o_wb_ack                                     = i_wb_stb && (write_request || read_final_r);
+assign o_wb_ack                                     = i_wb_stb && (write_request_r || read_final_r);
 assign o_wb_err                                     = 'd0;
 	  
 endmodule

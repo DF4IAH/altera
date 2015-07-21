@@ -119,49 +119,50 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
 // ------------------------------------------------------
 //         
 
-//`ifdef XILINX_FPGA
-//    xs6_sram_4096x32_byte_en
-//#(
-//// This file holds a software image used for FPGA simulations
-//// This pre-processor syntax works with both the simulator
-//// and ISE, which I couldn't get to work with giving it the
-//// file name as a define.
-//
-//    `ifdef BOOT_MEM32_PARAMS_FILE
-//        `include `BOOT_MEM32_PARAMS_FILE
-//    `else
-//        `ifdef BOOT_LOADER_ETHMAC
-//            `include "boot-loader-ethmac_memparams32.v"
-//        `else
-//            // default file
-//            `include "boot-loader_memparams32.v"
-//        `endif
-//    `endif 
-//)
-//`elsif ALTERA_FPGA
-//    `ifdef ALTERA_CYCLONE3_FPGA
-//        cyc3_sram_4096x32_byte_en
-//    `elsif ALTERA_MAX10_FPGA
-//        max10_sram_4096x32_byte_en
-//    `endif 
-//#(
-//    .DATA_WIDTH     ( WB_DWIDTH            ),
-//    .ADDRESS_WIDTH  ( MADDR_WIDTH          ),
-//    .INIT_FILE      ( "bootmem.hex"        )
-//)
-//`else
-//    generic_sram_byte_en
-    generic_rom_byte_en
-//`endif 
+`ifdef XILINX_FPGA
+    xs6_sram_4096x32_byte_en
+#(
+// This file holds a software image used for FPGA simulations
+// This pre-processor syntax works with both the simulator
+// and ISE, which I couldn't get to work with giving it the
+// file name as a define.
+
+    `ifdef BOOT_MEM32_PARAMS_FILE
+        `include `BOOT_MEM32_PARAMS_FILE
+    `else
+        `ifdef BOOT_LOADER_ETHMAC
+            `include "boot-loader-ethmac_memparams32.v"
+        `else
+            // default file
+            `include "boot-loader_memparams32.v"
+        `endif
+    `endif 
+)
+`elsif ALTERA_FPGA
+    `ifdef ALTERA_CYCLONE3_FPGA
+        cyc3_sram_4096x32_byte_en
+    `elsif ALTERA_MAX10_FPGA
+        max10_sram_4096x32_byte_en
+    `endif 
 #(
     .DATA_WIDTH     ( WB_DWIDTH            ),
-    .ADDRESS_WIDTH  ( MADDR_WIDTH          )
+    .ADDRESS_WIDTH  ( MADDR_WIDTH          ),
+    .INIT_FILE      ( "bootmem.hex"        )
 )
+`else
+    generic_sram_byte_en
+//  generic_rom_byte_en
+#(
+    .DATA_WIDTH     ( WB_DWIDTH            ),
+    .ADDRESS_WIDTH  ( MADDR_WIDTH          ),
+    .INIT_FILE      ( "bootmem.hex"        )
+)
+`endif 
 u_mem (
     .i_clk          ( i_wb_clk             ),
     .i_write_enable ( start_write          ),
     .i_byte_enable  ( byte_enable          ),
-    .i_address      ( address              ),  // 2048 words, 32 bits
+    .i_address      ( address              ),  // 4096 words, 32 bits
     .o_read_data    ( read_data            ),
     .i_write_data   ( write_data           )
 );

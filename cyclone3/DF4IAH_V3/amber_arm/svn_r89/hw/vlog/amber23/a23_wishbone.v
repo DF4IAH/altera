@@ -310,6 +310,7 @@ always @( posedge i_clk )
 // ========================================================
 //synthesis translate_off
 //synopsys translate_off
+
 wire    [(14*8)-1:0]   xAS_STATE;
 
 

@@ -413,15 +413,15 @@ assign o_sys_rst = rst0 || !calib_done_33mhz;
     // ======================================
     assign rst_tmp = i_brd_rst | ~pll_locked;
 
-    /* NO synthesis syn_maxfan = 10 */
-    always @(posedge pll_clk or posedge rst_tmp)
+    /* synthesis syn_maxfan = 10 */
+    always @(posedge pll_clk /* or posedge rst_tmp */)
         if (rst_tmp)
           rst0_sync_r <= {RST_SYNC_NUM{1'b1}};
         else
           // logical left shift by one (pads with 0)
           rst0_sync_r <= rst0_sync_r << 1;
 
-    always @(posedge pll_clk or posedge rst_tmp)
+    always @(posedge pll_clk /* or posedge rst_tmp */)
         if (rst_tmp)
             ddr_calib_done_sync_r <= {RST_SYNC_NUM{1'b0}};
         else
