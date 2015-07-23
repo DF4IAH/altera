@@ -87,6 +87,9 @@
 // Print Interrupt Controller debug messages
 //`define AMBER_IC_DEBUG
 
+// Print DMA Controller debug messages
+`define AMBER_DMA_DEBUG
+
 // Debug the loading of the memory file into memory
 //`define AMBER_LOAD_MEM_DEBUG
 

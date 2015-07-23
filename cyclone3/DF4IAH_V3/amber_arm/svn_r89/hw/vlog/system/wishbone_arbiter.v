@@ -73,6 +73,18 @@ output                      o_m1_wb_ack,
 output                      o_m1_wb_err,
 
 
+// WISHBONE master 2 - DMA
+input       [31:0]          i_m2_wb_adr,
+input       [WB_SWIDTH-1:0] i_m2_wb_sel,
+input                       i_m2_wb_we,
+output      [WB_DWIDTH-1:0] o_m2_wb_dat,
+input       [WB_DWIDTH-1:0] i_m2_wb_dat,
+input                       i_m2_wb_cyc,
+input                       i_m2_wb_stb,
+output                      o_m2_wb_ack,
+output                      o_m2_wb_err,
+
+
 // WISHBONE slave 0 - Ethmac
 output      [31:0]          o_s0_wb_adr,
 output      [WB_SWIDTH-1:0] o_s0_wb_sel,
@@ -166,16 +178,42 @@ output      [WB_DWIDTH-1:0] o_s7_wb_dat,
 output                      o_s7_wb_cyc,
 output                      o_s7_wb_stb,
 input                       i_s7_wb_ack,
-input                       i_s7_wb_err
+input                       i_s7_wb_err,
+
+
+// WISHBONE slave 8 - DMA Controller
+output      [31:0]          o_s8_wb_adr,
+output      [WB_SWIDTH-1:0] o_s8_wb_sel,
+output                      o_s8_wb_we,
+input       [WB_DWIDTH-1:0] i_s8_wb_dat,
+output      [WB_DWIDTH-1:0] o_s8_wb_dat,
+output                      o_s8_wb_cyc,
+output                      o_s8_wb_stb,
+input                       i_s8_wb_ack,
+input                       i_s8_wb_err,
+
+
+// WISHBONE slave 9 - ConfigData Controller
+output      [31:0]          o_s9_wb_adr,
+output      [WB_SWIDTH-1:0] o_s9_wb_sel,
+output                      o_s9_wb_we,
+input       [WB_DWIDTH-1:0] i_s9_wb_dat,
+output      [WB_DWIDTH-1:0] o_s9_wb_dat,
+output                      o_s9_wb_cyc,
+output                      o_s9_wb_stb,
+input                       i_s9_wb_ack,
+input                       i_s9_wb_err
 );
+
 
 `include "memory_configuration.vh"
 
 reg         m0_wb_hold_r = 'd0;
 reg         m1_wb_hold_r = 'd0;
-wire        current_master;
-reg         current_master_r = 'd0;
-wire        next_master;
+reg         m2_wb_hold_r = 'd0;
+wire [1:0]  current_master;
+reg  [1:0]  current_master_r = 'd0;
+wire [1:0]  next_master;
 wire        select_master;
 wire [3:0]  current_slave;
 
@@ -190,16 +228,20 @@ wire                    master_ack;
 wire                    master_err;
    
    
-// Arbitrate between m0 and m1. Ethmac (m0) always gets priority
-assign next_master    = i_m0_wb_cyc ? 1'd0 : 1'd1;
+// Arbitrate between m0, m1 and m2. Ethmac (m0) always gets priority. Next is the DMA engine (m2) which wins over the CPU (m1)
+assign next_master    = i_m0_wb_cyc ? 2'd0 :    // Ethernet
+                        i_m2_wb_cyc ? 2'd2 :    // DMA Controller
+                                      2'd1;     // CPU
 
 // Use cyc signal for arbitration so block accesses are not split up
 // assign m0_in_cycle    = m0_wb_hold_r && !master_ack;
 // assign m1_in_cycle    = m1_wb_hold_r && !master_ack;
 
 // only select a new bus master when the current bus master
-// daccess ends
-assign select_master  = current_master_r ? !m1_wb_hold_r : !m0_wb_hold_r;
+// access ends
+assign select_master  = ((current_master_r == 0) && !m0_wb_hold_r) || 
+                        ((current_master_r == 1) && !m1_wb_hold_r) ||
+                        ((current_master_r == 2) && !m2_wb_hold_r);
 assign current_master = select_master ? next_master : current_master_r;
 
 
@@ -208,6 +250,7 @@ always @( posedge i_wb_clk )
     current_master_r    <= current_master;
     m0_wb_hold_r        <= i_m0_wb_stb && !o_m0_wb_ack;
     m1_wb_hold_r        <= i_m1_wb_stb && !o_m1_wb_ack;
+    m2_wb_hold_r        <= i_m2_wb_stb && !o_m2_wb_ack;
     end
 
 
@@ -220,15 +263,17 @@ assign current_slave = in_ethmac   ( master_adr ) ? 4'd0  :  // Ethmac
                        in_test     ( master_adr ) ? 4'd5  :  // Test Module
                        in_tm       ( master_adr ) ? 4'd6  :  // Timer Module
                        in_ic       ( master_adr ) ? 4'd7  :  // Interrupt Controller
+                       in_dma      ( master_adr ) ? 4'd8  :  // DMA Controller
+                       in_cd       ( master_adr ) ? 4'd9  :  // ConfigData Controller
                                                     4'd2  ;  // default to main memory
 
 
-assign master_adr   = current_master ? i_m1_wb_adr : i_m0_wb_adr ;
-assign master_sel   = current_master ? i_m1_wb_sel : i_m0_wb_sel ;
-assign master_wdat  = current_master ? i_m1_wb_dat : i_m0_wb_dat ;
-assign master_we    = current_master ? i_m1_wb_we  : i_m0_wb_we  ;
-assign master_cyc   = current_master ? i_m1_wb_cyc : i_m0_wb_cyc ;
-assign master_stb   = current_master ? i_m1_wb_stb : i_m0_wb_stb ;
+assign master_adr   = (current_master == 0) ?  i_m0_wb_adr : (current_master == 1) ?  i_m1_wb_adr : i_m2_wb_adr;
+assign master_sel   = (current_master == 0) ?  i_m0_wb_sel : (current_master == 1) ?  i_m1_wb_sel : i_m2_wb_sel;
+assign master_wdat  = (current_master == 0) ?  i_m0_wb_dat : (current_master == 1) ?  i_m1_wb_dat : i_m2_wb_dat;
+assign master_we    = (current_master == 0) ?  i_m0_wb_we  : (current_master == 1) ?  i_m1_wb_we  : i_m2_wb_we;
+assign master_cyc   = (current_master == 0) ?  i_m0_wb_cyc : (current_master == 1) ?  i_m1_wb_cyc : i_m2_wb_cyc;
+assign master_stb   = (current_master == 0) ?  i_m0_wb_stb : (current_master == 1) ?  i_m1_wb_stb : i_m2_wb_stb;
 
 
 // Ethmac Slave outputs
@@ -295,6 +340,22 @@ assign o_s7_wb_we   = current_slave == 4'd7 ? master_we  : 1'd0;
 assign o_s7_wb_cyc  = current_slave == 4'd7 ? master_cyc : 1'd0;
 assign o_s7_wb_stb  = current_slave == 4'd7 ? master_stb : 1'd0;
 
+// DMA Controller
+assign o_s8_wb_adr  = master_adr;
+assign o_s8_wb_dat  = master_wdat;
+assign o_s8_wb_sel  = master_sel;
+assign o_s8_wb_we   = current_slave == 4'd8 ? master_we  : 1'd0;
+assign o_s8_wb_cyc  = current_slave == 4'd8 ? master_cyc : 1'd0;
+assign o_s8_wb_stb  = current_slave == 4'd8 ? master_stb : 1'd0;
+
+// ConfigData Controller
+assign o_s9_wb_adr  = master_adr;
+assign o_s9_wb_dat  = master_wdat;
+assign o_s9_wb_sel  = master_sel;
+assign o_s9_wb_we   = current_slave == 4'd9 ? master_we  : 1'd0;
+assign o_s9_wb_cyc  = current_slave == 4'd9 ? master_cyc : 1'd0;
+assign o_s9_wb_stb  = current_slave == 4'd9 ? master_stb : 1'd0;
+
 
 // Master Outputs
 assign master_rdat  = current_slave == 4'd0  ? i_s0_wb_dat  :
@@ -305,6 +366,8 @@ assign master_rdat  = current_slave == 4'd0  ? i_s0_wb_dat  :
                       current_slave == 4'd5  ? i_s5_wb_dat  :
                       current_slave == 4'd6  ? i_s6_wb_dat  :
                       current_slave == 4'd7  ? i_s7_wb_dat  :
+                      current_slave == 4'd8  ? i_s8_wb_dat  :
+                      current_slave == 4'd9  ? i_s9_wb_dat  :
                                                i_s2_wb_dat  ;
 
 
@@ -316,6 +379,8 @@ assign master_ack   = current_slave == 4'd0  ? i_s0_wb_ack  :
                       current_slave == 4'd5  ? i_s5_wb_ack  :
                       current_slave == 4'd6  ? i_s6_wb_ack  :
                       current_slave == 4'd7  ? i_s7_wb_ack  :
+                      current_slave == 4'd8  ? i_s8_wb_ack  :
+                      current_slave == 4'd9  ? i_s9_wb_ack  :
                                                i_s2_wb_ack  ; 
 
 
@@ -327,18 +392,24 @@ assign master_err   = current_slave == 4'd0  ? i_s0_wb_err  :
                       current_slave == 4'd5  ? i_s5_wb_err  :
                       current_slave == 4'd6  ? i_s6_wb_err  :
                       current_slave == 4'd7  ? i_s7_wb_err  :
+                      current_slave == 4'd8  ? i_s8_wb_err  :
+                      current_slave == 4'd9  ? i_s9_wb_err  :
                                                i_s2_wb_err  ; 
 
 
 // Ethmac Master Outputs
 assign o_m0_wb_dat  = master_rdat;
-assign o_m0_wb_ack  = current_master  ? 1'd0 : master_ack ;
-assign o_m0_wb_err  = current_master  ? 1'd0 : master_err ;
+assign o_m0_wb_ack  = (current_master == 0) ?  master_ack : 1'd0;
+assign o_m0_wb_err  = (current_master == 0) ?  master_err : 1'd0;
 
 // Amber Master Outputs
 assign o_m1_wb_dat  = master_rdat;
-assign o_m1_wb_ack  = current_master  ?  master_ack : 1'd0 ;
-assign o_m1_wb_err  = current_master  ?  master_err : 1'd0 ;
+assign o_m1_wb_ack  = (current_master == 1) ?  master_ack : 1'd0;
+assign o_m1_wb_err  = (current_master == 1) ?  master_err : 1'd0;
+
+// DMA Master Outputs
+assign o_m2_wb_dat  = master_rdat;
+assign o_m2_wb_ack  = (current_master == 2) ?  master_ack : 1'd0;
+assign o_m2_wb_err  = (current_master == 2) ?  master_err : 1'd0;
 
 endmodule
-

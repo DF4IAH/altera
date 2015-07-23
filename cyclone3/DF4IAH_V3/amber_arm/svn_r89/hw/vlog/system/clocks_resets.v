@@ -411,9 +411,12 @@ assign o_sys_rst = rst0 || !calib_done_33mhz;
     // ======================================
     // Synchronous reset generation
     // ======================================
-    assign rst_tmp = i_brd_rst | ~pll_locked;
-
-    /* synthesis syn_maxfan = 10 */
+    assign rst_tmp = i_brd_rst | ~pll_locked
+`ifdef ALTERA_FPGA
+    /* synthesis maxfan = 10 */;
+`else
+    /* synthesis syn_maxfan = 10 */;
+`endif
     always @(posedge pll_clk /* or posedge rst_tmp */)
         if (rst_tmp)
           rst0_sync_r <= {RST_SYNC_NUM{1'b1}};

@@ -104,6 +104,15 @@ localparam AMBER_IC_INT_SOFTSET_3   = 16'h00d0;
 localparam AMBER_IC_INT_SOFTCLEAR_3 = 16'h00d4;
 
 
+// DMA Controller
+localparam AMBER_DMA_START0         = 16'h0000;
+localparam AMBER_DMA_START1         = 16'h0004;
+localparam AMBER_DMA_LENGTH         = 16'h0008;
+localparam AMBER_DMA_CUR0           = 16'h0010;
+localparam AMBER_DMA_CUR1           = 16'h0014;
+localparam AMBER_DMA_REMAIN         = 16'h0018;
+
+
 // Timer Module
 localparam AMBER_TM_TIMER0_LOAD    =  16'h0000;
 localparam AMBER_TM_TIMER0_VALUE   =  16'h0004;

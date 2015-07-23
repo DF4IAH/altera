@@ -178,6 +178,7 @@ set_global_assignment -name VERILOG_INCLUDE_FILE amber_arm/svn_r89/hw/vlog/tb/de
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_iobuf.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_sram_line_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_sram_byte_en.v
+set_global_assignment -name VERILOG_INCLUDE_FILE bootmem.vh
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_rom_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_256x21_line_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_256x128_byte_en.v
@@ -225,6 +226,8 @@ set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/amber23/a23_b
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/amber23/a23_barrel_shift.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/amber23/a23_alu.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/system/clocks_resets.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/system/cfg_dta.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/system/dma.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/system/uart.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/system/timer_module.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/system/test_module.v

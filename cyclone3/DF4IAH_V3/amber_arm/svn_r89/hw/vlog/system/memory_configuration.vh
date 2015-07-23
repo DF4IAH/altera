@@ -46,14 +46,17 @@ localparam MAIN_MSB             = 24;
 // e.g. 13 for 4k words
 localparam BOOT_MSB             = 13;  
 
-localparam MAIN_BASE            = 32'h1000_0000; /*  Main Memory            */
 localparam BOOT_BASE            = 32'h0000_0000; /*  Cachable Boot Memory   */
+localparam MAIN_BASE            = 32'h1000_0000; /*  Main Memory            */
+localparam HIBOOT_BASE          = 32'h2800_0000; /*  Uncachable Boot Memory */
+localparam CONFIG_BASE          = 32'h4000_0000; /*  Config-Data EEPROM     */
+localparam AMBER_DMA_BASE       = 16'h1100;      /*  DMA Controller         */
+localparam AMBER_CD_BASE        = 16'h1200;      /*  ConfigData Controller  */
 localparam AMBER_TM_BASE        = 16'h1300;      /*  Timers Module          */
 localparam AMBER_IC_BASE        = 16'h1400;      /*  Interrupt Controller   */
 localparam AMBER_UART0_BASE     = 16'h1600;      /*  UART 0                 */
 localparam AMBER_UART1_BASE     = 16'h1700;      /*  UART 1                 */
 localparam ETHMAC_BASE          = 16'h2000;      /*  Ethernet MAC           */
-localparam HIBOOT_BASE          = 32'h2800_0000; /*  Uncachable Boot Memory */
 localparam TEST_BASE            = 16'hf000;      /*  Test Module            */
 
 
@@ -143,6 +146,23 @@ function in_ethmac;
     input [31:0] address;
 begin
     in_ethmac = address [31:16] == ETHMAC_BASE;
+end
+endfunction
+
+
+// DMA Controller
+function in_dma;
+    input [31:0] address;
+begin
+    in_dma = address [31:16] == AMBER_DMA_BASE;
+end
+endfunction
+
+// ConfigData Controller
+function in_cd;
+    input [31:0] address;
+begin
+    in_cd = address [31:16] == AMBER_CD_BASE;
 end
 endfunction
 
