@@ -72,6 +72,7 @@ input                       i_m_wb_err
 );
 
 
+`include "memory_configuration.vh"
 `include "register_addresses.vh"
 
 // Wishbone registers
@@ -155,283 +156,293 @@ always @( posedge i_clk )
             AMBER_DMA_START0:   wb_s_rdata32 <= src_start_reg;
             AMBER_DMA_START1:   wb_s_rdata32 <= dst_start_reg;
             AMBER_DMA_LENGTH:   wb_s_rdata32 <= {16'd0, block_len_reg};
-            AMBER_DMA_CUR0:     wb_s_rdata32 <= pull_src_ptr;
-            AMBER_DMA_CUR1:     wb_s_rdata32 <= push_dst_ptr;
-            AMBER_DMA_REMAIN:   wb_s_rdata32 <= {16'd0, pull_remain_reg};
+            AMBER_DMA_CUR0:     wb_s_rdata32 <= pp_src_ptr;
+            AMBER_DMA_CUR1:     wb_s_rdata32 <= pp_dst_ptr;
+            AMBER_DMA_REMAIN:   wb_s_rdata32 <= {16'd0, pp_remain};
 
-            default:            wb_s_rdata32 <= 32'h66778899;
-
+            default:            wb_s_rdata32 <= 32'hdeadbeef;
         endcase
 
 
 // -------------------------------  
-// Init copy
+// Master FSM
 // -------------------------------  
-localparam MASTER_READY     = 2'd0;
-localparam MASTER_RUN       = 2'd1;
-localparam MASTER_END       = 2'd2;
+localparam MASTER_INIT      = 2'd0;
+localparam MASTER_READY     = 2'd1;
+localparam MASTER_RUN       = 2'd2;
+localparam MASTER_END       = 2'd3;
 reg  [1:0]      fsm_master  = 2'd0;
 always @( posedge i_clk )
     begin
     if ( i_sys_rst )
         begin
-        fsm_master          <= MASTER_READY;
+        fsm_master  <= MASTER_INIT;
         end
     else
         case ( fsm_master )
+            MASTER_INIT:
+                begin
+                if (fsm_pp == PP_PRELOAD)               // preload boot_mem with ConfigData
+                    fsm_master      <= MASTER_END;
+                end
+            
             MASTER_READY:
                 begin
-                if (wb_s_start_write && (AMBER_DMA_LENGTH == wb_s_rdata32) && (block_len_reg != 0))
+                if (wb_s_start_write && (wb_s_wdata32 == AMBER_DMA_LENGTH) && (block_len_reg != 0))
                     begin
-                    fsm_master          <= MASTER_RUN;
+                    fsm_master      <= MASTER_RUN;
                     end
                 end
 
             MASTER_RUN:
-                fsm_master              <= MASTER_END;
+                fsm_master          <= MASTER_END;
 
             MASTER_END:
-                if ((fsm_pull == PULL_READY) && (fsm_push == PUSH_READY))
-                    fsm_master          <= MASTER_READY;
+                if (fsm_pp == PP_READY)
+                    fsm_master      <= MASTER_READY;
 
             default:
-                fsm_master              <= MASTER_READY;
+                fsm_master          <= MASTER_READY;
         endcase
     end
 
 
-// -------------------------------  
-// Pulling FSM
-// -------------------------------  
-localparam PULL_INIT        = 4'd0;
-localparam PULL_READY       = 4'd1;
-localparam PULL_BEGIN       = 4'd2;
-localparam PULL_MAIL11      = 4'd3;
-localparam PULL_MAIL12      = 4'd4;
-localparam PULL_MIDDLE      = 4'd5;
-localparam PULL_MAIL21      = 4'd6;
-localparam PULL_MAIL22      = 4'd7;
-localparam PULL_LAST        = 4'd8;
-localparam PULL_MAIL31      = 4'd9;
-localparam PULL_MAIL32      = 4'd10;
-reg  [31:0]             pull_src_ptr        = 'd0;
-reg  [15:0]             pull_remain_reg     = 'd0;
-reg  [3:0]              mail_pull_sel_r     = 'd0;
-reg  [WB_DWIDTH-1:0]    mail_pull_data      = 'd0;
-reg                     mail_pull_ready     = 'd0;
-reg  [3:0]              fsm_pull            = 'd0;
+// -------------------------------
+// PullPush FSM
+// -------------------------------
+localparam PP_INIT          = 4'd0;
+localparam PP_PRELOAD       = 4'd1;
+localparam PP_READY         = 4'd2;
+localparam PP_BEGIN         = 4'd3;
+localparam PP_MAIL11        = 4'd4;
+localparam PP_MAIL12        = 4'd5;
+localparam PP_MAIL13        = 4'd6;
+localparam PP_MIDDLE        = 4'd7;
+localparam PP_MAIL21        = 4'd8;
+localparam PP_MAIL22        = 4'd9;
+localparam PP_MAIL23        = 4'd10;
+localparam PP_LAST          = 4'd11;
+localparam PP_MAIL31        = 4'd12;
+localparam PP_MAIL32        = 4'd13;
 
-wire [3:0]              sel_int;
-assign                  sel_int = (pull_remain_reg > 3) ?  (4'b1111 << (pull_src_ptr & 2'b11) & 4'b1111) :
-                                                           (4'b1111 << (pull_src_ptr & 2'b11) & 4'b1111 & (4'b1111 >> (4 - pull_remain_reg)));
+reg  [31:0]             pp_src_ptr          = 'd0;
+reg  [31:0]             pp_dst_ptr          = 'd0;
+reg  [3:0]              pp_sel_r            = 'd0;
+reg  [WB_DWIDTH-1:0]    pp_data             = 'd0;
+reg  [3:0]              fsm_pp              = 'd0;
+
+integer                 pp_remain_int       =   0;
+wire [15:0]             pp_remain;
+assign pp_remain = pp_remain_int[15:0];
+
+wire [3:0]              sel_nxt;
+assign                  sel_nxt = (pp_remain > 3) ?  (4'b1111 << (pp_src_ptr & 2'b11) & 4'b1111) :
+                                                     (4'b1111 << (pp_src_ptr & 2'b11) & 4'b1111 & (4'b1111 >> (4 - pp_remain)));
 always @( posedge i_clk )
     begin
     if ( i_sys_rst )
         begin
-        pull_src_ptr    <= 'd0;
-        pull_remain_reg <= 'd0;
+        pp_src_ptr      <= 'd0;
+        pp_dst_ptr      <= 'd0;
+        pp_remain_int   <=   0;
+        pp_sel_r        <= 'd0;
+        pp_data         <= 'd0;
         o_m_wb_adr      <= 'd0;
         o_m_wb_sel      <= 'd0;
         o_m_wb_we       <= 'd0;
         o_m_wb_dat      <= 'd0;
         o_m_wb_cyc      <= 'd0;
         o_m_wb_stb      <= 'd0;
-        mail_pull_sel_r <= 'd0;
-        mail_pull_data  <= 'd0;
-        mail_pull_ready <= 'd0;
-        fsm_pull        <= PULL_INIT;
+        fsm_pp          <= PP_INIT;
         end
     else
-        case ( fsm_pull )
-            PULL_INIT:
+        case ( fsm_pp )
+            PP_INIT:
                 begin
-                pull_src_ptr    <= 'd0;
-                pull_remain_reg <= 'd0;
+                pp_src_ptr      <= 'd0;
+                pp_dst_ptr      <= 'd0;
+                pp_remain_int   <=   0;
+                pp_sel_r        <= 'd0;
+                pp_data         <= 'd0;
                 o_m_wb_adr      <= 'd0;
                 o_m_wb_sel      <= 'd0;
                 o_m_wb_we       <= 'd0;
                 o_m_wb_dat      <= 'd0;
                 o_m_wb_cyc      <= 'd0;
                 o_m_wb_stb      <= 'd0;
-                mail_pull_sel_r <= 'd0;
-                mail_pull_data  <= 'd0;
-                mail_pull_ready <= 'd0;
-                fsm_pull        <= PULL_READY;
+                fsm_pp          <= PP_PRELOAD;
                 end
 
-            PULL_READY:
-                if ((fsm_master == MASTER_RUN) && (pull_remain_reg != 0))
-                    begin
-                    pull_src_ptr        <= src_start_reg;
-                    pull_remain_reg     <= block_len_reg;
-                    o_m_wb_adr          <= src_start_reg & 32'hffff_fffd;   // first request cycle starts here
-                    o_m_wb_sel          <= sel_int[WB_SWIDTH-1:0];
-                    mail_pull_sel_r     <= sel_int[WB_SWIDTH-1:0];
-                    o_m_wb_cyc          <= 'd1;
-                    o_m_wb_stb          <= 'd1;
-                    fsm_pull            <= PULL_BEGIN;
+            PP_PRELOAD:
+                if (fsm_master != MASTER_INIT)
+                    begin                                               // PULL request
+                    pp_src_ptr      <= CONFIG_BASE;
+                    pp_dst_ptr      <= BOOT_BASE;
+                    pp_remain_int   <= 16'h1000;                        // 4096 x 32 words
+                    pp_sel_r        <= 4'b1111;                         // aligned words
+                    o_m_wb_adr      <= CONFIG_BASE & 32'hffff_fffc;
+                    o_m_wb_sel      <= 4'b1111;
+                    o_m_wb_cyc      <= 'd1;
+                    o_m_wb_stb      <= 'd1;
+                    fsm_pp          <= PP_BEGIN;
                     end
 
-            PULL_BEGIN:
-                if (i_m_wb_ack)
-                    begin
-                    mail_pull_data  <= i_m_wb_dat;
+            PP_READY:
+                if ((fsm_master == MASTER_RUN) && (pp_remain != 0))
+                    begin                                               // PULL request
+                    pp_src_ptr      <= src_start_reg;
+                    pp_dst_ptr      <= dst_start_reg;
+                    pp_remain_int   <= block_len_reg;
+                    pp_sel_r        <= sel_nxt[WB_SWIDTH-1:0];
+                    o_m_wb_adr      <= src_start_reg & 32'hffff_fffc;
+                    o_m_wb_sel      <= sel_nxt[WB_SWIDTH-1:0];
+                    o_m_wb_cyc      <= 'd1;
+                    o_m_wb_stb      <= 'd1;
+                    fsm_pp          <= PP_BEGIN;
+                    end
+
+            PP_BEGIN:
+                if (i_m_wb_ack || i_m_wb_err)
+                    begin                                               // PULL result
+                    pp_data         <= i_m_wb_dat;
+                    pp_src_ptr      <= (pp_src_ptr & 32'hffff_fffc) + 4;
                     o_m_wb_cyc      <= 'd0;
                     o_m_wb_stb      <= 'd0;
-                    pull_src_ptr    <= (pull_src_ptr & 32'hffff_fffd) + 4;
-                    if (4 < pull_remain_reg)
+                    if (4 < pp_remain)
                         begin
-                        pull_remain_reg     <= pull_remain_reg - 4;
-                        fsm_pull            <= PULL_MAIL11;
+                        pp_remain_int   <= pp_remain - 4;
+                        fsm_pp          <= PP_MAIL11;
                         end
                     else
                         // keep pull_remain_reg
-                        fsm_pull            <= PULL_MAIL21;
+                        fsm_pp          <= PP_MAIL21;
                     end
 
-            PULL_MAIL11:
-                begin
-                o_m_wb_adr      <= pull_src_ptr;    // next request cycle starts here
-                o_m_wb_sel      <= 4'b1111;
-                o_m_wb_cyc      <= 'd1;
-                o_m_wb_stb      <= 'd1;
-                if (mail_push_next)
-                    begin
-                    mail_pull_sel_r <= 4'b1111;
-                    mail_pull_ready <= 'd1;
-                    fsm_pull        <= PULL_MAIL12;
-                    end
-                end
-
-            PULL_MAIL12:
-                if (!mail_push_next)
-                    begin
-                    mail_pull_ready <= 'd0;
-                    fsm_pull        <= PULL_MIDDLE;
+            PP_MAIL11:
+                if (!i_m_wb_ack && !i_m_wb_err)
+                    begin                                               // PUSH activation
+                    o_m_wb_adr      <= pp_dst_ptr;
+                    o_m_wb_sel      <= pp_sel_r;
+                    o_m_wb_dat      <= pp_data;
+                    o_m_wb_we       <= 'd1;
+                    o_m_wb_cyc      <= 'd1;
+                    o_m_wb_stb      <= 'd1;
+                    fsm_pp          <= PP_MAIL12;
                     end
 
-            PULL_MIDDLE:
-                if (i_m_wb_ack)
-                    begin
-                    mail_pull_data  <= i_m_wb_dat;
+            PP_MAIL12:
+                if (i_m_wb_ack || i_m_wb_err)
+                    begin                                               // PUSH termination
+                    pp_dst_ptr      <= (pp_dst_ptr & 32'hffff_fffc) + 4;
+                    o_m_wb_we       <= 'd0;
                     o_m_wb_cyc      <= 'd0;
                     o_m_wb_stb      <= 'd0;
-                    pull_src_ptr    <= pull_src_ptr + 4;
-                    if (4 < pull_remain_reg)
+                    fsm_pp          <= PP_MAIL13;
+                    end
+
+            PP_MAIL13:
+                if (!i_m_wb_ack && !i_m_wb_err)
+                    begin                                               // PULL request
+                    pp_sel_r        <= 4'b1111;
+                    o_m_wb_adr      <= pp_src_ptr;
+                    o_m_wb_sel      <= 4'b1111;
+                    o_m_wb_cyc      <= 'd1;
+                    o_m_wb_stb      <= 'd1;
+                    fsm_pp          <= PP_MIDDLE;
+                    end
+
+            PP_MIDDLE:
+                if (i_m_wb_ack)
+                    begin                                               // PULL result
+                    pp_data         <= i_m_wb_dat;
+                    pp_src_ptr      <= pp_src_ptr + 4;
+                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_stb      <= 'd0;
+                    if (4 < pp_remain)
                         begin
-                        pull_remain_reg     <= pull_remain_reg - 4;
-                        fsm_pull            <= PULL_MAIL11;
+                        pp_remain_int   <= pp_remain - 4;
+                        fsm_pp          <= PP_MAIL11;
                         end
-//                  else if (0 == pull_remain_reg)         // dead code
-//                      fsm_pull            <= PULL_LAST;
+//                  else if (0 == pp_remain_reg)        // dead code
+//                      fsm_pp          <= PP_LAST;
                     else
-                        // keep pull_remain_reg
-                        fsm_pull            <= PULL_MAIL21;
+                        // keep pp_remain_reg
+                        fsm_pp          <= PP_MAIL21;
                     end
 
-            PULL_MAIL21:                            // entry point for 1..4 requested bytes
-                begin
-                o_m_wb_sel      <= (4'b1111 >> (4 - pull_remain_reg));
-                o_m_wb_adr      <= pull_src_ptr;    // last request cycle starts here
-                o_m_wb_cyc      <= 'd1;
-                o_m_wb_stb      <= 'd1;
-                if (mail_push_next)
-                    begin
-                    mail_pull_sel_r <= (4'b1111 >> (4 - pull_remain_reg));
-                    mail_pull_ready <= 'd1;
-                    fsm_pull        <= PULL_MAIL22;
-                    end
-                end
-
-            PULL_MAIL22:
-                if (!mail_push_next)
-                    begin
-                    mail_pull_ready <= 'd0;
-                    fsm_pull        <= PULL_LAST;
+            PP_MAIL21:          // entry point for 1..4 requested bytes
+                if (!i_m_wb_ack && !i_m_wb_err)
+                    begin                                               // PUSH activation
+                    o_m_wb_adr      <= pp_dst_ptr;
+                    o_m_wb_sel      <= pp_sel_r;
+                    o_m_wb_dat      <= pp_data;
+                    o_m_wb_we       <= 'd1;
+                    o_m_wb_cyc      <= 'd1;
+                    o_m_wb_stb      <= 'd1;
+                    fsm_pp          <= PP_MAIL22;
                     end
 
-            PULL_LAST:
-                if (i_m_wb_ack)
-                    begin
-                    mail_pull_data  <= i_m_wb_dat;
+            PP_MAIL22:
+                if (i_m_wb_ack || i_m_wb_err)
+                    begin                                               // PUSH termination
+                    pp_dst_ptr      <= pp_dst_ptr + 4;
+                    o_m_wb_we       <= 'd0;
                     o_m_wb_cyc      <= 'd0;
                     o_m_wb_stb      <= 'd0;
-                    fsm_pull        <= PULL_MAIL31;
+                    fsm_pp          <= PP_MAIL23;
                     end
 
-            PULL_MAIL31:
-                begin
-                o_m_wb_sel      <= 'd0;
-                o_m_wb_adr      <= 'd0;
-                o_m_wb_cyc      <= 'd0;
-                o_m_wb_stb      <= 'd0;
-                if (mail_push_next)
-                    begin
-                    mail_pull_ready <= 'd1;
-                    fsm_pull        <= PULL_MAIL32;
+            PP_MAIL23:
+                if (!i_m_wb_ack && !i_m_wb_err)
+                    begin                                               // PULL request
+                    pp_sel_r        <= (4'b1111 >> (4 - pp_remain));
+                    o_m_wb_adr      <= pp_src_ptr;
+                    o_m_wb_sel      <= (4'b1111 >> (4 - pp_remain));
+                    o_m_wb_cyc      <= 'd1;
+                    o_m_wb_stb      <= 'd1;
+                    fsm_pp          <= PP_LAST;
                     end
-                end
-
-            PULL_MAIL32:
-                if (!mail_push_next)
-                    begin
-                    mail_pull_sel_r <= 'd0;
-                    mail_pull_data  <= 'd0;
-                    mail_pull_ready <= 'd0;
-                    fsm_pull        <= PULL_READY;
-                    end
-
-            default:
-                fsm_pull    <= PULL_INIT;
-        endcase
-    end
-
-
-// -------------------------------  
-// Pushing FSM
-// -------------------------------  
-localparam PUSH_INIT      = 2'd0;
-localparam PUSH_READY     = 2'd1;
-reg  [31:0]             push_dst_ptr        = 'd0;
-reg  [3:0]              mail_push_sel_r     = 'd0;
-reg  [WB_DWIDTH-1:0]    mail_push_data      = 'd0;
-reg                     mail_push_next      = 'd0;
-reg  [1:0]              fsm_push            = 2'd0;
-always @( posedge i_clk )
-    begin
-    if ( i_sys_rst )
-        begin
-        push_dst_ptr    <= 'd0;
-        mail_push_sel_r <= 'd0;
-        mail_push_data  <= 'd0;
-        mail_push_next  <= 'd0;
-        fsm_push        <= PUSH_INIT;
-        end
-    else
-        case ( fsm_push )
-            PUSH_INIT:
-                begin
-                push_dst_ptr    <= 'd0;
-                mail_push_sel_r <= 'd0;
-                mail_push_data  <= 'd0;
-                mail_push_next  <= 'd0;
-                fsm_push        <= PUSH_READY;
-                end
-
-            PUSH_READY:
-                begin
-                // if ()
                 
-                end
-//                    push_dst_ptr        <= dst_start_reg;
+            PP_LAST:
+                if (i_m_wb_ack || i_m_wb_err)
+                    begin                                               // PULL result
+                    pp_data         <= i_m_wb_dat;
+                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_stb      <= 'd0;
+                    fsm_pp          <= PP_MAIL31;
+                    end
 
-//                    mail_push_sel_r <= mail_pull_sel_r
-//                    mail_push_data  <= mail_pull_data;
+            PP_MAIL31:
+                 if (!i_m_wb_ack && !i_m_wb_err)
+                    begin                                               // PUSH activation
+                    o_m_wb_adr      <= pp_dst_ptr;
+                    o_m_wb_sel      <= pp_sel_r;
+                    o_m_wb_dat      <= pp_data;
+                    o_m_wb_we       <= 'd1;
+                    o_m_wb_cyc      <= 'd1;
+                    o_m_wb_stb      <= 'd1;
+                    fsm_pp          <= PP_MAIL32;
+                    end
+
+            PP_MAIL32:
+                if (i_m_wb_ack || i_m_wb_err)
+                    begin                                               // PUSH termination
+                    pp_sel_r        <= 'd0;
+                    pp_data         <= 'd0;
+                    o_m_wb_adr      <= 'd0;
+                    o_m_wb_sel      <= 'd0;
+                    o_m_wb_dat      <= 'd0;
+                    o_m_wb_we       <= 'd0;
+                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_stb      <= 'd0;
+                    fsm_pp          <= PP_READY;
+                    end
 
             default:
-                fsm_push    <= PUSH_INIT;
+                fsm_pp  <= PP_INIT;
         endcase
     end
+
 
 
 // =======================================================================================
@@ -452,28 +463,32 @@ wire wb_s_read_ack = i_wb_s_stb && !i_wb_s_we &&  o_wb_s_ack;
 // Report DMA Module Register accesses
 // -----------------------------------------------  
 always @(posedge i_clk)
-    if ( wb_s_read_ack || wb_s_start_write )
+    if (wb_s_read_ack || wb_s_start_write)
         begin
         `TB_DEBUG_MESSAGE
 
-        if ( wb_start_write )
+        if (wb_start_write)
             $write("Write 0x%08x to   ", i_wb_dat);
         else
             $write("Read  0x%08x from ", o_wb_dat);
 
-        case ( i_wb_adr[15:0] )
+        case (i_wb_adr[15:0])
             AMBER_DMA_START0:
-                $write(" DMA Controller Start address of puller"); 
+                $write(" DMA Controller PULL start address"); 
             AMBER_DMA_START1:
-                $write(" DMA Controller Start address of pusher"); 
+                $write(" DMA Controller PUSH start address"); 
             AMBER_DMA_LENGTH:
                 $write(" DMA Controller Memory copy length"); 
+            AMBER_DMA_CUR0:
+                $write(" DMA Controller Current PULL address"); 
+            AMBER_DMA_CUR1:
+                $write(" DMA Controller Current PUSH address"); 
             AMBER_DMA_REMAIN:
-                $write(" DMA Controller Current remaining bytes to run"); 
+                $write(" DMA Controller Remaining bytes to run"); 
 
             default:
                 begin
-                $write(" unknown Amber DMA Register region");
+                $write(" unknown Amber DMA Register Address");
                 $write(", Address 0x%08h\n", i_wb_adr); 
                 `TB_ERROR_MESSAGE
                 end
