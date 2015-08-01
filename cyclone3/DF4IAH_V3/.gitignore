@@ -11,3 +11,4 @@ top.sof
 *.rpt
 *.smsg
 *.summary
+bootmem*
