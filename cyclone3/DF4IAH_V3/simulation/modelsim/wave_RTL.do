@@ -337,15 +337,6 @@ add wave -noupdate -expand -group Amber_Execute -group I/O_Execute -radix hexade
 add wave -noupdate -expand -group Amber_Execute -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_copro_read_data
 add wave -noupdate -expand -group Amber_Execute -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_data_access_exec
 add wave -noupdate -expand -group Amber_Execute -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_copro_write_data
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_adr
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_sel
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_we
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_dat
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_cyc
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_stb
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_ack
-add wave -noupdate -expand -group Amber_Execute -group I/O_Execute /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_err
 add wave -noupdate -expand -group Amber_Execute -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_plus4
 add wave -noupdate -expand -group Amber_Execute -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_minus4
 add wave -noupdate -expand -group Amber_Execute -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/address_plus4
@@ -415,23 +406,6 @@ add wave -noupdate -expand -group Amber_Execute -group Internal_Execute -group S
 add wave -noupdate -expand -group Amber_Execute -expand -group DEBUG_Execute -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_execute/xCONDITION
 add wave -noupdate -expand -group Amber_Execute -expand -group DEBUG_Execute -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_execute/xMODE
 add wave -noupdate -divider {Wishbone Slaves}
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -expand -group Control_S1 -color Yellow /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_clk
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_cyc
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_stb
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_ack
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_err
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_adr
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -radix binary /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_sel
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_we
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/i_wb_dat
-add wave -noupdate -expand -group BootMem__S1 -expand -group I/O_S1 -radix hexadecimal -childformat {{{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[31]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[30]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[29]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[28]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[27]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[26]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[25]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[24]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[23]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[22]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[21]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[20]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[19]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[18]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[17]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[16]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[15]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[14]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[13]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[12]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[11]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[10]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[9]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[8]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[7]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[6]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[5]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[4]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[3]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[2]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[1]} -radix hexadecimal} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[0]} -radix hexadecimal}} -subitemconfig {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[31]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[30]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[29]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[28]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[27]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[26]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[25]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[24]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[23]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[22]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[21]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[20]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[19]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[18]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[17]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[16]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[15]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[14]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[13]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[12]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[11]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[10]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[9]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[8]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[7]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[6]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[5]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[4]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[3]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[2]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[1]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat[0]} {-height 15 -radix hexadecimal}} /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/o_wb_dat
-add wave -noupdate -expand -group BootMem__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/address
-add wave -noupdate -expand -group BootMem__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/start_read
-add wave -noupdate -expand -group BootMem__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/start_read_r
-add wave -noupdate -expand -group BootMem__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/read_data
-add wave -noupdate -expand -group BootMem__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/start_write
-add wave -noupdate -expand -group BootMem__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/write_data
-add wave -noupdate -expand -group BootMem__S1 -expand -group Internal_S1 -radix binary -childformat {{{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[3]} -radix binary} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[2]} -radix binary} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[1]} -radix binary} {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[0]} -radix binary}} -subitemconfig {{/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[3]} {-height 15 -radix binary} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[2]} {-height 15 -radix binary} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[1]} {-height 15 -radix binary} {/tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable[0]} {-height 15 -radix binary}} /tb_top/u_dut/u_system/boot_mem32/u_boot_mem/byte_enable
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group Control_S2 -color Tan /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/i_sys_rst
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group Control_S2 -color Yellow /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/i_wb_clk
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group Control_S2 -color Yellow /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/i_ram_clk
@@ -457,7 +431,7 @@ add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -ex
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 -color {Sky Blue} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_request_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_OUT_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_dat_out_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_OUT_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_dat_out_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -color Pink -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_cyc_ctr
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_sel_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_adr_r
@@ -472,8 +446,47 @@ add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -ex
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_dat_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_sel_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_read_pos
+add wave -noupdate -expand -group DMA__S8 -color Yellow /tb_top/u_dut/u_system/u_dma/i_clk
+add wave -noupdate -expand -group DMA__S8 -color Tan /tb_top/u_dut/u_system/u_dma/i_sys_rst
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/o_m_wb_stb
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/o_m_wb_cyc
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/i_m_wb_ack
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/i_m_wb_err
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/o_m_wb_adr
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -radix binary /tb_top/u_dut/u_system/u_dma/o_m_wb_sel
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/o_m_wb_we
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/o_m_wb_dat
+add wave -noupdate -expand -group DMA__S8 -expand -group Master_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/i_m_wb_dat
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/i_s_wb_stb
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/i_s_wb_cyc
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/o_s_wb_ack
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -color Wheat /tb_top/u_dut/u_system/u_dma/o_s_wb_err
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/i_s_wb_adr
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -radix binary /tb_top/u_dut/u_system/u_dma/i_s_wb_sel
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/i_s_wb_we
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/i_s_wb_dat
+add wave -noupdate -expand -group DMA__S8 -group Slave_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/o_s_wb_dat
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_read_ack
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_rdata32
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_write
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_read
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_read_d1
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_wdata32
+add wave -noupdate -expand -group DMA__S8 -color Aquamarine -radix hexadecimal /tb_top/u_dut/u_system/u_dma/src_start_reg
+add wave -noupdate -expand -group DMA__S8 -color Aquamarine -radix hexadecimal /tb_top/u_dut/u_system/u_dma/dst_start_reg
+add wave -noupdate -expand -group DMA__S8 -color Pink -radix hexadecimal /tb_top/u_dut/u_system/u_dma/block_len_reg
+add wave -noupdate -expand -group DMA__S8 -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_src_ptr
+add wave -noupdate -expand -group DMA__S8 -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_dst_ptr
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_remain_int
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_remain
+add wave -noupdate -expand -group DMA__S8 -radix binary /tb_top/u_dut/u_system/u_dma/pp_sel_r
+add wave -noupdate -expand -group DMA__S8 -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_data
+add wave -noupdate -expand -group DMA__S8 -radix binary /tb_top/u_dut/u_system/u_dma/sel_nxt
+add wave -noupdate -expand -group DMA__S8 -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/fsm_master
+add wave -noupdate -expand -group DMA__S8 -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/fsm_pp
 add wave -noupdate -divider WishboneArbiter
 add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -expand -group Control -color Yellow -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_wb_clk
+add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -expand -group Control -color Tan /tb_top/u_dut/u_system/u_wishbone_arbiter/i_sys_rst
 add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/master_cyc
 add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/master_stb
 add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/master_ack
@@ -483,31 +496,43 @@ add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -radix bina
 add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/master_we
 add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/master_wdat
 add wave -noupdate -expand -group WishboneArbiter -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/master_rdat
+add wave -noupdate -expand -group WishboneArbiter -divider {WishboneArbiter Masters}
 add wave -noupdate -expand -group WishboneArbiter -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/current_master
 add wave -noupdate -expand -group WishboneArbiter -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/current_master_r
 add wave -noupdate -expand -group WishboneArbiter -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/next_master
 add wave -noupdate -expand -group WishboneArbiter -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/select_master
-add wave -noupdate -expand -group WishboneArbiter -group M0 /tb_top/u_dut/u_system/u_wishbone_arbiter/m0_wb_hold_r
+add wave -noupdate -expand -group WishboneArbiter -group M0 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/m0_wb_hold_r
+add wave -noupdate -expand -group WishboneArbiter -group M0 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group M0 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group M0 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m0_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group M0 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m0_wb_err
 add wave -noupdate -expand -group WishboneArbiter -group M0 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_adr
-add wave -noupdate -expand -group WishboneArbiter -group M0 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_sel
-add wave -noupdate -expand -group WishboneArbiter -group M0 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_we
+add wave -noupdate -expand -group WishboneArbiter -group M0 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_sel
+add wave -noupdate -expand -group WishboneArbiter -group M0 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_we
 add wave -noupdate -expand -group WishboneArbiter -group M0 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m0_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group M0 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group M0 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -group M0 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m0_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -group M0 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m0_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -group M0 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m0_wb_err
-add wave -noupdate -expand -group WishboneArbiter -group M1 /tb_top/u_dut/u_system/u_wishbone_arbiter/m1_wb_hold_r
-add wave -noupdate -expand -group WishboneArbiter -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_adr
-add wave -noupdate -expand -group WishboneArbiter -group M1 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_sel
-add wave -noupdate -expand -group WishboneArbiter -group M1 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_we
-add wave -noupdate -expand -group WishboneArbiter -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m1_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group M1 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -group M1 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -group M1 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m1_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -group M1 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m1_wb_err
-add wave -noupdate -expand -group WishboneArbiter /tb_top/u_dut/u_system/u_wishbone_arbiter/current_slave
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/m1_wb_hold_r
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m1_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m1_wb_err
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_adr
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -radix binary /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_sel
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_we
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m1_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -expand -group M1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m1_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/m2_wb_hold_r
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m2_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m2_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m2_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m2_wb_err
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m2_wb_adr
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -radix binary /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m2_wb_sel
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m2_wb_we
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_m2_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -expand -group M2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_m2_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -divider {WishboneArbiter Slaves}
+add wave -noupdate -expand -group WishboneArbiter -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wishbone_arbiter/current_slave
 add wave -noupdate -expand -group WishboneArbiter -group S0 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s0_wb_adr
 add wave -noupdate -expand -group WishboneArbiter -group S0 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s0_wb_sel
 add wave -noupdate -expand -group WishboneArbiter -group S0 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s0_wb_we
@@ -522,67 +547,85 @@ add wave -noupdate -expand -group WishboneArbiter -expand -group S1 -color Wheat
 add wave -noupdate -expand -group WishboneArbiter -expand -group S1 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s1_wb_ack
 add wave -noupdate -expand -group WishboneArbiter -expand -group S1 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s1_wb_err
 add wave -noupdate -expand -group WishboneArbiter -expand -group S1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s1_wb_adr
-add wave -noupdate -expand -group WishboneArbiter -expand -group S1 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s1_wb_sel
+add wave -noupdate -expand -group WishboneArbiter -expand -group S1 -radix binary /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s1_wb_sel
 add wave -noupdate -expand -group WishboneArbiter -expand -group S1 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s1_wb_we
 add wave -noupdate -expand -group WishboneArbiter -expand -group S1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s1_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -expand -group S1 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s1_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s2_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s2_wb_err
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_adr
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_sel
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_we
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s2_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -expand -group S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s2_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group S2 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s2_wb_err
+add wave -noupdate -expand -group WishboneArbiter -group S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_adr
+add wave -noupdate -expand -group WishboneArbiter -group S2 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_sel
+add wave -noupdate -expand -group WishboneArbiter -group S2 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_we
+add wave -noupdate -expand -group WishboneArbiter -group S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s2_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -group S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s2_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -group S3 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group S3 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group S3 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s3_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group S3 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s3_wb_err
 add wave -noupdate -expand -group WishboneArbiter -group S3 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_adr
 add wave -noupdate -expand -group WishboneArbiter -group S3 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_sel
 add wave -noupdate -expand -group WishboneArbiter -group S3 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_we
 add wave -noupdate -expand -group WishboneArbiter -group S3 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s3_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S3 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group S3 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -group S3 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s3_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -group S3 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s3_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -group S3 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s3_wb_err
+add wave -noupdate -expand -group WishboneArbiter -group S4 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group S4 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group S4 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s4_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group S4 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s4_wb_err
 add wave -noupdate -expand -group WishboneArbiter -group S4 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_adr
 add wave -noupdate -expand -group WishboneArbiter -group S4 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_sel
 add wave -noupdate -expand -group WishboneArbiter -group S4 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_we
 add wave -noupdate -expand -group WishboneArbiter -group S4 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s4_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S4 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group S4 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -group S4 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s4_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -group S4 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s4_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -group S4 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s4_wb_err
+add wave -noupdate -expand -group WishboneArbiter -group S5 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group S5 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group S5 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s5_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group S5 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s5_wb_err
 add wave -noupdate -expand -group WishboneArbiter -group S5 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_adr
 add wave -noupdate -expand -group WishboneArbiter -group S5 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_sel
 add wave -noupdate -expand -group WishboneArbiter -group S5 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_we
 add wave -noupdate -expand -group WishboneArbiter -group S5 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s5_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S5 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group S5 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -group S5 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s5_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -group S5 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s5_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -group S5 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s5_wb_err
+add wave -noupdate -expand -group WishboneArbiter -group S6 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group S6 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group S6 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s6_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group S6 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s6_wb_err
 add wave -noupdate -expand -group WishboneArbiter -group S6 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_adr
 add wave -noupdate -expand -group WishboneArbiter -group S6 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_sel
 add wave -noupdate -expand -group WishboneArbiter -group S6 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_we
 add wave -noupdate -expand -group WishboneArbiter -group S6 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s6_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S6 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group S6 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -group S6 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s6_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -group S6 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s6_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -group S6 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s6_wb_err
+add wave -noupdate -expand -group WishboneArbiter -group S7 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group S7 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group S7 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s7_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group S7 -color Wheat /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s7_wb_err
 add wave -noupdate -expand -group WishboneArbiter -group S7 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_adr
 add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_sel
 add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_we
 add wave -noupdate -expand -group WishboneArbiter -group S7 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s7_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S7 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_dat
-add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_cyc
-add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s7_wb_stb
-add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s7_wb_ack
-add wave -noupdate -expand -group WishboneArbiter -group S7 /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s7_wb_err
+add wave -noupdate -expand -group WishboneArbiter -group S8 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s8_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -group S8 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s8_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -group S8 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s8_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -group S8 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s8_wb_err
+add wave -noupdate -expand -group WishboneArbiter -group S8 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s8_wb_adr
+add wave -noupdate -expand -group WishboneArbiter -group S8 -radix binary /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s8_wb_sel
+add wave -noupdate -expand -group WishboneArbiter -group S8 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s8_wb_we
+add wave -noupdate -expand -group WishboneArbiter -group S8 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s8_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -group S8 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s8_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_cyc
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_stb
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s9_wb_ack
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -color Wheat -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s9_wb_err
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_adr
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -radix binary /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_sel
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_we
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s9_wb_dat
+add wave -noupdate -expand -group WishboneArbiter -expand -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_dat
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {10016673 ps} 0} {{Cursor 2} {226000 ps} 0} {{Cursor 3} {19423553 ps} 0}
-quietly wave cursor active 1
+WaveRestoreCursors {{Cursor i_brd_reset_n} {999025 ps} 1} {{Cursor i_brd_reset (synced)} {1073785 ps} 1} {{Cursor o_sys_rst} {1673871 ps} 1} {{Cursor DMA_Master_stb} {1748732 ps} 1} {{Cursor DMA_Master_ack} {1773846 ps} 1} {{Cursor DMA_Master_stb off} {1798495 ps} 1} {{Cursor M1 activates} {8147819 ps} 1}
+quietly wave cursor active 7
 configure wave -namecolwidth 497
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -597,4 +640,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {30250625 ps} {32092178 ps}
+WaveRestoreZoom {7995275 ps} {8311524 ps}
