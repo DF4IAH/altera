@@ -39,7 +39,7 @@
 //////////////////////////////////////////////////////////////////
 
 
-module generic_rom_byte_en
+module cfgdta_rom_byte_en
 #(
 parameter MADDR_WIDTH   = 12,
 parameter DATA_WIDTH    = 32
@@ -49,7 +49,7 @@ parameter DATA_WIDTH    = 32
 input                           i_clk,
 input       [MADDR_WIDTH-1:0]   i_address,
 output reg  [DATA_WIDTH-1:0]    o_read_data
-    );
+);
     
 reg         [DATA_WIDTH-1:0]    rom [0:2**MADDR_WIDTH-1];
 
@@ -57,7 +57,7 @@ reg         [DATA_WIDTH-1:0]    rom [0:2**MADDR_WIDTH-1];
 // BIG ENDIAN
 initial 
     begin
-    `include "bootmem.vh"
+    `include "../../../../../bootmem.vh"
     end
 
 

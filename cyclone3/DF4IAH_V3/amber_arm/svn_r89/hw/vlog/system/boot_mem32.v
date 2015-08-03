@@ -41,6 +41,8 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
+`include "system_config_defines.vh"
+
 
 module boot_mem32 #(
 parameter WB_DWIDTH   = 32,
@@ -136,9 +138,9 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
             // default file
             `include "boot-loader_memparams32.v"
         `endif
-    `endif 
+    `endif
 )
-`elsif XXX_ALTERA_FPGA
+`elsif ALTERA_FPGA
     `ifdef ALTERA_CYCLONE3_FPGA
         cyc3_sram_4096x32_byte_en
     `elsif ALTERA_MAX10_FPGA
@@ -146,22 +148,17 @@ assign address     = i_wb_adr[MADDR_WIDTH+1:2];
     `endif 
 #(
     .DATA_WIDTH     ( WB_DWIDTH            ),
-    .ADDRESS_WIDTH  ( MADDR_WIDTH          ),
-    .INIT_FILE      ( "bootmem.hex"        )
+    .ADDRESS_WIDTH  ( MADDR_WIDTH          ) /* ,
+    .INIT_FILE      ( "bootmem.mif"        )  */
 )
 `else
     generic_sram_byte_en
 #(
     .DATA_WIDTH     ( WB_DWIDTH            ),
-    .ADDRESS_WIDTH  ( 9                    ),
-    .INIT_FILE      ( "bootmem_h.hex"      )
+    .ADDRESS_WIDTH  ( 8                    ) /* ,
+    .INIT_FILE      ( "bootmem_h.hex"      )  */
 )
-//    generic_rom_byte_en
-//#(
-//    .DATA_WIDTH     ( WB_DWIDTH            ),
-//    .ADDRESS_WIDTH  ( MADDR_WIDTH          )
-//)
-`endif 
+`endif
 u_mem (
     .i_clk          ( i_wb_clk             ),
     .i_write_enable ( start_write          ),

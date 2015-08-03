@@ -43,7 +43,7 @@
 module cfg_dta  #(
 parameter WB_DWIDTH   = 32,
 parameter WB_SWIDTH   = 4,
-parameter MADDR_WIDTH = 12
+parameter MADDR_WIDTH = 20
 )(
 input                       i_clk,
 input                       i_sys_rst,
@@ -65,7 +65,7 @@ output                      o_wb_err
 `include "register_addresses.vh"
 
 // Wishbone interface
-reg  [31:0]     wb_rdata32 = 'd0;
+wire [31:0]     wb_rdata32;  //  = 'd0;
 wire            wb_start_write;
 wire            wb_start_read;
 reg             wb_start_read_d1 = 'd0;
@@ -110,21 +110,21 @@ endgenerate
 
 
 // -------------------------------  
-// external EEPROM / FLASH access engine
+// external serial EEPROM / FLASH access engine
 // -------------------------------  
 
-    
 
-// this sub-module is a quick replacement to read from a local "ROM" module w/ initialized program code
 
-    generic_rom_byte_en #(
-        .MADDR_WIDTH    ( 12                        ),
-        .DATA_WIDTH     ( WB_DWIDTH                 )
+// this sub module is a quick replacement to read from a local "ROM" module w/ initialized program code
+
+    cfgdta_rom_byte_en #(
+        .MADDR_WIDTH    ( MADDR_WIDTH                      ),
+        .DATA_WIDTH     ( WB_DWIDTH                        )
     )
-    u_mem (
-        .i_clk          ( i_clk                     ),
-        .i_address      ( i_wb_adr[MADDR_WIDTH+1:2] ),  // 4096 words, 32 bits
-        .o_read_data    ( o_wb_dat                  )
+    u_rom (
+        .i_clk          ( i_clk                            ),
+        .i_address      ( i_wb_adr[MADDR_WIDTH+1:2]        ),  // 4096 words, 32 bits
+        .o_read_data    ( wb_rdata32                       )
     );
 
 endmodule

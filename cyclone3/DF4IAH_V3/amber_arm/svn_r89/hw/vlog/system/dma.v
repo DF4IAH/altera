@@ -76,15 +76,16 @@ input                       i_m_wb_err
 `include "register_addresses.vh"
 
 // Wishbone registers
-reg  [31:0]     src_start_reg = 'd0;         // initial address of source block
-reg  [31:0]     dst_start_reg = 'd0;         // initial address of destination block
-reg  [15:0]     block_len_reg = 'd0;            // block copy length
+reg  [31:0]     src_start_reg       = 'd0;        // initial address of source block
+reg  [31:0]     dst_start_reg       = 'd0;        // initial address of destination block
+reg  [15:0]     block_len_reg       = 'd0;        // block copy length
+reg             dma_block_reg       = 'd0;        // blocking access for complete transfer by holding the wishbone cycle signal
 
 // Wishbone slave interface
-reg  [31:0]     wb_s_rdata32 = 'd0;
+reg  [31:0]     wb_s_rdata32        = 'd0;
 wire            wb_s_start_write;
 wire            wb_s_start_read;
-reg             wb_s_start_read_d1 = 'd0;
+reg             wb_s_start_read_d1  = 'd0;
 wire [31:0]     wb_s_wdata32;
 
 
@@ -125,6 +126,49 @@ else
 endgenerate
 
 
+// -------------------------------
+// for Master FSM
+// -------------------------------
+localparam MASTER_INIT                      = 2'd0;
+localparam MASTER_READY                     = 2'd1;
+localparam MASTER_RUN                       = 2'd2;
+localparam MASTER_END                       = 2'd3;
+reg  [1:0]              fsm_master          = 2'd0;
+
+// -------------------------------
+// for PullPush FSM
+// -------------------------------
+localparam PP_INIT                          = 4'd0;
+localparam PP_PRELOAD                       = 4'd1;
+localparam PP_READY                         = 4'd2;
+localparam PP_BEGIN                         = 4'd3;
+localparam PP_MAIL11                        = 4'd4;
+localparam PP_MAIL12                        = 4'd5;
+localparam PP_MAIL13                        = 4'd6;
+localparam PP_MIDDLE                        = 4'd7;
+localparam PP_MAIL21                        = 4'd8;
+localparam PP_MAIL22                        = 4'd9;
+localparam PP_MAIL23                        = 4'd10;
+localparam PP_LAST                          = 4'd11;
+localparam PP_MAIL31                        = 4'd12;
+localparam PP_MAIL32                        = 4'd13;
+
+reg  [3:0]              fsm_pp              = 'd0;
+reg  [31:0]             pp_src_ptr          = 'd0;
+reg  [31:0]             pp_dst_ptr          = 'd0;
+reg  [3:0]              pp_sel_r            = 'd0;
+reg  [WB_DWIDTH-1:0]    pp_data             = 'd0;
+reg                     pp_dma_block        = 'd0;
+
+integer                 pp_remain_int       =   0;
+wire [15:0]             pp_remain;
+assign pp_remain = pp_remain_int[15:0];
+
+wire [3:0]              sel_nxt;
+assign sel_nxt = (pp_remain > 3) ?  (4'b1111 << (pp_src_ptr & 2'b11) & 4'b1111) :
+                                    (4'b1111 << (pp_src_ptr & 2'b11) & 4'b1111 & (4'b1111 >> (4 - pp_remain)));
+
+
 // ========================================================
 // Register Writes
 // ========================================================
@@ -142,6 +186,7 @@ always @( posedge i_clk )
             AMBER_DMA_START0: src_start_reg  <= wb_s_wdata32[31:0];
             AMBER_DMA_START1: dst_start_reg  <= wb_s_wdata32[31:0];
             AMBER_DMA_LENGTH: block_len_reg  <= wb_s_wdata32[15:0];
+            AMBER_DMA_BLOCK:  dma_block_reg  <= wb_s_wdata32[0];
         endcase
     end
 
@@ -156,6 +201,7 @@ always @( posedge i_clk )
             AMBER_DMA_START0:   wb_s_rdata32 <= src_start_reg;
             AMBER_DMA_START1:   wb_s_rdata32 <= dst_start_reg;
             AMBER_DMA_LENGTH:   wb_s_rdata32 <= {16'd0, block_len_reg};
+            AMBER_DMA_BLOCK:    wb_s_rdata32 <= {31'd0, dma_block_reg};
             AMBER_DMA_CUR0:     wb_s_rdata32 <= pp_src_ptr;
             AMBER_DMA_CUR1:     wb_s_rdata32 <= pp_dst_ptr;
             AMBER_DMA_REMAIN:   wb_s_rdata32 <= {16'd0, pp_remain};
@@ -164,14 +210,9 @@ always @( posedge i_clk )
         endcase
 
 
-// -------------------------------  
+// ===============================
 // Master FSM
-// -------------------------------  
-localparam MASTER_INIT      = 2'd0;
-localparam MASTER_READY     = 2'd1;
-localparam MASTER_RUN       = 2'd2;
-localparam MASTER_END       = 2'd3;
-reg  [1:0]      fsm_master  = 2'd0;
+// ===============================
 always @( posedge i_clk )
     begin
     if ( i_sys_rst )
@@ -207,41 +248,14 @@ always @( posedge i_clk )
     end
 
 
-// -------------------------------
+// ===============================
 // PullPush FSM
-// -------------------------------
-localparam PP_INIT          = 4'd0;
-localparam PP_PRELOAD       = 4'd1;
-localparam PP_READY         = 4'd2;
-localparam PP_BEGIN         = 4'd3;
-localparam PP_MAIL11        = 4'd4;
-localparam PP_MAIL12        = 4'd5;
-localparam PP_MAIL13        = 4'd6;
-localparam PP_MIDDLE        = 4'd7;
-localparam PP_MAIL21        = 4'd8;
-localparam PP_MAIL22        = 4'd9;
-localparam PP_MAIL23        = 4'd10;
-localparam PP_LAST          = 4'd11;
-localparam PP_MAIL31        = 4'd12;
-localparam PP_MAIL32        = 4'd13;
-
-reg  [31:0]             pp_src_ptr          = 'd0;
-reg  [31:0]             pp_dst_ptr          = 'd0;
-reg  [3:0]              pp_sel_r            = 'd0;
-reg  [WB_DWIDTH-1:0]    pp_data             = 'd0;
-reg  [3:0]              fsm_pp              = 'd0;
-
-integer                 pp_remain_int       =   0;
-wire [15:0]             pp_remain;
-assign pp_remain = pp_remain_int[15:0];
-
-wire [3:0]              sel_nxt;
-assign                  sel_nxt = (pp_remain > 3) ?  (4'b1111 << (pp_src_ptr & 2'b11) & 4'b1111) :
-                                                     (4'b1111 << (pp_src_ptr & 2'b11) & 4'b1111 & (4'b1111 >> (4 - pp_remain)));
+// ===============================
 always @( posedge i_clk )
     begin
     if ( i_sys_rst )
         begin
+        pp_dma_block    <= 'd0;
         pp_src_ptr      <= 'd0;
         pp_dst_ptr      <= 'd0;
         pp_remain_int   <=   0;
@@ -259,6 +273,7 @@ always @( posedge i_clk )
         case ( fsm_pp )
             PP_INIT:
                 begin
+                pp_dma_block    <= 'd0;
                 pp_src_ptr      <= 'd0;
                 pp_dst_ptr      <= 'd0;
                 pp_remain_int   <=   0;
@@ -276,11 +291,12 @@ always @( posedge i_clk )
             PP_PRELOAD:
                 if (fsm_master != MASTER_INIT)
                     begin                                               // PULL request
-                    pp_src_ptr      <= CONFIG_BASE;
+                    pp_dma_block    <= 'd1;                             // init first and block CPU
+                    pp_src_ptr      <= CONFIG_BASE + PRG_OFFS;
                     pp_dst_ptr      <= BOOT_BASE;
-                    pp_remain_int   <= 16'h1000;                        // 4096 x 32 words
+                    pp_remain_int   <= 16'd256 - 4;                     // 4096 x 32 words
                     pp_sel_r        <= 4'b1111;                         // aligned words
-                    o_m_wb_adr      <= CONFIG_BASE & 32'hffff_fffc;
+                    o_m_wb_adr      <= (CONFIG_BASE + PRG_OFFS) & 32'hffff_fffc;
                     o_m_wb_sel      <= 4'b1111;
                     o_m_wb_cyc      <= 'd1;
                     o_m_wb_stb      <= 'd1;
@@ -290,6 +306,7 @@ always @( posedge i_clk )
             PP_READY:
                 if ((fsm_master == MASTER_RUN) && (pp_remain != 0))
                     begin                                               // PULL request
+                    pp_dma_block    <= dma_block_reg;
                     pp_src_ptr      <= src_start_reg;
                     pp_dst_ptr      <= dst_start_reg;
                     pp_remain_int   <= block_len_reg;
@@ -306,7 +323,7 @@ always @( posedge i_clk )
                     begin                                               // PULL result
                     pp_data         <= i_m_wb_dat;
                     pp_src_ptr      <= (pp_src_ptr & 32'hffff_fffc) + 4;
-                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_cyc      <= 'd1;
                     o_m_wb_stb      <= 'd0;
                     if (4 < pp_remain)
                         begin
@@ -335,7 +352,7 @@ always @( posedge i_clk )
                     begin                                               // PUSH termination
                     pp_dst_ptr      <= (pp_dst_ptr & 32'hffff_fffc) + 4;
                     o_m_wb_we       <= 'd0;
-                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_cyc      <= pp_dma_block;
                     o_m_wb_stb      <= 'd0;
                     fsm_pp          <= PP_MAIL13;
                     end
@@ -356,14 +373,14 @@ always @( posedge i_clk )
                     begin                                               // PULL result
                     pp_data         <= i_m_wb_dat;
                     pp_src_ptr      <= pp_src_ptr + 4;
-                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_cyc      <= 'd1;
                     o_m_wb_stb      <= 'd0;
                     if (4 < pp_remain)
                         begin
                         pp_remain_int   <= pp_remain - 4;
                         fsm_pp          <= PP_MAIL11;
                         end
-//                  else if (0 == pp_remain_reg)        // dead code
+//                  else if (0 == pp_remain_reg)                        // dead code
 //                      fsm_pp          <= PP_LAST;
                     else
                         // keep pp_remain_reg
@@ -387,7 +404,7 @@ always @( posedge i_clk )
                     begin                                               // PUSH termination
                     pp_dst_ptr      <= pp_dst_ptr + 4;
                     o_m_wb_we       <= 'd0;
-                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_cyc      <= pp_dma_block;
                     o_m_wb_stb      <= 'd0;
                     fsm_pp          <= PP_MAIL23;
                     end
@@ -407,7 +424,7 @@ always @( posedge i_clk )
                 if (i_m_wb_ack || i_m_wb_err)
                     begin                                               // PULL result
                     pp_data         <= i_m_wb_dat;
-                    o_m_wb_cyc      <= 'd0;
+                    o_m_wb_cyc      <= 'd1;
                     o_m_wb_stb      <= 'd0;
                     fsm_pp          <= PP_MAIL31;
                     end
@@ -427,6 +444,7 @@ always @( posedge i_clk )
             PP_MAIL32:
                 if (i_m_wb_ack || i_m_wb_err)
                     begin                                               // PUSH termination
+                    pp_dma_block    <= 'd0;
                     pp_sel_r        <= 'd0;
                     pp_data         <= 'd0;
                     o_m_wb_adr      <= 'd0;
@@ -450,14 +468,37 @@ always @( posedge i_clk )
 // =======================================================================================
 // Non-synthesizable debug code
 // =======================================================================================
-
-
 //synthesis translate_off
 //synopsys translate_off
+wire    [(3*8)-1:0]    xFSM_MASTER;
+wire    [(6*8)-1:0]    xFSM_PP;
+
+assign  xFSM_MASTER = fsm_master    == MASTER_INIT                  ? "INI" :
+                      fsm_master    == MASTER_READY                 ? "RDY" :
+                      fsm_master    == MASTER_RUN                   ? "RUN" :
+                      fsm_master    == MASTER_END                   ? "END" :
+                                                                      "???" ;
+
+assign  xFSM_PP     = fsm_pp        == PP_INIT                      ? "INIT  " :
+                      fsm_pp        == PP_PRELOAD                   ? "PRELD " :
+                      fsm_pp        == PP_READY                     ? "READY " :
+                      fsm_pp        == PP_BEGIN                     ? "BEGIN " :
+                      fsm_pp        == PP_MAIL11                    ? "MAIL11" :
+                      fsm_pp        == PP_MAIL12                    ? "MAIL12" :
+                      fsm_pp        == PP_MAIL13                    ? "MAIL13" :
+                      fsm_pp        == PP_MIDDLE                    ? "MIDDLE" :
+                      fsm_pp        == PP_MAIL21                    ? "MAIL21" :
+                      fsm_pp        == PP_MAIL22                    ? "MAIL22" :
+                      fsm_pp        == PP_MAIL23                    ? "MAIL23" :
+                      fsm_pp        == PP_LAST                      ? "LAST  " :
+                      fsm_pp        == PP_MAIL31                    ? "MAIL31" :
+                      fsm_pp        == PP_MAIL32                    ? "MAIL32" :
+                                                                      "??????" ;
 
 `ifdef AMBER_DMA_DEBUG            
 
-wire wb_s_read_ack = i_wb_s_stb && !i_wb_s_we &&  o_wb_s_ack;
+wire wb_s_read_ack = i_s_wb_stb && !i_s_wb_we &&  o_s_wb_ack;
+
 
 // -----------------------------------------------
 // Report DMA Module Register accesses
@@ -467,12 +508,12 @@ always @(posedge i_clk)
         begin
         `TB_DEBUG_MESSAGE
 
-        if (wb_start_write)
-            $write("Write 0x%08x to   ", i_wb_dat);
+        if (wb_s_start_write)
+            $write("Write 0x%08x to   ", i_s_wb_dat);
         else
-            $write("Read  0x%08x from ", o_wb_dat);
+            $write("Read  0x%08x from ", o_s_wb_dat);
 
-        case (i_wb_adr[15:0])
+        case (i_s_wb_adr[15:0])
             AMBER_DMA_START0:
                 $write(" DMA Controller PULL start address"); 
             AMBER_DMA_START1:
@@ -489,12 +530,12 @@ always @(posedge i_clk)
             default:
                 begin
                 $write(" unknown Amber DMA Register Address");
-                $write(", Address 0x%08h\n", i_wb_adr); 
+                $write(", Address 0x%08h\n", i_s_wb_adr); 
                 `TB_ERROR_MESSAGE
                 end
         endcase
 
-        $write(", Address 0x%08h\n", i_wb_adr); 
+        $write(", Address 0x%08h\n", i_s_wb_adr); 
         end
 
 `endif

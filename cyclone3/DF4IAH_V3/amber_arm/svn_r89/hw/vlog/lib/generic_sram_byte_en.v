@@ -43,7 +43,7 @@
 module generic_sram_byte_en
 #(
 parameter DATA_WIDTH    = 128,
-parameter ADDRESS_WIDTH = 7,
+parameter ADDRESS_WIDTH = 8,
 parameter INIT_FILE     = "none.hex"
 )
 
@@ -56,9 +56,8 @@ input      [DATA_WIDTH/8-1:0]   i_byte_enable,
 output reg [DATA_WIDTH-1:0]     o_read_data
     );                                                     
 
-reg      [DATA_WIDTH-1:0]     mem[0:2**ADDRESS_WIDTH-1];
-//(* XXXram_init_file = INIT_FILE *) reg [DATA_WIDTH-1:0]   mem[0:2**ADDRESS_WIDTH-1];
 
+reg         [DATA_WIDTH-1:0]    mem[0:2**ADDRESS_WIDTH-1];
 
 //synthesis translate_off
 //synopsys translate_off
@@ -79,18 +78,28 @@ always @(posedge i_clk)
     // write
     if (i_write_enable)
         for (i=0;i<DATA_WIDTH/8;i=i+1)
-            begin
-            mem[i_address][i*8+0] <= i_byte_enable[i] ? i_write_data[i*8+0] : mem[i_address][i*8+0] ;
-            mem[i_address][i*8+1] <= i_byte_enable[i] ? i_write_data[i*8+1] : mem[i_address][i*8+1] ;
-            mem[i_address][i*8+2] <= i_byte_enable[i] ? i_write_data[i*8+2] : mem[i_address][i*8+2] ;
-            mem[i_address][i*8+3] <= i_byte_enable[i] ? i_write_data[i*8+3] : mem[i_address][i*8+3] ;
-            mem[i_address][i*8+4] <= i_byte_enable[i] ? i_write_data[i*8+4] : mem[i_address][i*8+4] ;
-            mem[i_address][i*8+5] <= i_byte_enable[i] ? i_write_data[i*8+5] : mem[i_address][i*8+5] ;
-            mem[i_address][i*8+6] <= i_byte_enable[i] ? i_write_data[i*8+6] : mem[i_address][i*8+6] ;
-            mem[i_address][i*8+7] <= i_byte_enable[i] ? i_write_data[i*8+7] : mem[i_address][i*8+7] ;
-            end                                                 
+            if (i_byte_enable[i])
+                begin
+                mem[i_address][i*8+0] <= i_write_data[i*8+0];
+                mem[i_address][i*8+1] <= i_write_data[i*8+1];
+                mem[i_address][i*8+2] <= i_write_data[i*8+2];
+                mem[i_address][i*8+3] <= i_write_data[i*8+3];
+                mem[i_address][i*8+4] <= i_write_data[i*8+4];
+                mem[i_address][i*8+5] <= i_write_data[i*8+5];
+                mem[i_address][i*8+6] <= i_write_data[i*8+6];
+                mem[i_address][i*8+7] <= i_write_data[i*8+7];
+                end                                                 
+
+//          begin
+//          mem[i_address][i*8+0] <= i_byte_enable[i] ? i_write_data[i*8+0] : mem[i_address][i*8+0] ;
+//          mem[i_address][i*8+1] <= i_byte_enable[i] ? i_write_data[i*8+1] : mem[i_address][i*8+1] ;
+//          mem[i_address][i*8+2] <= i_byte_enable[i] ? i_write_data[i*8+2] : mem[i_address][i*8+2] ;
+//          mem[i_address][i*8+3] <= i_byte_enable[i] ? i_write_data[i*8+3] : mem[i_address][i*8+3] ;
+//          mem[i_address][i*8+4] <= i_byte_enable[i] ? i_write_data[i*8+4] : mem[i_address][i*8+4] ;
+//          mem[i_address][i*8+5] <= i_byte_enable[i] ? i_write_data[i*8+5] : mem[i_address][i*8+5] ;
+//          mem[i_address][i*8+6] <= i_byte_enable[i] ? i_write_data[i*8+6] : mem[i_address][i*8+6] ;
+//          mem[i_address][i*8+7] <= i_byte_enable[i] ? i_write_data[i*8+7] : mem[i_address][i*8+7] ;
+//          end                                                 
     end
-    
-    
 
 endmodule

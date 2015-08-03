@@ -48,6 +48,7 @@ parameter WB_SWIDTH  = 4
 )(
 
 input                       i_wb_clk,     // WISHBONE clock
+input                       i_sys_rst,
 
 // WISHBONE master 0 - Ethmac
 input       [31:0]          i_m0_wb_adr,
@@ -246,26 +247,35 @@ assign current_master = select_master ? next_master : current_master_r;
 
 
 always @( posedge i_wb_clk )
-    begin
-    current_master_r    <= current_master;
-    m0_wb_hold_r        <= i_m0_wb_stb && !o_m0_wb_ack;
-    m1_wb_hold_r        <= i_m1_wb_stb && !o_m1_wb_ack;
-    m2_wb_hold_r        <= i_m2_wb_stb && !o_m2_wb_ack;
-    end
+    if ( i_sys_rst )
+        begin
+        current_master_r    <= 2'd0;
+        m0_wb_hold_r        <= 1'd0;
+        m1_wb_hold_r        <= 1'd0;
+        m2_wb_hold_r        <= 1'd0;
+        end
+    else
+        begin
+        current_master_r    <= current_master;
+        m0_wb_hold_r        <= i_m0_wb_stb && !o_m0_wb_ack;
+        m1_wb_hold_r        <= i_m1_wb_stb && !o_m1_wb_ack;
+        m2_wb_hold_r        <= i_m2_wb_stb && !o_m2_wb_ack;
+        end
 
 
 // Arbitrate between slaves
-assign current_slave = in_ethmac   ( master_adr ) ? 4'd0  :  // Ethmac
-                       in_boot_mem ( master_adr ) ? 4'd1  :  // Boot memory
-                       in_main_mem ( master_adr ) ? 4'd2  :  // Main memory
-                       in_uart0    ( master_adr ) ? 4'd3  :  // UART 0
-                       in_uart1    ( master_adr ) ? 4'd4  :  // UART 1
-                       in_test     ( master_adr ) ? 4'd5  :  // Test Module
-                       in_tm       ( master_adr ) ? 4'd6  :  // Timer Module
-                       in_ic       ( master_adr ) ? 4'd7  :  // Interrupt Controller
-                       in_dma      ( master_adr ) ? 4'd8  :  // DMA Controller
-                       in_cd       ( master_adr ) ? 4'd9  :  // ConfigData Controller
-                                                    4'd2  ;  // default to main memory
+assign current_slave = in_ethmac     ( master_adr ) ? 4'd0  :  // Ethmac
+                       in_boot_mem   ( master_adr ) ? 4'd1  :  // Boot memory
+                       in_main_mem   ( master_adr ) ? 4'd2  :  // Main memory
+                       in_cfgdta_mem ( master_adr ) ? 4'd9  :  // ConfigData memory
+                       in_uart0      ( master_adr ) ? 4'd3  :  // UART 0
+                       in_uart1      ( master_adr ) ? 4'd4  :  // UART 1
+                       in_test       ( master_adr ) ? 4'd5  :  // Test Module
+                       in_tm         ( master_adr ) ? 4'd6  :  // Timer Module
+                       in_ic         ( master_adr ) ? 4'd7  :  // Interrupt Controller
+                       in_dma        ( master_adr ) ? 4'd8  :  // DMA Controller
+//                     in_cd         ( master_adr ) ? 4'd10 :  // ConfigData Controller
+                                                      4'd2  ;  // default to main memory
 
 
 assign master_adr   = (current_master == 0) ?  i_m0_wb_adr : (current_master == 1) ?  i_m1_wb_adr : i_m2_wb_adr;

@@ -140,7 +140,7 @@ set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda
 set_global_assignment -name ENABLE_DRC_SETTINGS ON
 set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL ON
-set_global_assignment -name EDA_RUN_TOOL_AUTOMATICALLY ON -section_id eda_simulation
+set_global_assignment -name EDA_RUN_TOOL_AUTOMATICALLY OFF -section_id eda_simulation
 set_global_assignment -name FLOW_ENABLE_RTL_VIEWER OFF
 set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name SMART_RECOMPILE ON
@@ -179,7 +179,7 @@ set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_i
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_sram_line_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_sram_byte_en.v
 set_global_assignment -name VERILOG_INCLUDE_FILE bootmem.vh
-set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_rom_byte_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cfgdta_rom_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_256x21_line_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_256x128_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_1024x128_byte_en.v

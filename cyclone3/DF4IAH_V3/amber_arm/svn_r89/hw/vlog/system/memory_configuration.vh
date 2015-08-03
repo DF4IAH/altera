@@ -41,23 +41,27 @@
 //////////////////////////////////////////////////////////////////
 
 // e.g. 24 for 32MBytes, 26 for 128MBytes
-localparam MAIN_MSB             = 24; 
+localparam MAIN_MSB             = 24;
 
 // e.g. 13 for 4k words
-localparam BOOT_MSB             = 13;  
+localparam BOOT_MSB             = 13;
+
+// e.g. 20 for 2MBytes (16 MBit)
+localparam CONFIG_MSB           = 21;
+localparam PRG_OFFS             = 21'h1c_0000;   /*  Offset to program data */
 
 localparam BOOT_BASE            = 32'h0000_0000; /*  Cachable Boot Memory   */
+localparam HIBOOT_BASE          = 32'h0800_0000; /*  Uncachable Boot Memory */
 localparam MAIN_BASE            = 32'h1000_0000; /*  Main Memory            */
-localparam HIBOOT_BASE          = 32'h2800_0000; /*  Uncachable Boot Memory */
-localparam CONFIG_BASE          = 32'h4000_0000; /*  Config-Data EEPROM     */
-localparam AMBER_DMA_BASE       = 16'h1100;      /*  DMA Controller         */
-localparam AMBER_CD_BASE        = 16'h1200;      /*  ConfigData Controller  */
-localparam AMBER_TM_BASE        = 16'h1300;      /*  Timers Module          */
-localparam AMBER_IC_BASE        = 16'h1400;      /*  Interrupt Controller   */
-localparam AMBER_UART0_BASE     = 16'h1600;      /*  UART 0                 */
-localparam AMBER_UART1_BASE     = 16'h1700;      /*  UART 1                 */
-localparam ETHMAC_BASE          = 16'h2000;      /*  Ethernet MAC           */
-localparam TEST_BASE            = 16'hf000;      /*  Test Module            */
+localparam CONFIG_BASE          = 32'he000_0000; /*  ConfigData Memory      */
+localparam ETHMAC_BASE          = 16'hf000;      /*  Ethernet MAC           */
+localparam AMBER_DMA_BASE       = 16'hf100;      /*  DMA Controller         */
+//localparam AMBER_CD_BASE      = 16'hf200;      /*  ConfigData Controller  */
+localparam AMBER_TM_BASE        = 16'hf300;      /*  Timers Module          */
+localparam AMBER_IC_BASE        = 16'hf400;      /*  Interrupt Controller   */
+localparam AMBER_UART0_BASE     = 16'hf600;      /*  UART 0                 */
+localparam AMBER_UART1_BASE     = 16'hf700;      /*  UART 1                 */
+localparam TEST_BASE            = 16'hff00;      /*  Test Module            */
 
 
 
@@ -92,6 +96,14 @@ begin
 in_main_mem  = (address >= MAIN_BASE   && 
                 address < (MAIN_BASE   + 2**(MAIN_MSB+1)-1)) &&
                 !in_boot_mem ( address );
+end
+endfunction
+
+
+function in_cfgdta_mem;
+    input [31:0] address;
+begin
+in_cfgdta_mem  = (address[31:CONFIG_MSB+1] == CONFIG_BASE[31:CONFIG_MSB+1]);
 end
 endfunction
 
@@ -159,12 +171,12 @@ end
 endfunction
 
 // ConfigData Controller
-function in_cd;
-    input [31:0] address;
-begin
-    in_cd = address [31:16] == AMBER_CD_BASE;
-end
-endfunction
+//function in_cd;
+//    input [31:0] address;
+//begin
+//    in_cd = address [31:16] == AMBER_CD_BASE;
+//end
+//endfunction
 
 
 // Used in fetch.v and l2cache.v to allow accesses to these addresses

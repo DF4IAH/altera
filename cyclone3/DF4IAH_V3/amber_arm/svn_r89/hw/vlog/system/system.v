@@ -156,8 +156,6 @@ wire  [127:0]   c3_p0_rd_data;
 wire            c3_p0_rd_empty;
 wire            c3_p0_cmd_full;
 wire            c3_p0_wr_full;
-`else
-assign phy_init_done = 1'd1;
 `endif
 
 
@@ -256,111 +254,112 @@ wire      [2:0]             timer_int;
 // ======================================
 // Clocks and Resets Module
 // ======================================
-clocks_resets u_clocks_resets (
-    .i_brd_rst                  ( brd_rst               ),
-    .i_brd_clk                  ( brd_clk               ),
-//    .i_brd_clk_p                ( brd_clk_p             ),
-//    .i_brd_clk_n                ( brd_clk_n             ),
-    .i_ddr_calib_done           ( phy_init_done         ),
-    .o_sys_rst                  ( sys_rst               ),
-    .o_sys_clk                  ( sys_clk               ),
-    .o_ram_clk                  ( ram_clk               )
-);
+    clocks_resets u_clocks_resets (
+        .i_brd_rst              ( brd_rst               ),
+        .i_brd_clk              ( brd_clk               ),
+//      .i_brd_clk_p            ( brd_clk_p             ),
+//      .i_brd_clk_n            ( brd_clk_n             ),
+        .i_ddr_calib_done       ( phy_init_done         ),
+        .o_sys_rst              ( sys_rst               ),
+        .o_sys_clk              ( sys_clk               ),
+        .o_ram_clk              ( ram_clk               )
+    );
+
 
 
 // -------------------------------------------------------------
 // Instantiate Amber Processor Core
 // -------------------------------------------------------------
 `ifdef AMBER_A25_CORE
-a25_core u_amber (
+    a25_core u_amber (
 `else
-a23_core u_amber (
+    a23_core u_amber (
 `endif
-    .i_clk                      ( sys_clk               ),
-    
+        .i_clk                  ( sys_clk               ),
+        
 
-    .i_irq                      ( amber_irq             ),
-    .i_firq                     ( amber_firq            ),
+        .i_irq                  ( amber_irq             ),
+        .i_firq                 ( amber_firq            ),
 
-    .i_system_rdy               ( system_rdy            ),
+        .i_system_rdy           ( system_rdy            ),
 
-    // WISHBONE master
-    .o_wb_adr                   ( m_wb_adr  [1]         ),
-    .o_wb_sel                   ( m_wb_sel  [1]         ),
-    .o_wb_we                    ( m_wb_we   [1]         ),
-    .i_wb_dat                   ( m_wb_dat_r[1]         ),
-    .o_wb_dat                   ( m_wb_dat_w[1]         ),
-    .o_wb_cyc                   ( m_wb_cyc  [1]         ),
-    .o_wb_stb                   ( m_wb_stb  [1]         ),
-    .i_wb_ack                   ( m_wb_ack  [1]         ),
-    .i_wb_err                   ( m_wb_err  [1]         )
-);
+        // WISHBONE master
+        .o_wb_adr               ( m_wb_adr  [1]         ),
+        .o_wb_sel               ( m_wb_sel  [1]         ),
+        .o_wb_we                ( m_wb_we   [1]         ),
+        .i_wb_dat               ( m_wb_dat_r[1]         ),
+        .o_wb_dat               ( m_wb_dat_w[1]         ),
+        .o_wb_cyc               ( m_wb_cyc  [1]         ),
+        .o_wb_stb               ( m_wb_stb  [1]         ),
+        .i_wb_ack               ( m_wb_ack  [1]         ),
+        .i_wb_err               ( m_wb_err  [1]         )
+    );
 
 
 // -------------------------------------------------------------
 // Instantiate B100 Ethernet MAC
 // -------------------------------------------------------------
-eth_top u_eth_top (
-    .wb_clk_i                   ( sys_clk               ),
-    .wb_rst_i                   ( sys_rst               ),
+    eth_top u_eth_top (
+        .wb_clk_i               ( sys_clk               ),
+        .wb_rst_i               ( sys_rst               ),
 
-    // WISHBONE slave
-    .wb_adr_i                   ( ems_wb_adr [11:2]     ),
-    .wb_sel_i                   ( ems_wb_sel            ),
-    .wb_we_i                    ( ems_wb_we             ),
-    .wb_cyc_i                   ( ems_wb_cyc            ),
-    .wb_stb_i                   ( ems_wb_stb            ),
-    .wb_ack_o                   ( ems_wb_ack            ),
-    .wb_dat_i                   ( ems_wb_wdat           ),
-    .wb_dat_o                   ( ems_wb_rdat           ),
-    .wb_err_o                   ( ems_wb_err            ),
+        // WISHBONE slave
+        .wb_adr_i               ( ems_wb_adr [11:2]     ),
+        .wb_sel_i               ( ems_wb_sel            ),
+        .wb_we_i                ( ems_wb_we             ),
+        .wb_cyc_i               ( ems_wb_cyc            ),
+        .wb_stb_i               ( ems_wb_stb            ),
+        .wb_ack_o               ( ems_wb_ack            ),
+        .wb_dat_i               ( ems_wb_wdat           ),
+        .wb_dat_o               ( ems_wb_rdat           ),
+        .wb_err_o               ( ems_wb_err            ),
 
-    // WISHBONE master
-    .m_wb_adr_o                 ( emm_wb_adr            ),
-    .m_wb_sel_o                 ( emm_wb_sel            ),
-    .m_wb_we_o                  ( emm_wb_we             ),
-    .m_wb_dat_i                 ( emm_wb_rdat           ),
-    .m_wb_dat_o                 ( emm_wb_wdat           ),
-    .m_wb_cyc_o                 ( emm_wb_cyc            ),
-    .m_wb_stb_o                 ( emm_wb_stb            ),
-    .m_wb_ack_i                 ( emm_wb_ack            ),
-    .m_wb_err_i                 ( emm_wb_err            ),
+        // WISHBONE master
+        .m_wb_adr_o             ( emm_wb_adr            ),
+        .m_wb_sel_o             ( emm_wb_sel            ),
+        .m_wb_we_o              ( emm_wb_we             ),
+        .m_wb_dat_i             ( emm_wb_rdat           ),
+        .m_wb_dat_o             ( emm_wb_wdat           ),
+        .m_wb_cyc_o             ( emm_wb_cyc            ),
+        .m_wb_stb_o             ( emm_wb_stb            ),
+        .m_wb_ack_i             ( emm_wb_ack            ),
+        .m_wb_err_i             ( emm_wb_err            ),
 
-    // MAC to PHY I/F
-    .mtx_clk_pad_i              ( mtx_clk_pad_i         ),
-    .mtxd_pad_o                 ( mtxd_pad_o            ),
-    .mtxen_pad_o                ( mtxen_pad_o           ),
-    .mtxerr_pad_o               ( mtxerr_pad_o          ),
-    .mrx_clk_pad_i              ( mrx_clk_pad_i         ),
-    .mrxd_pad_i                 ( mrxd_pad_i            ),
-    .mrxdv_pad_i                ( mrxdv_pad_i           ),
-    .mrxerr_pad_i               ( mrxerr_pad_i          ),
-    .mcoll_pad_i                ( mcoll_pad_i           ),
-    .mcrs_pad_i                 ( mcrs_pad_i            ),
-    .md_pad_i                   ( md_pad_i              ),
-    .mdc_pad_o                  ( mdc_pad_o             ),
-    .md_pad_o                   ( md_pad_o              ),
-    .md_padoe_o                 ( md_padoe_o            ),
+        // MAC to PHY I/F
+        .mtx_clk_pad_i          ( mtx_clk_pad_i         ),
+        .mtxd_pad_o             ( mtxd_pad_o            ),
+        .mtxen_pad_o            ( mtxen_pad_o           ),
+        .mtxerr_pad_o           ( mtxerr_pad_o          ),
+        .mrx_clk_pad_i          ( mrx_clk_pad_i         ),
+        .mrxd_pad_i             ( mrxd_pad_i            ),
+        .mrxdv_pad_i            ( mrxdv_pad_i           ),
+        .mrxerr_pad_i           ( mrxerr_pad_i          ),
+        .mcoll_pad_i            ( mcoll_pad_i           ),
+        .mcrs_pad_i             ( mcrs_pad_i            ),
+        .md_pad_i               ( md_pad_i              ),
+        .mdc_pad_o              ( mdc_pad_o             ),
+        .md_pad_o               ( md_pad_o              ),
+        .md_padoe_o             ( md_padoe_o            ),
 
-    // Interrupt
-    .int_o                      ( ethmac_int            )
-);
+        // Interrupt
+        .int_o                  ( ethmac_int            )
+    );
 
 
 // -------------------------------------------------------------
 // Instantiate Ethernet Control Interface tri-state buffer
 // -------------------------------------------------------------
 `ifdef XILINX_FPGA
-IOBUF u_iobuf (
+    IOBUF u_iobuf (
 `else
-generic_iobuf u_iobuf (
+    generic_iobuf u_iobuf (
 `endif
-    .O                          ( md_pad_i              ),
-    .IO                         ( md_pad_io             ),
-    .I                          ( md_pad_o              ),
-    // T is high for tri-state output
-    .T                          ( ~md_padoe_o           )
-);
+        .O                      ( md_pad_i              ),
+        .IO                     ( md_pad_io             ),
+        .I                      ( md_pad_o              ),
+        // T is high for tri-state output
+        .T                      ( ~md_padoe_o           )
+    );
 
 // Ethernet MII PHY reset
 // Halt core until system is ready
@@ -369,9 +368,8 @@ assign system_rdy = phy_init_done && !sys_rst;
 // -------------------------------------------------------------
 // Instantiate Boot Memory - 16 KBytes of Embedded SRAM  (4096 DWORDS)
 // -------------------------------------------------------------
-
 generate
-if (WB_DWIDTH == 32) begin : boot_mem32
+if (WB_DWIDTH == 32) begin : u_boot_mem32
     boot_mem32 u_boot_mem (
         .i_wb_clk               ( sys_clk               ),
         .i_wb_adr               ( s_wb_adr  [1]         ),
@@ -385,7 +383,7 @@ if (WB_DWIDTH == 32) begin : boot_mem32
         .o_wb_err               ( s_wb_err  [1]         )
     );
 end
-else begin : boot_mem128
+else begin : u_boot_mem128
     boot_mem128 u_boot_mem (
         .i_wb_clk               ( sys_clk               ),
         .i_wb_adr               ( s_wb_adr  [1]         ),
@@ -403,243 +401,11 @@ endgenerate
 
 
 // -------------------------------------------------------------
-// Instantiate DMA Controller
+// Instantiate System Memory
 // -------------------------------------------------------------
-dma u_dma (
-    .i_clk                      ( sys_clk               ),
-    .i_sys_rst                  ( sys_rst               ),
-
-    // WISHBONE slave
-    .i_s_wb_adr                 ( s_wb_adr  [8]         ),
-    .i_s_wb_sel                 ( s_wb_sel  [8]         ),
-    .i_s_wb_we                  ( s_wb_we   [8]         ),
-    .o_s_wb_dat                 ( s_wb_dat_r[8]         ),
-    .i_s_wb_dat                 ( s_wb_dat_w[8]         ),
-    .i_s_wb_cyc                 ( s_wb_cyc  [8]         ),
-    .i_s_wb_stb                 ( s_wb_stb  [8]         ),
-    .o_s_wb_ack                 ( s_wb_ack  [8]         ),
-    .o_s_wb_err                 ( s_wb_err  [8]         ),
-
-    // WISHBONE master
-    .o_m_wb_adr                 ( m_wb_adr  [2]         ),
-    .o_m_wb_sel                 ( m_wb_sel  [2]         ),
-    .o_m_wb_we                  ( m_wb_we   [2]         ),
-    .i_m_wb_dat                 ( m_wb_dat_r[2]         ),
-    .o_m_wb_dat                 ( m_wb_dat_w[2]         ),
-    .o_m_wb_cyc                 ( m_wb_cyc  [2]         ),
-    .o_m_wb_stb                 ( m_wb_stb  [2]         ),
-    .i_m_wb_ack                 ( m_wb_ack  [2]         ),
-    .i_m_wb_err                 ( m_wb_err  [2]         )
-
-    // Interrupt
-    //.o_int                    ( dma_int               )
-);
-
-
-// -------------------------------------------------------------
-// Instantiate UART0
-// -------------------------------------------------------------
-uart  #(
-    .WB_DWIDTH                  ( WB_DWIDTH             ),
-    .WB_SWIDTH                  ( WB_SWIDTH             )
-    )
-u_uart0 (
-    .i_clk                      ( sys_clk               ),
-
-    .o_uart_int                 ( uart0_int             ),
-
-    .i_uart_cts_n               ( i_uart0_rts           ),
-    .o_uart_txd                 ( o_uart0_rx            ),
-    .o_uart_rts_n               ( o_uart0_cts           ),
-    .i_uart_rxd                 ( i_uart0_tx            ),
-
-    .i_wb_adr                   ( s_wb_adr  [3]         ),
-    .i_wb_sel                   ( s_wb_sel  [3]         ),
-    .i_wb_we                    ( s_wb_we   [3]         ),
-    .o_wb_dat                   ( s_wb_dat_r[3]         ),
-    .i_wb_dat                   ( s_wb_dat_w[3]         ),
-    .i_wb_cyc                   ( s_wb_cyc  [3]         ),
-    .i_wb_stb                   ( s_wb_stb  [3]         ),
-    .o_wb_ack                   ( s_wb_ack  [3]         ),
-    .o_wb_err                   ( s_wb_err  [3]         )
-);
-
-
-// -------------------------------------------------------------
-// Instantiate UART1
-// -------------------------------------------------------------
-uart  #(
-    .WB_DWIDTH                  ( WB_DWIDTH             ),
-    .WB_SWIDTH                  ( WB_SWIDTH             )
-    )
-u_uart1 (
-    .i_clk                      ( sys_clk               ),
-
-    .o_uart_int                 ( uart1_int             ),
-
-    .i_uart_cts_n               ( i_uart1_rts           ),
-    .o_uart_txd                 ( o_uart1_rx            ),
-    .o_uart_rts_n               ( o_uart1_cts           ),
-    .i_uart_rxd                 ( i_uart1_tx            ),
-
-    .i_wb_adr                   ( s_wb_adr  [4]         ),
-    .i_wb_sel                   ( s_wb_sel  [4]         ),
-    .i_wb_we                    ( s_wb_we   [4]         ),
-    .o_wb_dat                   ( s_wb_dat_r[4]         ),
-    .i_wb_dat                   ( s_wb_dat_w[4]         ),
-    .i_wb_cyc                   ( s_wb_cyc  [4]         ),
-    .i_wb_stb                   ( s_wb_stb  [4]         ),
-    .o_wb_ack                   ( s_wb_ack  [4]         ),
-    .o_wb_err                   ( s_wb_err  [4]         )
-);
-
-
-// -------------------------------------------------------------
-// Instantiate Test Module
-//   - includes register used to terminate tests
-// -------------------------------------------------------------
-test_module #(
-    .WB_DWIDTH                  ( WB_DWIDTH             ),
-    .WB_SWIDTH                  ( WB_SWIDTH             )
-    )
-u_test_module (
-    .i_clk                      ( sys_clk               ),
-
-    .o_irq                      ( test_reg_irq          ),
-    .o_firq                     ( test_reg_firq         ),
-    .o_mem_ctrl                 ( test_mem_ctrl         ),
-    .i_wb_adr                   ( s_wb_adr  [5]         ),
-    .i_wb_sel                   ( s_wb_sel  [5]         ),
-    .i_wb_we                    ( s_wb_we   [5]         ),
-    .o_wb_dat                   ( s_wb_dat_r[5]         ),
-    .i_wb_dat                   ( s_wb_dat_w[5]         ),
-    .i_wb_cyc                   ( s_wb_cyc  [5]         ),
-    .i_wb_stb                   ( s_wb_stb  [5]         ),
-    .o_wb_ack                   ( s_wb_ack  [5]         ),
-    .o_wb_err                   ( s_wb_err  [5]         ),
-    .o_led                      ( led                   ),
-    .o_phy_rst_n                ( phy_reset_n           )
-);
-
-
-// -------------------------------------------------------------
-// Instantiate Timer Module
-// -------------------------------------------------------------
-timer_module  #(
-    .WB_DWIDTH                  ( WB_DWIDTH             ),
-    .WB_SWIDTH                  ( WB_SWIDTH             )
-    )
-u_timer_module (
-    .i_clk                      ( sys_clk               ),
-
-    // Interrupt outputs
-    .o_timer_int                ( timer_int             ),
-
-    // Wishbone interface
-    .i_wb_adr                   ( s_wb_adr  [6]         ),
-    .i_wb_sel                   ( s_wb_sel  [6]         ),
-    .i_wb_we                    ( s_wb_we   [6]         ),
-    .o_wb_dat                   ( s_wb_dat_r[6]         ),
-    .i_wb_dat                   ( s_wb_dat_w[6]         ),
-    .i_wb_cyc                   ( s_wb_cyc  [6]         ),
-    .i_wb_stb                   ( s_wb_stb  [6]         ),
-    .o_wb_ack                   ( s_wb_ack  [6]         ),
-    .o_wb_err                   ( s_wb_err  [6]         )
-);
-
-
-// -------------------------------------------------------------
-// Instantiate Interrupt Controller Module
-// -------------------------------------------------------------
-interrupt_controller  #(
-    .WB_DWIDTH                  ( WB_DWIDTH             ),
-    .WB_SWIDTH                  ( WB_SWIDTH             )
-    )
-u_interrupt_controller (
-    .i_clk                      ( sys_clk               ),
-
-    // Interrupt outputs
-    .o_irq                      ( amber_irq             ),
-    .o_firq                     ( amber_firq            ),
-
-    // Interrupt inputs
-    .i_uart0_int                ( uart0_int             ),
-    .i_uart1_int                ( uart1_int             ),
-    .i_ethmac_int               ( ethmac_int            ),
-    .i_test_reg_irq             ( test_reg_irq          ),
-    .i_test_reg_firq            ( test_reg_firq         ),
-    .i_tm_timer_int             ( timer_int             ),
-
-    // Wishbone interface
-    .i_wb_adr                   ( s_wb_adr  [7]         ),
-    .i_wb_sel                   ( s_wb_sel  [7]         ),
-    .i_wb_we                    ( s_wb_we   [7]         ),
-    .o_wb_dat                   ( s_wb_dat_r[7]         ),
-    .i_wb_dat                   ( s_wb_dat_w[7]         ),
-    .i_wb_cyc                   ( s_wb_cyc  [7]         ),
-    .i_wb_stb                   ( s_wb_stb  [7]         ),
-    .o_wb_ack                   ( s_wb_ack  [7]         ),
-    .o_wb_err                   ( s_wb_err  [7]         )
-);
-
-
-// -------------------------------------------------------------
-// Instantiate ConfigData Controller
-// -------------------------------------------------------------
-cfg_dta u_cfg_dta (
-    .i_clk                      ( sys_clk               ),
-    .i_sys_rst                  ( sys_rst               ),
-
-    // WISHBONE slave
-    .i_wb_adr                   ( s_wb_adr  [9]         ),
-    .i_wb_sel                   ( s_wb_sel  [9]         ),
-    .i_wb_we                    ( s_wb_we   [9]         ),
-    .o_wb_dat                   ( s_wb_dat_r[9]         ),
-    .i_wb_dat                   ( s_wb_dat_w[9]         ),
-    .i_wb_cyc                   ( s_wb_cyc  [9]         ),
-    .i_wb_stb                   ( s_wb_stb  [9]         ),
-    .o_wb_ack                   ( s_wb_ack  [9]         ),
-    .o_wb_err                   ( s_wb_err  [9]         )
-
-    // ConfigData to S-EEPROM I/F
-
-
-    // Interrupt
-    //.int_o                    ( cd_int                )
-);
-
-
 `ifdef XILINX_FPGA
-`elsif ALTERA_FPGA
-`else
-    // ======================================
-    // Instantiate non-synthesizable main memory model
-    // ======================================
+    `ifdef XILINX_SPARTAN6_FPGA
 
-    assign phy_init_done = 1'd1;
-
-//    main_mem #(
-//                .WB_DWIDTH      ( WB_DWIDTH             ),
-//                .WB_SWIDTH      ( WB_SWIDTH             )
-//                )
-//    u_main_mem (
-//               .i_clk           ( sys_clk               ),
-//               .i_mem_ctrl      ( test_mem_ctrl         ),
-//               .i_wb_adr        ( s_wb_adr  [2]         ),
-//               .i_wb_sel        ( s_wb_sel  [2]         ),
-//               .i_wb_we         ( s_wb_we   [2]         ),
-//               .o_wb_dat        ( s_wb_dat_r[2]         ),
-//               .i_wb_dat        ( s_wb_dat_w[2]         ),
-//               .i_wb_cyc        ( s_wb_cyc  [2]         ),
-//               .i_wb_stb        ( s_wb_stb  [2]         ),
-//               .o_wb_ack        ( s_wb_ack  [2]         ),
-//               .o_wb_err        ( s_wb_err  [2]         )
-//            );
-
-`endif
-
-
-`ifdef XILINX_SPARTAN6_FPGA
     // -------------------------------------------------------------
     // Instantiate Wishbone to Xilinx Spartan-6 DDR3 Bridge
     // -------------------------------------------------------------
@@ -679,66 +445,71 @@ cfg_dta u_cfg_dta (
     // -------------------------------------------------------------
     ddr3 u_ddr3  (
         // DDR3 signals
-       .mcb3_dram_dq            ( ddr3_dq               ),
-       .mcb3_dram_a             ( ddr3_addr             ),
-       .mcb3_dram_ba            ( ddr3_ba               ),
-       .mcb3_dram_ras_n         ( ddr3_ras_n            ),
-       .mcb3_dram_cas_n         ( ddr3_cas_n            ),
-       .mcb3_dram_we_n          ( ddr3_we_n             ),
-       .mcb3_dram_odt           ( ddr3_odt              ),
-       .mcb3_dram_reset_n       ( ddr3_reset_n          ),
-       .mcb3_dram_cke           ( ddr3_cke              ),
-       .mcb3_dram_udm           ( ddr3_dm[1]            ),
-       .mcb3_dram_dm            ( ddr3_dm[0]            ),
-       .mcb3_rzq                ( mcb3_rzq              ),
-       .mcb3_dram_udqs          ( ddr3_dqs_p[1]         ),
-       .mcb3_dram_dqs           ( ddr3_dqs_p[0]         ),
-       .mcb3_dram_udqs_n        ( ddr3_dqs_n[1]         ),
-       .mcb3_dram_dqs_n         ( ddr3_dqs_n[0]         ),
-       .mcb3_dram_ck            ( ddr3_ck_p             ),
-       .mcb3_dram_ck_n          ( ddr3_ck_n             ),
+        .mcb3_dram_dq           ( ddr3_dq               ),
+        .mcb3_dram_a            ( ddr3_addr             ),
+        .mcb3_dram_ba           ( ddr3_ba               ),
+        .mcb3_dram_ras_n        ( ddr3_ras_n            ),
+        .mcb3_dram_cas_n        ( ddr3_cas_n            ),
+        .mcb3_dram_we_n         ( ddr3_we_n             ),
+        .mcb3_dram_odt          ( ddr3_odt              ),
+        .mcb3_dram_reset_n      ( ddr3_reset_n          ),
+        .mcb3_dram_cke          ( ddr3_cke              ),
+        .mcb3_dram_udm          ( ddr3_dm[1]            ),
+        .mcb3_dram_dm           ( ddr3_dm[0]            ),
+        .mcb3_rzq               ( mcb3_rzq              ),
+        .mcb3_dram_udqs         ( ddr3_dqs_p[1]         ),
+        .mcb3_dram_dqs          ( ddr3_dqs_p[0]         ),
+        .mcb3_dram_udqs_n       ( ddr3_dqs_n[1]         ),
+        .mcb3_dram_dqs_n        ( ddr3_dqs_n[0]         ),
+        .mcb3_dram_ck           ( ddr3_ck_p             ),
+        .mcb3_dram_ck_n         ( ddr3_ck_n             ),
 
-       .c3_sys_clk              ( clk_200               ),
-       .c3_sys_rst_i            ( brd_rst               ), // active-high
-       .c3_clk0                 (                       ),
-       .c3_rst0                 (                       ),
-       .c3_calib_done           ( phy_init_done         ),
+        .c3_sys_clk             ( clk_200               ),
+        .c3_sys_rst_i           ( brd_rst               ), // active-high
+        .c3_clk0                (                       ),
+        .c3_rst0                (                       ),
+        .c3_calib_done          ( phy_init_done         ),
 
-       .c3_p0_cmd_clk           ( sys_clk               ),
+        .c3_p0_cmd_clk          ( sys_clk               ),
 
-       .c3_p0_cmd_en            ( c3_p0_cmd_en          ),
-       .c3_p0_cmd_instr         ( c3_p0_cmd_instr       ),
-       .c3_p0_cmd_bl            ( 6'd0                  ),
-       .c3_p0_cmd_byte_addr     ( c3_p0_cmd_byte_addr   ),
-       .c3_p0_cmd_empty         (                       ),
-       .c3_p0_cmd_full          ( c3_p0_cmd_full        ),
+        .c3_p0_cmd_en           ( c3_p0_cmd_en          ),
+        .c3_p0_cmd_instr        ( c3_p0_cmd_instr       ),
+        .c3_p0_cmd_bl           ( 6'd0                  ),
+        .c3_p0_cmd_byte_addr    ( c3_p0_cmd_byte_addr   ),
+        .c3_p0_cmd_empty        (                       ),
+        .c3_p0_cmd_full         ( c3_p0_cmd_full        ),
 
-       .c3_p0_wr_clk            ( sys_clk               ),
+        .c3_p0_wr_clk           ( sys_clk               ),
 
-       .c3_p0_wr_en             ( c3_p0_wr_en           ),
-       .c3_p0_wr_mask           ( c3_p0_wr_mask         ),
-       .c3_p0_wr_data           ( c3_p0_wr_data         ),
-       .c3_p0_wr_full           ( c3_p0_wr_full         ),
-       .c3_p0_wr_empty          (                       ),
-       .c3_p0_wr_count          (                       ),
-       .c3_p0_wr_underrun       (                       ),
-       .c3_p0_wr_error          (                       ),
+        .c3_p0_wr_en            ( c3_p0_wr_en           ),
+        .c3_p0_wr_mask          ( c3_p0_wr_mask         ),
+        .c3_p0_wr_data          ( c3_p0_wr_data         ),
+        .c3_p0_wr_full          ( c3_p0_wr_full         ),
+        .c3_p0_wr_empty         (                       ),
+        .c3_p0_wr_count         (                       ),
+        .c3_p0_wr_underrun      (                       ),
+        .c3_p0_wr_error         (                       ),
 
-       .c3_p0_rd_clk            ( sys_clk               ),
+        .c3_p0_rd_clk           ( sys_clk               ),
 
-       .c3_p0_rd_en             ( 1'd1                  ),
-       .c3_p0_rd_data           ( c3_p0_rd_data         ),
-       .c3_p0_rd_full           (                       ),
-       .c3_p0_rd_empty          ( c3_p0_rd_empty        ),
-       .c3_p0_rd_count          (                       ),
-       .c3_p0_rd_overflow       (                       ),
-       .c3_p0_rd_error          (                       )
-       );
+        .c3_p0_rd_en            ( 1'd1                  ),
+        .c3_p0_rd_data          ( c3_p0_rd_data         ),
+        .c3_p0_rd_full          (                       ),
+        .c3_p0_rd_empty         ( c3_p0_rd_empty        ),
+        .c3_p0_rd_count         (                       ),
+        .c3_p0_rd_overflow      (                       ),
+        .c3_p0_rd_error         (                       )
+    );
+        
+   `endif
 
-`elsif ALTERA_CYCLONE3_FPGA
+`elsif ALTERA_FPGA
+
     // ======================================
     // Instantiate static RAM - 2Mx8 of external SRAM
     // ======================================
+    assign phy_init_done = 1'd1;
+
     wb_sram_bridge #(
         .WB_DWIDTH              ( WB_DWIDTH             ),
         .WB_SWIDTH              ( WB_SWIDTH             ),
@@ -750,11 +521,37 @@ cfg_dta u_cfg_dta (
         .i_wb_clk               ( sys_clk               ),
         .i_ram_clk              ( ram_clk               ),
 
+        .i_wb_adr               ( s_wb_adr  [2]         ),
+        .i_wb_sel               ( s_wb_sel  [2]         ),
+        .i_wb_we                ( s_wb_we   [2]         ),
+        .o_wb_dat               ( s_wb_dat_r[2]         ),
+        .i_wb_dat               ( s_wb_dat_w[2]         ),
+        .i_wb_cyc               ( s_wb_cyc  [2]         ),
+        .i_wb_stb               ( s_wb_stb  [2]         ),
+        .o_wb_ack               ( s_wb_ack  [2]         ),
+        .o_wb_err               ( s_wb_err  [2]         ),
+
         .o_sram_cs              ( o_sram_cs             ),
         .o_sram_read            ( o_sram_read           ),
         .o_sram_write           ( o_sram_write          ),
         .o_sram_addr            ( o_sram_addr           ),
-        .io_sram_data           ( io_sram_data          ),
+        .io_sram_data           ( io_sram_data          )
+    );
+
+`else
+
+    // ======================================
+    // Instantiate non-synthesizable main memory model
+    // ======================================
+    assign phy_init_done = 1'd1;
+
+    main_mem #(
+        .WB_DWIDTH              ( WB_DWIDTH             ),
+        .WB_SWIDTH              ( WB_SWIDTH             )
+        )
+    u_main_mem (
+        .i_clk                  ( sys_clk               ),
+        .i_mem_ctrl             ( test_mem_ctrl         ),
 
         .i_wb_adr               ( s_wb_adr  [2]         ),
         .i_wb_sel               ( s_wb_sel  [2]         ),
@@ -765,9 +562,220 @@ cfg_dta u_cfg_dta (
         .i_wb_stb               ( s_wb_stb  [2]         ),
         .o_wb_ack               ( s_wb_ack  [2]         ),
         .o_wb_err               ( s_wb_err  [2]         )
-        );
+    );
+
 `endif
 
+
+// -------------------------------------------------------------
+// Instantiate UART0
+// -------------------------------------------------------------
+    uart  #(
+        .WB_DWIDTH              ( WB_DWIDTH             ),
+        .WB_SWIDTH              ( WB_SWIDTH             )
+        )
+    u_uart0 (
+        .i_clk                  ( sys_clk               ),
+
+        .o_uart_int             ( uart0_int             ),
+
+        .i_uart_cts_n           ( i_uart0_rts           ),
+        .o_uart_txd             ( o_uart0_rx            ),
+        .o_uart_rts_n           ( o_uart0_cts           ),
+        .i_uart_rxd             ( i_uart0_tx            ),
+
+        .i_wb_adr               ( s_wb_adr  [3]         ),
+        .i_wb_sel               ( s_wb_sel  [3]         ),
+        .i_wb_we                ( s_wb_we   [3]         ),
+        .o_wb_dat               ( s_wb_dat_r[3]         ),
+        .i_wb_dat               ( s_wb_dat_w[3]         ),
+        .i_wb_cyc               ( s_wb_cyc  [3]         ),
+        .i_wb_stb               ( s_wb_stb  [3]         ),
+        .o_wb_ack               ( s_wb_ack  [3]         ),
+        .o_wb_err               ( s_wb_err  [3]         )
+    );
+
+
+// -------------------------------------------------------------
+// Instantiate UART1
+// -------------------------------------------------------------
+    uart  #(
+        .WB_DWIDTH              ( WB_DWIDTH             ),
+        .WB_SWIDTH              ( WB_SWIDTH             )
+        )
+    u_uart1 (
+        .i_clk                  ( sys_clk               ),
+
+        .o_uart_int             ( uart1_int             ),
+
+        .i_uart_cts_n           ( i_uart1_rts           ),
+        .o_uart_txd             ( o_uart1_rx            ),
+        .o_uart_rts_n           ( o_uart1_cts           ),
+        .i_uart_rxd             ( i_uart1_tx            ),
+
+        .i_wb_adr               ( s_wb_adr  [4]         ),
+        .i_wb_sel               ( s_wb_sel  [4]         ),
+        .i_wb_we                ( s_wb_we   [4]         ),
+        .o_wb_dat               ( s_wb_dat_r[4]         ),
+        .i_wb_dat               ( s_wb_dat_w[4]         ),
+        .i_wb_cyc               ( s_wb_cyc  [4]         ),
+        .i_wb_stb               ( s_wb_stb  [4]         ),
+        .o_wb_ack               ( s_wb_ack  [4]         ),
+        .o_wb_err               ( s_wb_err  [4]         )
+    );
+
+
+// -------------------------------------------------------------
+// Instantiate Test Module
+//   - includes register used to terminate tests
+// -------------------------------------------------------------
+    test_module #(
+        .WB_DWIDTH              ( WB_DWIDTH             ),
+        .WB_SWIDTH              ( WB_SWIDTH             )
+        )
+    u_test_module (
+        .i_clk                  ( sys_clk               ),
+
+        .o_irq                  ( test_reg_irq          ),
+        .o_firq                 ( test_reg_firq         ),
+        .o_mem_ctrl             ( test_mem_ctrl         ),
+        .i_wb_adr               ( s_wb_adr  [5]         ),
+        .i_wb_sel               ( s_wb_sel  [5]         ),
+        .i_wb_we                ( s_wb_we   [5]         ),
+        .o_wb_dat               ( s_wb_dat_r[5]         ),
+        .i_wb_dat               ( s_wb_dat_w[5]         ),
+        .i_wb_cyc               ( s_wb_cyc  [5]         ),
+        .i_wb_stb               ( s_wb_stb  [5]         ),
+        .o_wb_ack               ( s_wb_ack  [5]         ),
+        .o_wb_err               ( s_wb_err  [5]         ),
+        .o_led                  ( led                   ),
+        .o_phy_rst_n            ( phy_reset_n           )
+    );
+
+
+// -------------------------------------------------------------
+// Instantiate Timer Module
+// -------------------------------------------------------------
+    timer_module  #(
+        .WB_DWIDTH              ( WB_DWIDTH             ),
+        .WB_SWIDTH              ( WB_SWIDTH             )
+        )
+    u_timer_module (
+        .i_clk                  ( sys_clk               ),
+
+        // Interrupt outputs
+        .o_timer_int            ( timer_int             ),
+
+        // Wishbone interface
+        .i_wb_adr               ( s_wb_adr  [6]         ),
+        .i_wb_sel               ( s_wb_sel  [6]         ),
+        .i_wb_we                ( s_wb_we   [6]         ),
+        .o_wb_dat               ( s_wb_dat_r[6]         ),
+        .i_wb_dat               ( s_wb_dat_w[6]         ),
+        .i_wb_cyc               ( s_wb_cyc  [6]         ),
+        .i_wb_stb               ( s_wb_stb  [6]         ),
+        .o_wb_ack               ( s_wb_ack  [6]         ),
+        .o_wb_err               ( s_wb_err  [6]         )
+    );
+
+
+// -------------------------------------------------------------
+// Instantiate Interrupt Controller Module
+// -------------------------------------------------------------
+    interrupt_controller  #(
+        .WB_DWIDTH              ( WB_DWIDTH             ),
+        .WB_SWIDTH              ( WB_SWIDTH             )
+        )
+    u_interrupt_controller (
+        .i_clk                  ( sys_clk               ),
+
+        // Interrupt outputs
+        .o_irq                  ( amber_irq             ),
+        .o_firq                 ( amber_firq            ),
+
+        // Interrupt inputs
+        .i_uart0_int            ( uart0_int             ),
+        .i_uart1_int            ( uart1_int             ),
+        .i_ethmac_int           ( ethmac_int            ),
+        .i_test_reg_irq         ( test_reg_irq          ),
+        .i_test_reg_firq        ( test_reg_firq         ),
+        .i_tm_timer_int         ( timer_int             ),
+
+        // Wishbone interface
+        .i_wb_adr               ( s_wb_adr  [7]         ),
+        .i_wb_sel               ( s_wb_sel  [7]         ),
+        .i_wb_we                ( s_wb_we   [7]         ),
+        .o_wb_dat               ( s_wb_dat_r[7]         ),
+        .i_wb_dat               ( s_wb_dat_w[7]         ),
+        .i_wb_cyc               ( s_wb_cyc  [7]         ),
+        .i_wb_stb               ( s_wb_stb  [7]         ),
+        .o_wb_ack               ( s_wb_ack  [7]         ),
+        .o_wb_err               ( s_wb_err  [7]         )
+    );
+
+
+// -------------------------------------------------------------
+// Instantiate DMA Controller
+// -------------------------------------------------------------
+    dma u_dma (
+        .i_clk                  ( sys_clk               ),
+        .i_sys_rst              ( sys_rst               ),
+
+        // WISHBONE slave
+        .i_s_wb_adr             ( s_wb_adr  [8]         ),
+        .i_s_wb_sel             ( s_wb_sel  [8]         ),
+        .i_s_wb_we              ( s_wb_we   [8]         ),
+        .o_s_wb_dat             ( s_wb_dat_r[8]         ),
+        .i_s_wb_dat             ( s_wb_dat_w[8]         ),
+        .i_s_wb_cyc             ( s_wb_cyc  [8]         ),
+        .i_s_wb_stb             ( s_wb_stb  [8]         ),
+        .o_s_wb_ack             ( s_wb_ack  [8]         ),
+        .o_s_wb_err             ( s_wb_err  [8]         ),
+
+        // WISHBONE master
+        .o_m_wb_adr             ( m_wb_adr  [2]         ),
+        .o_m_wb_sel             ( m_wb_sel  [2]         ),
+        .o_m_wb_we              ( m_wb_we   [2]         ),
+        .i_m_wb_dat             ( m_wb_dat_r[2]         ),
+        .o_m_wb_dat             ( m_wb_dat_w[2]         ),
+        .o_m_wb_cyc             ( m_wb_cyc  [2]         ),
+        .o_m_wb_stb             ( m_wb_stb  [2]         ),
+        .i_m_wb_ack             ( m_wb_ack  [2]         ),
+        .i_m_wb_err             ( m_wb_err  [2]         )
+
+        // Interrupt
+        //.o_int                ( dma_int               )
+    );
+
+
+// -------------------------------------------------------------
+// Instantiate ConfigData Memory
+// -------------------------------------------------------------
+    cfg_dta #(
+        .WB_DWIDTH              ( WB_DWIDTH             ),
+        .WB_SWIDTH              ( WB_SWIDTH             ),
+        .MADDR_WIDTH            ( 12                    )       // 20: external Configuration Data in serial flash, 12: local "ROM" module w/ initialized program code
+        )
+    u_cfg_dta (
+        .i_clk                  ( sys_clk               ),
+        .i_sys_rst              ( sys_rst               ),
+
+        // WISHBONE slave
+        .i_wb_adr               ( s_wb_adr  [9]         ),
+        .i_wb_sel               ( s_wb_sel  [9]         ),
+        .i_wb_we                ( s_wb_we   [9]         ),
+        .o_wb_dat               ( s_wb_dat_r[9]         ),
+        .i_wb_dat               ( s_wb_dat_w[9]         ),
+        .i_wb_cyc               ( s_wb_cyc  [9]         ),
+        .i_wb_stb               ( s_wb_stb  [9]         ),
+        .o_wb_ack               ( s_wb_ack  [9]         ),
+        .o_wb_err               ( s_wb_err  [9]         )
+
+        // ConfigData to ext. Config-Memory I/F
+
+        // Interrupt
+        //.int_o                ( cd_int                )
+    );
 
 
 // -------------------------------------------------------------
@@ -778,7 +786,9 @@ cfg_dta u_cfg_dta (
         .WB_SWIDTH              ( WB_SWIDTH             )
         )
     u_wishbone_arbiter (
+        .i_sys_rst              ( sys_rst               ),
         .i_wb_clk               ( sys_clk               ),
+
 
         // WISHBONE master 0 - Ethmac
         .i_m0_wb_adr            ( m_wb_adr   [0]        ),
@@ -791,8 +801,7 @@ cfg_dta u_cfg_dta (
         .o_m0_wb_ack            ( m_wb_ack   [0]        ),
         .o_m0_wb_err            ( m_wb_err   [0]        ),
 
-
-        // WISHBONE master 1 - Amber Process or
+        // WISHBONE master 1 - Amber Processor
         .i_m1_wb_adr            ( m_wb_adr   [1]        ),
         .i_m1_wb_sel            ( m_wb_sel   [1]        ),
         .i_m1_wb_we             ( m_wb_we    [1]        ),
@@ -802,6 +811,17 @@ cfg_dta u_cfg_dta (
         .i_m1_wb_stb            ( m_wb_stb   [1]        ),
         .o_m1_wb_ack            ( m_wb_ack   [1]        ),
         .o_m1_wb_err            ( m_wb_err   [1]        ),
+
+        // WISHBONE master 2 - DMA Controller
+        .i_m2_wb_adr            ( m_wb_adr   [2]        ),
+        .i_m2_wb_sel            ( m_wb_sel   [2]        ),
+        .i_m2_wb_we             ( m_wb_we    [2]        ),
+        .o_m2_wb_dat            ( m_wb_dat_r [2]        ),
+        .i_m2_wb_dat            ( m_wb_dat_w [2]        ),
+        .i_m2_wb_cyc            ( m_wb_cyc   [2]        ),
+        .i_m2_wb_stb            ( m_wb_stb   [2]        ),
+        .o_m2_wb_ack            ( m_wb_ack   [2]        ),
+        .o_m2_wb_err            ( m_wb_err   [2]        ),
 
 
         // WISHBONE slave 0 - Ethmac
@@ -815,7 +835,6 @@ cfg_dta u_cfg_dta (
         .i_s0_wb_ack            ( s_wb_ack   [0]        ),
         .i_s0_wb_err            ( s_wb_err   [0]        ),
 
-
         // WISHBONE slave 1 - Boot Memory
         .o_s1_wb_adr            ( s_wb_adr   [1]        ),
         .o_s1_wb_sel            ( s_wb_sel   [1]        ),
@@ -826,7 +845,6 @@ cfg_dta u_cfg_dta (
         .o_s1_wb_stb            ( s_wb_stb   [1]        ),
         .i_s1_wb_ack            ( s_wb_ack   [1]        ),
         .i_s1_wb_err            ( s_wb_err   [1]        ),
-
 
         // WISHBONE slave 2 - Main Memory
         .o_s2_wb_adr            ( s_wb_adr   [2]        ),
@@ -839,7 +857,6 @@ cfg_dta u_cfg_dta (
         .i_s2_wb_ack            ( s_wb_ack   [2]        ),
         .i_s2_wb_err            ( s_wb_err   [2]        ),
 
-
         // WISHBONE slave 3 - UART 0
         .o_s3_wb_adr            ( s_wb_adr   [3]        ),
         .o_s3_wb_sel            ( s_wb_sel   [3]        ),
@@ -850,7 +867,6 @@ cfg_dta u_cfg_dta (
         .o_s3_wb_stb            ( s_wb_stb   [3]        ),
         .i_s3_wb_ack            ( s_wb_ack   [3]        ),
         .i_s3_wb_err            ( s_wb_err   [3]        ),
-
 
         // WISHBONE slave 4 - UART 1
         .o_s4_wb_adr            ( s_wb_adr   [4]        ),
@@ -863,7 +879,6 @@ cfg_dta u_cfg_dta (
         .i_s4_wb_ack            ( s_wb_ack   [4]        ),
         .i_s4_wb_err            ( s_wb_err   [4]        ),
 
-
         // WISHBONE slave 5 - Test Module
         .o_s5_wb_adr            ( s_wb_adr   [5]        ),
         .o_s5_wb_sel            ( s_wb_sel   [5]        ),
@@ -874,7 +889,6 @@ cfg_dta u_cfg_dta (
         .o_s5_wb_stb            ( s_wb_stb   [5]        ),
         .i_s5_wb_ack            ( s_wb_ack   [5]        ),
         .i_s5_wb_err            ( s_wb_err   [5]        ),
-
 
         // WISHBONE slave 6 - Timer Module
         .o_s6_wb_adr            ( s_wb_adr   [6]        ),
@@ -887,7 +901,6 @@ cfg_dta u_cfg_dta (
         .i_s6_wb_ack            ( s_wb_ack   [6]        ),
         .i_s6_wb_err            ( s_wb_err   [6]        ),
 
-
         // WISHBONE slave 7 - Interrupt Controller
         .o_s7_wb_adr            ( s_wb_adr   [7]        ),
         .o_s7_wb_sel            ( s_wb_sel   [7]        ),
@@ -897,14 +910,39 @@ cfg_dta u_cfg_dta (
         .o_s7_wb_cyc            ( s_wb_cyc   [7]        ),
         .o_s7_wb_stb            ( s_wb_stb   [7]        ),
         .i_s7_wb_ack            ( s_wb_ack   [7]        ),
-        .i_s7_wb_err            ( s_wb_err   [7]        )
+        .i_s7_wb_err            ( s_wb_err   [7]        ),
+
+        // WISHBONE slave 8 - DMA Controller
+        .o_s8_wb_adr            ( s_wb_adr   [8]        ),
+        .o_s8_wb_sel            ( s_wb_sel   [8]        ),
+        .o_s8_wb_we             ( s_wb_we    [8]        ),
+        .i_s8_wb_dat            ( s_wb_dat_r [8]        ),
+        .o_s8_wb_dat            ( s_wb_dat_w [8]        ),
+        .o_s8_wb_cyc            ( s_wb_cyc   [8]        ),
+        .o_s8_wb_stb            ( s_wb_stb   [8]        ),
+        .i_s8_wb_ack            ( s_wb_ack   [8]        ),
+        .i_s8_wb_err            ( s_wb_err   [8]        ),
+
+        // WISHBONE slave 9 - Config Data Memory
+        .o_s9_wb_adr            ( s_wb_adr   [9]        ),
+        .o_s9_wb_sel            ( s_wb_sel   [9]        ),
+        .o_s9_wb_we             ( s_wb_we    [9]        ),
+        .i_s9_wb_dat            ( s_wb_dat_r [9]        ),
+        .o_s9_wb_dat            ( s_wb_dat_w [9]        ),
+        .o_s9_wb_cyc            ( s_wb_cyc   [9]        ),
+        .o_s9_wb_stb            ( s_wb_stb   [9]        ),
+        .i_s9_wb_ack            ( s_wb_ack   [9]        ),
+        .i_s9_wb_err            ( s_wb_err   [9]        )
     );
 
 
+// -------------------------------------------------------------
+// Instantiate Ethernet MAC
+// -------------------------------------------------------------
     ethmac_wb #(
         .WB_DWIDTH              ( WB_DWIDTH             ),
         .WB_SWIDTH              ( WB_SWIDTH             )
-    )
+        )
     u_ethmac_wb (
         // Wishbone arbiter side
         .o_m_wb_adr             ( m_wb_adr   [0]        ),

@@ -111,6 +111,7 @@ localparam AMBER_DMA_LENGTH         = 16'h0008;
 localparam AMBER_DMA_CUR0           = 16'h0010;
 localparam AMBER_DMA_CUR1           = 16'h0014;
 localparam AMBER_DMA_REMAIN         = 16'h0018;
+localparam AMBER_DMA_BLOCK          = 16'h001c;
 
 
 // Timer Module
