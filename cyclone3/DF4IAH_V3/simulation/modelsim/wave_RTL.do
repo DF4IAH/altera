@@ -96,73 +96,73 @@ add wave -noupdate -group Amber_Fetch__M1 -expand -group Amber_Fetch_Cache -grou
 add wave -noupdate -group Amber_Fetch__M1 -expand -group Amber_Fetch_Cache -expand -group DEBUG_Fetch -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_fetch/u_cache/xC_STATE
 add wave -noupdate -group Amber_Fetch__M1 -expand -group Amber_Fetch_Cache -expand -group DEBUG_Fetch -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_fetch/u_cache/xSOURCE_SEL
 add wave -noupdate -group Amber_Fetch__M1 -expand -group Amber_Fetch_Cache -expand -group DEBUG_Fetch -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_fetch/u_wishbone/xAS_STATE
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Control -color Tan /tb_top/u_dut/u_system/u_amber/u_decode/i_system_rdy
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Control -color Yellow /tb_top/u_dut/u_system/u_amber/u_decode/i_clk
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_fetch_stall
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_execute_address
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_execute_status_bits
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_abt_status
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_read_data
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_irq
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_firq
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_adex
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_read_data
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_read_data_alignment
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_condition
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_exclusive_exec
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_data_access_exec
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rm_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rds_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rn_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rm_sel_nxt
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rds_sel_nxt
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rn_sel_nxt
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_interrupt_vector_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_address_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_pc_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_byte_enable_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Register -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_reg_write_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Register -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Register -radix hexadecimal -childformat {{{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[3]} -radix hexadecimal} {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[2]} -radix hexadecimal} {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[1]} -radix hexadecimal} {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[0]} -radix hexadecimal}} -subitemconfig {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[3]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[2]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[1]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[0]} {-height 15 -radix hexadecimal}} /tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group UserMode -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_user_mode_regs_load
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group UserMode -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_user_mode_regs_store_nxt
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group UserMode -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_firq_not_user_mode
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_write_data_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_base_address_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_pc_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_irq_mask
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_irq_mask_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_firq_mask
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_firq_mask_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_mode
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_mode_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_flags_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_imm32
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_imm_shift_amount
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_shift_imm_zero
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_alu_function
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_use_carry_in
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_multiply_function
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_multiply_done
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_barrel_shift_amount_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_barrel_shift_data_sel
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_barrel_shift_function
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_opcode1
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_opcode2
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_crn
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_crm
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_num
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_operation
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_write_data_wen
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_iabt_trigger
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_iabt_address
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_iabt_status
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_iabt
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_dabt_trigger
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_dabt_address
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_dabt_status
-add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_dabt
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Control -color Tan /tb_top/u_dut/u_system/u_amber/u_decode/i_system_rdy
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Control -color Yellow /tb_top/u_dut/u_system/u_amber/u_decode/i_clk
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -color {Dark Orchid} -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_fetch_stall
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -color Coral -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_execute_address
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_execute_status_bits
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -color {Green Yellow} -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_read_data
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_abt_status
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_irq
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_firq
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_adex
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_read_data
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_read_data_alignment
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_condition
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_exclusive_exec
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_data_access_exec
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rm_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rds_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rn_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rm_sel_nxt
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rds_sel_nxt
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_rn_sel_nxt
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_interrupt_vector_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_address_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_pc_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_byte_enable_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Register -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_reg_write_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Register -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Register -radix hexadecimal -childformat {{{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[3]} -radix hexadecimal} {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[2]} -radix hexadecimal} {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[1]} -radix hexadecimal} {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[0]} -radix hexadecimal}} -subitemconfig {{/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[3]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[2]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[1]} {-height 15 -radix hexadecimal} {/tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel[0]} {-height 15 -radix hexadecimal}} /tb_top/u_dut/u_system/u_amber/u_decode/o_reg_bank_wsel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group UserMode -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_user_mode_regs_load
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group UserMode -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_user_mode_regs_store_nxt
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group UserMode -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_firq_not_user_mode
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_write_data_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_base_address_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_pc_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_irq_mask
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_irq_mask_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_firq_mask
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_firq_mask_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_mode
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_mode_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_status_bits_flags_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_imm32
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_imm_shift_amount
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_shift_imm_zero
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_alu_function
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_use_carry_in
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_multiply_function
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_multiply_done
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_barrel_shift_amount_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_barrel_shift_data_sel
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_barrel_shift_function
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_opcode1
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_opcode2
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_crn
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_crm
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_num
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_operation
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group CoPro -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_copro_write_data_wen
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_iabt_trigger
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_iabt_address
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_iabt_status
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group IABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_iabt
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_dabt_trigger
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_dabt_address
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/o_dabt_status
+add wave -noupdate -expand -group Amber_Decode -expand -group Decode -expand -group I/O -group DABT -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/i_dabt
 add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group Internal -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/restore_base_address_nxt
 add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group Internal -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/restore_base_address
 add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group Internal -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/base_address_wen_nxt
@@ -278,151 +278,151 @@ add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group Inte
 add wave -noupdate -expand -group Amber_Decode -expand -group Decode -group Internal -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_decode/status_bits_flags_wen_nxt
 add wave -noupdate -expand -group Amber_Decode -expand -group DEBUG_Decode -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_decode/xCONTROL_STATE
 add wave -noupdate -expand -group Amber_Decode -expand -group DEBUG_Decode -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_decode/xMODE
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -group Control -color Tan -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_system_rdy
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -group Control -color Yellow -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_clk
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_write_data
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_address
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_adex
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_address_valid
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_address_nxt
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_priviledged
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_exclusive
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_write_enable
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_byte_enable
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_data_access
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_status_bits
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_multiply_done
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_fetch_stall
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_mode
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_irq_mask
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_firq_mask
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_imm32
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_imm_shift_amount
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_shift_imm_zero
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_condition
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_exclusive_exec
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_use_carry_in
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rm_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rds_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rn_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rm_sel_nxt
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rds_sel_nxt
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rn_sel_nxt
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_barrel_shift_amount_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_barrel_shift_data_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_barrel_shift_function
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_alu_function
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_multiply_function
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_interrupt_vector_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_address_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_pc_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_byte_enable_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_reg_write_sel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_user_mode_regs_load
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_user_mode_regs_store_nxt
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_firq_not_user_mode
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_write_data_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_base_address_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_pc_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_reg_bank_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_reg_bank_wsel
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_flags_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_mode_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_irq_mask_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_firq_mask_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_copro_write_data_wen
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_read_data
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_read_data_alignment
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_copro_read_data
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_data_access_exec
-add wave -noupdate -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_copro_write_data
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_plus4
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_minus4
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/address_plus4
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_plus4
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rn_plus4
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_out
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_flags
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rm
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rs
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rd
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rn
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/interrupt_vector
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/base_address
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/address_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/base_address_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/address_r
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/save_int_pc
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/save_int_pc_m4
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/reg_write_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_wen
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/priviledged_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_data_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_enable_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/byte_enable_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/adex_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/reg_bank_wen
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/reg_bank_wsel
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/multiply_out
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/multiply_flags
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/shift_amount
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_in
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_out
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_carry
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_carry_alu
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_out_pc_filtered
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/carry_in
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/execute
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/priviledged_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_data_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/copro_write_data_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/byte_enable_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/data_access_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_enable_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/exclusive_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_flags_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_flags
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_nr
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_nr
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_oh_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_oh
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_oh_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_irq_mask_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_irq_mask
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_firq_mask_nxt
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_firq_mask
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_flags_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_irq_mask_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_firq_mask_update
-add wave -noupdate -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_out
-add wave -noupdate -group Amber_Execute__M1 -expand -group DEBUG_Execute -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_execute/xCONDITION
-add wave -noupdate -group Amber_Execute__M1 -expand -group DEBUG_Execute -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_execute/xMODE
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -group Control -color Tan -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_system_rdy
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -group Control -color Yellow -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_clk
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -color Coral -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_write_data
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_address
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_adex
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_address_valid
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_address_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_priviledged
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_exclusive
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_write_enable
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_byte_enable
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_data_access
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_status_bits
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_multiply_done
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_fetch_stall
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_mode
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_irq_mask
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_firq_mask
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_imm32
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_imm_shift_amount
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_shift_imm_zero
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_condition
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_exclusive_exec
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_use_carry_in
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rm_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rds_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rn_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rm_sel_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rds_sel_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_rn_sel_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_barrel_shift_amount_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_barrel_shift_data_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_barrel_shift_function
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_alu_function
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_multiply_function
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_interrupt_vector_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_address_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_pc_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_byte_enable_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_reg_write_sel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_user_mode_regs_load
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_user_mode_regs_store_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_firq_not_user_mode
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_write_data_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_base_address_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_pc_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_reg_bank_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_reg_bank_wsel
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_flags_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_mode_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_irq_mask_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_status_bits_firq_mask_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_copro_write_data_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_read_data
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_read_data_alignment
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_copro_read_data
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/i_data_access_exec
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group I/O_Execute -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/o_copro_write_data
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_plus4
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_minus4
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/address_plus4
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_plus4
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rn_plus4
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_out
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_flags
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rm
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rs
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rd
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/rn
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/interrupt_vector
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/base_address
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/address_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/base_address_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/address_r
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/save_int_pc
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/save_int_pc_m4
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/reg_write_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/pc_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/priviledged_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_data_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_enable_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/byte_enable_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Address -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/adex_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/reg_bank_wen
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/reg_bank_wsel
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/multiply_out
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/multiply_flags
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/shift_amount
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_in
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_out
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_carry
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -group Barrel -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/barrel_shift_carry_alu
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/alu_out_pc_filtered
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/carry_in
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group ALU -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/execute
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/priviledged_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_data_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/copro_write_data_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/byte_enable_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/data_access_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/write_enable_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Update_REGs -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/exclusive_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_flags_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_flags
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_nr
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_nr
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_oh_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_oh
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_rds_oh_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_irq_mask_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_irq_mask
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_firq_mask_nxt
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_firq_mask
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_flags_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_mode_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_irq_mask_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_firq_mask_update
+add wave -noupdate -expand -group Amber_Execute__M1 -group Internal_Execute -group Status -radix hexadecimal /tb_top/u_dut/u_system/u_amber/u_execute/status_bits_out
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group DEBUG_Execute -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_execute/xCONDITION
+add wave -noupdate -expand -group Amber_Execute__M1 -expand -group DEBUG_Execute -color Cyan -radix ascii /tb_top/u_dut/u_system/u_amber/u_execute/xMODE
 add wave -noupdate -divider {Wishbone Slaves}
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -expand -group Control_S1 -color Yellow /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_clk
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_cyc
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_stb
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/o_wb_ack
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/o_wb_err
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_adr
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_sel
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_we
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/o_wb_dat
-add wave -noupdate -expand -group BootRam__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_dat
-add wave -noupdate -expand -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/start_write
-add wave -noupdate -expand -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/start_read
-add wave -noupdate -expand -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/start_read_r
-add wave -noupdate -expand -group BootRam__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/read_data
-add wave -noupdate -expand -group BootRam__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/write_data
-add wave -noupdate -expand -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/byte_enable
-add wave -noupdate -expand -group BootRam__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/address
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -expand -group Control_S1 -color Yellow /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_clk
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_cyc
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_stb
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/o_wb_ack
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -color Wheat /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/o_wb_err
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_adr
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_sel
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_we
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/o_wb_dat
+add wave -noupdate -group BootRam__S1 -expand -group I/O_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/i_wb_dat
+add wave -noupdate -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/start_write
+add wave -noupdate -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/start_read
+add wave -noupdate -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/start_read_r
+add wave -noupdate -group BootRam__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/read_data
+add wave -noupdate -group BootRam__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/write_data
+add wave -noupdate -group BootRam__S1 -expand -group Internal_S1 /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/byte_enable
+add wave -noupdate -group BootRam__S1 -expand -group Internal_S1 -radix hexadecimal /tb_top/u_dut/u_system/u_boot_mem32/u_boot_mem/address
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group Control_S2 -color Tan /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/i_sys_rst
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group Control_S2 -color Yellow /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/i_wb_clk
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group Control_S2 -color Yellow /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/i_ram_clk
@@ -446,7 +446,6 @@ add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -ex
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_request_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 -color {Sky Blue} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_OUT_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_dat_out_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_state
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_cyc_ctr_int
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -color Pink -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_cyc_ctr
@@ -454,13 +453,16 @@ add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -ex
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_adr_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_dat_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ready_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -color {Medium Sea Green} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_final_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -color Salmon /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_final_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_write_final_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_read_final_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_state
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_write_final_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_read_final_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_addr_int
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_adr_r_int
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_adr_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_dat_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_dat_out_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix binary /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_sel_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_pos_int
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_pos
@@ -646,8 +648,8 @@ add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s9_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_dat
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor i_brd_reset_n} {999025 ps} 1} {{Cursor i_brd_reset (synced)} {1073785 ps} 1} {{Cursor o_sys_rst} {1673871 ps} 1} {{Cursor 4} {12848361 ps} 1} {{Cursor 5} {13236111 ps} 1} {{Cursor 6} {13474837 ps} 0}
-quietly wave cursor active 6
+WaveRestoreCursors {i_brd_reset_n {999025 ps} 1} {{i_brd_reset (synced)} {1073785 ps} 1} {o_sys_rst {1673871 ps} 1} {{1st SRAM Read Cycle} {12848361 ps} 1} {{1st SRAM Datum at WB} {13473607 ps} 1} {{2nd SRAM Datum at WB} {14146697 ps} 1} {{4th SRAM Datum at WB - Cache line full} {15471276 ps} 1} {{SRAM write access} {15730237 ps} 1}
+quietly wave cursor active 8
 configure wave -namecolwidth 497
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -662,4 +664,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {13283227 ps} {13599476 ps}
+WaveRestoreZoom {16099229 ps} {16731725 ps}
