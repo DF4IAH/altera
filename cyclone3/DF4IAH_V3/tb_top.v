@@ -61,6 +61,7 @@ reg                             i_reset_n;
 reg                             i_brd_clk;
 reg                             i_mtx_clk;
 reg                             i_mrx_clk;
+reg                             tb_sram_clk;
 
 
 
@@ -151,11 +152,12 @@ top u_dut (
 
 initial 
     begin 
-    i_reset_n = 0;
+    i_reset_n   = 0;
 
-    i_brd_clk = 0;
-    i_mtx_clk = 0;
-    i_mrx_clk = 0;
+    i_brd_clk   = 0;
+    i_mtx_clk   = 0;
+    i_mrx_clk   = 0;
+    tb_sram_clk = 0;
 
     #1000000     i_reset_n = 1;                 // 1 us
     end
@@ -164,6 +166,11 @@ initial
 always
     begin
     #25000      i_brd_clk = !i_brd_clk;         // 20 MHz
+    end
+
+always
+    begin
+    #5555       tb_sram_clk = !tb_sram_clk;     // 90 MHz
     end
 
 always
@@ -180,7 +187,7 @@ always
 integer             sram_data_ctr = 'd0;
 reg         [7:0]   sram_data_reg = 'd0;
 reg         [7:0]   sram_read_r   = 'd0;
-always @ (posedge i_brd_clk)
+always @ (posedge tb_sram_clk)
     begin
     if ( !sram_read_r && o_sram_read_n )        // rising edge of o_sram_read_n
         begin

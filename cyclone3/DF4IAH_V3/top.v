@@ -243,9 +243,6 @@ system u_system (
 );
 
 
-wire        [ 2:0]      monitor = 3'bz;
-
-
 
 // Synchronizing reset
 //
@@ -259,10 +256,9 @@ always @ ( posedge i_brd_clk )
 
 // Monitoring
 //
-assign monitor[0] = i_reset_n;
-assign monitor[1] = i_reset_n_r;
-assign monitor[2] = brd_rst;
-assign o_monitor  = monitor;
+assign o_monitor[0] = !i_reset_n;
+assign o_monitor[1] = !i_reset_n_r;
+assign o_monitor[2] =  brd_rst;
 
 
 initial 

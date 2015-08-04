@@ -16,8 +16,8 @@ add wave -noupdate -expand -group Top -group SPI /tb_top/o_spi0_ss_n
 add wave -noupdate -expand -group Top -group SPI /tb_top/o_spi0_mosi
 add wave -noupdate -expand -group Top -group SPI /tb_top/i_spi0_miso
 add wave -noupdate -expand -group Top -expand -group SRAM -color {Sky Blue} /tb_top/o_sram_cs_n
-add wave -noupdate -expand -group Top -expand -group SRAM /tb_top/o_sram_read_n
-add wave -noupdate -expand -group Top -expand -group SRAM /tb_top/o_sram_write_n
+add wave -noupdate -expand -group Top -expand -group SRAM -color {Green Yellow} /tb_top/o_sram_read_n
+add wave -noupdate -expand -group Top -expand -group SRAM -color Maroon /tb_top/o_sram_write_n
 add wave -noupdate -expand -group Top -expand -group SRAM -radix hexadecimal /tb_top/o_sram_addr
 add wave -noupdate -expand -group Top -expand -group SRAM -radix hexadecimal /tb_top/io_sram_data
 add wave -noupdate -expand -group Top -group Ethernet -group Ethernet_Config /tb_top/o_mdc
@@ -446,26 +446,33 @@ add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -ex
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_request_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 -color {Sky Blue} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_state
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_cyc_ctr_int
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -color Pink -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_cyc_ctr
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_sel_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_adr_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_dat_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ready_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_write_final_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_read_final_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_state
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_write_final_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_read_final_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_addr_int
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_adr_r_int
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_adr_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_dat_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_dat_out_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix binary /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_sel_r
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_pos_int
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group SRAM_S2_2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_pos
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_state
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color {Medium Blue} -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wbsync1_ram_state
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color Aquamarine -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wbsync2_ram_state
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color {Medium Blue} -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wbsync1_ram_dat_out_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color Aquamarine -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wbsync2_ram_dat_out_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_sel_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_adr_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_dat_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ready_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_read_final_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_state
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Blue} -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync1_wb_state
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Aquamarine} -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync2_wb_state
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Blue} -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync1_wb_adr_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Aquamarine} -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync2_wb_adr_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Blue} -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync1_wb_dat_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Aquamarine} -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync2_wb_dat_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Blue} -radix binary /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync1_wb_sel_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color {Medium Aquamarine} -radix binary /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ramsync2_wb_sel_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -color Pink -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_cyc_ctr
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_write_final_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_read_final_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_sr_adr_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_dat_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_dat_out_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_pos_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_SRAM_S2 -radix binary /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/ram_sel_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group DEBUG_SRAM -color Cyan -radix ascii /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/xWB_STATE
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group DEBUG_SRAM -color Cyan -radix ascii /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/xRAM_STATE
 add wave -noupdate -group DMA__M2-S8 -color Yellow /tb_top/u_dut/u_system/u_dma/i_clk
@@ -488,24 +495,24 @@ add wave -noupdate -group DMA__M2-S8 -group Slave_DMA -radix binary /tb_top/u_du
 add wave -noupdate -group DMA__M2-S8 -group Slave_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/i_s_wb_we
 add wave -noupdate -group DMA__M2-S8 -group Slave_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/i_s_wb_dat
 add wave -noupdate -group DMA__M2-S8 -group Slave_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/o_s_wb_dat
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_read_ack
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_rdata32
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_write
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_read
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_read_d1
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_wdata32
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -color Aquamarine -radix hexadecimal /tb_top/u_dut/u_system/u_dma/src_start_reg
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -color Aquamarine -radix hexadecimal /tb_top/u_dut/u_system/u_dma/dst_start_reg
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -color Pink -radix hexadecimal /tb_top/u_dut/u_system/u_dma/block_len_reg
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_src_ptr
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_dst_ptr
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix unsigned /tb_top/u_dut/u_system/u_dma/pp_remain_int
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_remain
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix binary /tb_top/u_dut/u_system/u_dma/pp_sel_r
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_data
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -radix binary /tb_top/u_dut/u_system/u_dma/sel_nxt
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/fsm_master
-add wave -noupdate -group DMA__M2-S8 -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/fsm_pp
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_read_ack
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_rdata32
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_write
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_read
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_start_read_d1
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/wb_s_wdata32
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -color Aquamarine -radix hexadecimal /tb_top/u_dut/u_system/u_dma/src_start_reg
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -color Aquamarine -radix hexadecimal /tb_top/u_dut/u_system/u_dma/dst_start_reg
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -color Pink -radix hexadecimal /tb_top/u_dut/u_system/u_dma/block_len_reg
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA /tb_top/u_dut/u_system/u_dma/pp_dma_block
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_src_ptr
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_dst_ptr
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_remain
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix binary /tb_top/u_dut/u_system/u_dma/pp_sel_r
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix hexadecimal /tb_top/u_dut/u_system/u_dma/pp_data
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -radix binary /tb_top/u_dut/u_system/u_dma/sel_nxt
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/fsm_master
+add wave -noupdate -group DMA__M2-S8 -expand -group Internal_DMA -color Cyan -radix hexadecimal /tb_top/u_dut/u_system/u_dma/fsm_pp
 add wave -noupdate -group DMA__M2-S8 -expand -group DEBUG_DMA -color Cyan -radix ascii /tb_top/u_dut/u_system/u_dma/xFSM_MASTER
 add wave -noupdate -group DMA__M2-S8 -expand -group DEBUG_DMA -color Cyan -radix ascii /tb_top/u_dut/u_system/u_dma/xFSM_PP
 add wave -noupdate -group DMA__M2-S8 -expand -group DEBUG_DMA -divider WishboneArbiter
@@ -648,9 +655,9 @@ add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s9_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_dat
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {i_brd_reset_n {999025 ps} 1} {{i_brd_reset (synced)} {1073785 ps} 1} {o_sys_rst {1673871 ps} 1} {{1st SRAM Read Cycle} {12848361 ps} 1} {{1st SRAM Datum at WB} {13473607 ps} 1} {{2nd SRAM Datum at WB} {14146697 ps} 1} {{4th SRAM Datum at WB - Cache line full} {15471276 ps} 1} {{SRAM write access} {15730237 ps} 1}
-quietly wave cursor active 8
-configure wave -namecolwidth 497
+WaveRestoreCursors {i_brd_reset_n {999025 ps} 1} {{i_brd_reset (synced)} {1073785 ps} 1} {o_sys_rst {1673871 ps} 1} {{1st SRAM Read Cycle} {12849603 ps} 1} {{1st SRAM Datum at WB} {13173072 ps} 1} {{2nd SRAM Datum at WB} {13572469 ps} 1} {{4th SRAM Datum at WB - Cache line full} {13929602 ps} 1} {{SRAM write access} {14471741 ps} 1} {{Cursor 10} {14775482 ps} 0} {{Cursor 10} {14800131 ps} 0} {{Cursor 11} {14836871 ps} 0}
+quietly wave cursor active 11
+configure wave -namecolwidth 561
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -664,4 +671,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {16099229 ps} {16731725 ps}
+WaveRestoreZoom {14436446 ps} {15039177 ps}

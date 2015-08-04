@@ -159,10 +159,8 @@ reg  [31:0]             pp_dst_ptr          = 'd0;
 reg  [3:0]              pp_sel_r            = 'd0;
 reg  [WB_DWIDTH-1:0]    pp_data             = 'd0;
 reg                     pp_dma_block        = 'd0;
-
-integer                 pp_remain_int       =   0;
-wire [15:0]             pp_remain;
-assign pp_remain = pp_remain_int[15:0];
+reg  [15:0]             pp_remain           = 'd0;
+reg  [31:0]             dummy               = 'd0;
 
 wire [3:0]              sel_nxt;
 assign sel_nxt = (pp_remain > 3) ?  (4'b1111 << (pp_src_ptr & 2'b11) & 4'b1111) :
@@ -258,7 +256,7 @@ always @( posedge i_clk )
         pp_dma_block    <= 'd0;
         pp_src_ptr      <= 'd0;
         pp_dst_ptr      <= 'd0;
-        pp_remain_int   <=   0;
+        pp_remain       <= 'd0;
         pp_sel_r        <= 'd0;
         pp_data         <= 'd0;
         o_m_wb_adr      <= 'd0;
@@ -276,7 +274,7 @@ always @( posedge i_clk )
                 pp_dma_block    <= 'd0;
                 pp_src_ptr      <= 'd0;
                 pp_dst_ptr      <= 'd0;
-                pp_remain_int   <=   0;
+                pp_remain       <= 'd0;
                 pp_sel_r        <= 'd0;
                 pp_data         <= 'd0;
                 o_m_wb_adr      <= 'd0;
@@ -290,174 +288,174 @@ always @( posedge i_clk )
 
             PP_PRELOAD:
                 if (fsm_master != MASTER_INIT)
-                    begin                                               // PULL request
-                    pp_dma_block    <= 'd1;                             // init first and block CPU
-                    pp_src_ptr      <= CONFIG_BASE + PRG_OFFS;
-                    pp_dst_ptr      <= BOOT_BASE;
-                    pp_remain_int   <= 16'd256 - 4;                     // 4096 x 32 words
-                    pp_sel_r        <= 4'b1111;                         // aligned words
-                    o_m_wb_adr      <= (CONFIG_BASE + PRG_OFFS) & 32'hffff_fffc;
-                    o_m_wb_sel      <= 4'b1111;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd1;
-                    fsm_pp          <= PP_BEGIN;
+                    begin                                                       // PULL request
+                    pp_dma_block                    <= 'd1;                     // init first and block CPU
+                    pp_src_ptr                      <= CONFIG_BASE + PRG_OFFS;
+                    pp_dst_ptr                      <= BOOT_BASE;
+                    {dummy[31:16],pp_remain}        <= 16'd256 - 4;             // 4096 x 32 words
+                    pp_sel_r                        <= 4'b1111;                 // aligned words
+                    o_m_wb_adr                      <= (CONFIG_BASE + PRG_OFFS) & 32'hffff_fffc;
+                    o_m_wb_sel                      <= 4'b1111;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd1;
+                    fsm_pp                          <= PP_BEGIN;
                     end
 
             PP_READY:
                 if ((fsm_master == MASTER_RUN) && (pp_remain != 0))
-                    begin                                               // PULL request
-                    pp_dma_block    <= dma_block_reg;
-                    pp_src_ptr      <= src_start_reg;
-                    pp_dst_ptr      <= dst_start_reg;
-                    pp_remain_int   <= block_len_reg;
-                    pp_sel_r        <= sel_nxt[WB_SWIDTH-1:0];
-                    o_m_wb_adr      <= src_start_reg & 32'hffff_fffc;
-                    o_m_wb_sel      <= sel_nxt[WB_SWIDTH-1:0];
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd1;
-                    fsm_pp          <= PP_BEGIN;
+                    begin                                                       // PULL request
+                    pp_dma_block                    <= dma_block_reg;
+                    pp_src_ptr                      <= src_start_reg;
+                    pp_dst_ptr                      <= dst_start_reg;
+                    pp_remain                       <= block_len_reg;
+                    pp_sel_r                        <= sel_nxt[WB_SWIDTH-1:0];
+                    o_m_wb_adr                      <= src_start_reg & 32'hffff_fffc;
+                    o_m_wb_sel                      <= sel_nxt[WB_SWIDTH-1:0];
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd1;
+                    fsm_pp                          <= PP_BEGIN;
                     end
 
             PP_BEGIN:
                 if (i_m_wb_ack || i_m_wb_err)
-                    begin                                               // PULL result
-                    pp_data         <= i_m_wb_dat;
-                    pp_src_ptr      <= (pp_src_ptr & 32'hffff_fffc) + 4;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd0;
+                    begin                                                       // PULL result
+                    pp_data                         <= i_m_wb_dat;
+                    pp_src_ptr                      <= (pp_src_ptr & 32'hffff_fffc) + 4;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd0;
                     if (4 < pp_remain)
                         begin
-                        pp_remain_int   <= pp_remain - 4;
-                        fsm_pp          <= PP_MAIL11;
+                        {dummy[31:16],pp_remain}    <= pp_remain - 4;
+                        fsm_pp                      <= PP_MAIL11;
                         end
                     else
                         // keep pull_remain_reg
-                        fsm_pp          <= PP_MAIL21;
+                        fsm_pp                      <= PP_MAIL21;
                     end
 
             PP_MAIL11:
                 if (!i_m_wb_ack && !i_m_wb_err)
-                    begin                                               // PUSH activation
-                    o_m_wb_adr      <= pp_dst_ptr;
-                    o_m_wb_sel      <= pp_sel_r;
-                    o_m_wb_dat      <= pp_data;
-                    o_m_wb_we       <= 'd1;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd1;
-                    fsm_pp          <= PP_MAIL12;
+                    begin                                                       // PUSH activation
+                    o_m_wb_adr                      <= pp_dst_ptr;
+                    o_m_wb_sel                      <= pp_sel_r;
+                    o_m_wb_dat                      <= pp_data;
+                    o_m_wb_we                       <= 'd1;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd1;
+                    fsm_pp                          <= PP_MAIL12;
                     end
 
             PP_MAIL12:
                 if (i_m_wb_ack || i_m_wb_err)
-                    begin                                               // PUSH termination
-                    pp_dst_ptr      <= (pp_dst_ptr & 32'hffff_fffc) + 4;
-                    o_m_wb_we       <= 'd0;
-                    o_m_wb_cyc      <= pp_dma_block;
-                    o_m_wb_stb      <= 'd0;
-                    fsm_pp          <= PP_MAIL13;
+                    begin                                                       // PUSH termination
+                    pp_dst_ptr                      <= (pp_dst_ptr & 32'hffff_fffc) + 4;
+                    o_m_wb_we                       <= 'd0;
+                    o_m_wb_cyc                      <= pp_dma_block;
+                    o_m_wb_stb                      <= 'd0;
+                    fsm_pp                          <= PP_MAIL13;
                     end
 
             PP_MAIL13:
                 if (!i_m_wb_ack && !i_m_wb_err)
-                    begin                                               // PULL request
-                    pp_sel_r        <= 4'b1111;
-                    o_m_wb_adr      <= pp_src_ptr;
-                    o_m_wb_sel      <= 4'b1111;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd1;
-                    fsm_pp          <= PP_MIDDLE;
+                    begin                                                       // PULL request
+                    pp_sel_r                        <= 4'b1111;
+                    o_m_wb_adr                      <= pp_src_ptr;
+                    o_m_wb_sel                      <= 4'b1111;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd1;
+                    fsm_pp                          <= PP_MIDDLE;
                     end
 
             PP_MIDDLE:
                 if (i_m_wb_ack)
-                    begin                                               // PULL result
-                    pp_data         <= i_m_wb_dat;
-                    pp_src_ptr      <= pp_src_ptr + 4;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd0;
+                    begin                                                       // PULL result
+                    pp_data                         <= i_m_wb_dat;
+                    pp_src_ptr                      <= pp_src_ptr + 4;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd0;
                     if (4 < pp_remain)
                         begin
-                        pp_remain_int   <= pp_remain - 4;
-                        fsm_pp          <= PP_MAIL11;
+                        {dummy[31:16],pp_remain}    <= pp_remain - 4;
+                        fsm_pp                      <= PP_MAIL11;
                         end
-//                  else if (0 == pp_remain_reg)                        // dead code
-//                      fsm_pp          <= PP_LAST;
+//                  else if (0 == pp_remain_reg)                                // dead code
+//                      fsm_pp                      <= PP_LAST;
                     else
                         // keep pp_remain_reg
-                        fsm_pp          <= PP_MAIL21;
+                        fsm_pp                      <= PP_MAIL21;
                     end
 
-            PP_MAIL21:          // entry point for 1..4 requested bytes
+            PP_MAIL21:                                                          // entry point for 1..4 requested bytes
                 if (!i_m_wb_ack && !i_m_wb_err)
-                    begin                                               // PUSH activation
-                    o_m_wb_adr      <= pp_dst_ptr;
-                    o_m_wb_sel      <= pp_sel_r;
-                    o_m_wb_dat      <= pp_data;
-                    o_m_wb_we       <= 'd1;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd1;
-                    fsm_pp          <= PP_MAIL22;
+                    begin                                                       // PUSH activation
+                    o_m_wb_adr                      <= pp_dst_ptr;
+                    o_m_wb_sel                      <= pp_sel_r;
+                    o_m_wb_dat                      <= pp_data;
+                    o_m_wb_we                       <= 'd1;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd1;
+                    fsm_pp                          <= PP_MAIL22;
                     end
 
             PP_MAIL22:
                 if (i_m_wb_ack || i_m_wb_err)
-                    begin                                               // PUSH termination
-                    pp_dst_ptr      <= pp_dst_ptr + 4;
-                    o_m_wb_we       <= 'd0;
-                    o_m_wb_cyc      <= pp_dma_block;
-                    o_m_wb_stb      <= 'd0;
-                    fsm_pp          <= PP_MAIL23;
+                    begin                                                       // PUSH termination
+                    pp_dst_ptr                      <= pp_dst_ptr + 4;
+                    o_m_wb_we                       <= 'd0;
+                    o_m_wb_cyc                      <= pp_dma_block;
+                    o_m_wb_stb                      <= 'd0;
+                    fsm_pp                          <= PP_MAIL23;
                     end
 
             PP_MAIL23:
                 if (!i_m_wb_ack && !i_m_wb_err)
-                    begin                                               // PULL request
-                    pp_sel_r        <= (4'b1111 >> (4 - pp_remain));
-                    o_m_wb_adr      <= pp_src_ptr;
-                    o_m_wb_sel      <= (4'b1111 >> (4 - pp_remain));
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd1;
-                    fsm_pp          <= PP_LAST;
+                    begin                                                       // PULL request
+                    pp_sel_r                        <= (4'b1111 >> (4 - pp_remain));
+                    o_m_wb_adr                      <= pp_src_ptr;
+                    o_m_wb_sel                      <= (4'b1111 >> (4 - pp_remain));
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd1;
+                    fsm_pp                          <= PP_LAST;
                     end
                 
             PP_LAST:
                 if (i_m_wb_ack || i_m_wb_err)
-                    begin                                               // PULL result
-                    pp_data         <= i_m_wb_dat;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd0;
-                    fsm_pp          <= PP_MAIL31;
+                    begin                                                       // PULL result
+                    pp_data                         <= i_m_wb_dat;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd0;
+                    fsm_pp                          <= PP_MAIL31;
                     end
 
             PP_MAIL31:
                  if (!i_m_wb_ack && !i_m_wb_err)
-                    begin                                               // PUSH activation
-                    o_m_wb_adr      <= pp_dst_ptr;
-                    o_m_wb_sel      <= pp_sel_r;
-                    o_m_wb_dat      <= pp_data;
-                    o_m_wb_we       <= 'd1;
-                    o_m_wb_cyc      <= 'd1;
-                    o_m_wb_stb      <= 'd1;
-                    fsm_pp          <= PP_MAIL32;
+                    begin                                                       // PUSH activation
+                    o_m_wb_adr                      <= pp_dst_ptr;
+                    o_m_wb_sel                      <= pp_sel_r;
+                    o_m_wb_dat                      <= pp_data;
+                    o_m_wb_we                       <= 'd1;
+                    o_m_wb_cyc                      <= 'd1;
+                    o_m_wb_stb                      <= 'd1;
+                    fsm_pp                          <= PP_MAIL32;
                     end
 
             PP_MAIL32:
                 if (i_m_wb_ack || i_m_wb_err)
-                    begin                                               // PUSH termination
-                    pp_dma_block    <= 'd0;
-                    pp_sel_r        <= 'd0;
-                    pp_data         <= 'd0;
-                    o_m_wb_adr      <= 'd0;
-                    o_m_wb_sel      <= 'd0;
-                    o_m_wb_dat      <= 'd0;
-                    o_m_wb_we       <= 'd0;
-                    o_m_wb_cyc      <= 'd0;
-                    o_m_wb_stb      <= 'd0;
-                    fsm_pp          <= PP_READY;
+                    begin                                                       // PUSH termination
+                    pp_dma_block                    <= 'd0;
+                    pp_sel_r                        <= 'd0;
+                    pp_data                         <= 'd0;
+                    o_m_wb_adr                      <= 'd0;
+                    o_m_wb_sel                      <= 'd0;
+                    o_m_wb_dat                      <= 'd0;
+                    o_m_wb_we                       <= 'd0;
+                    o_m_wb_cyc                      <= 'd0;
+                    o_m_wb_stb                      <= 'd0;
+                    fsm_pp                          <= PP_READY;
                     end
 
             default:
-                fsm_pp  <= PP_INIT;
+                fsm_pp                              <= PP_INIT;
         endcase
     end
 
