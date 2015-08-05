@@ -94,7 +94,9 @@ derive_pll_clocks -create_base_clocks
 #**************************************************************
 # Set Clock Uncertainty
 #**************************************************************
+if { $::TimeQuestInfo(family) == "HardCopy II"} {
 derive_clock_uncertainty
+}
 #set_clock_uncertainty -setup -from [get_clocks __listOfWildcards] -to [get_clocks __listOfWildcards]
 #set_clock_uncertainty -hold  -from [get_clocks __listOfWildcards] -to [get_clocks __listOfWildcards]
 
@@ -119,12 +121,12 @@ set_input_delay -clock clk_sram_virtual -min [expr $CLKs_min + $tCO_min + $BD_mi
 # Set Output Delay
 #**************************************************************
 # Create the output maximum delay for the data output from the FPGA that accounts for all delays specified
-set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports { o_uart* o_led* o_i2c* io_i2c* o_spi* }]
+set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports { o_uart* o_led* o_i2c* io_i2c* o_spi* o_monitor* }]
 set_output_delay -clock clk_eth_tx_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports o_mtx*]
 set_output_delay -clock clk_sram_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports { o_sram_* io_sram_* }]
 
 # Create the output minimum delay for the data output from the FPGA that accounts for all delays specified
-set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports { o_uart* o_led* o_i2c* io_i2c* o_spi* }]
+set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports { o_uart* o_led* o_i2c* io_i2c* o_spi* o_monitor* }]
 set_output_delay -clock clk_eth_tx_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports o_mtx*]
 set_output_delay -clock clk_sram_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports { o_sram_* io_sram_* }]
 

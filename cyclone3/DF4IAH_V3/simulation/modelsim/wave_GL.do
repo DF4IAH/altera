@@ -22,6 +22,8 @@ quietly virtual signal -install /tb_top {/tb_top/o_monitor[30]  } MONITOR_read_r
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[31]  } MONITOR_read_request_r001
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[34]  } MONITOR_ram_write_final_r
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[35]  } MONITOR_ram_read_final_r
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[34]  } MONITOR_wb_read_final_r
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[35]  } MONITOR_ready_r
 quietly WaveActivateNextPane {} 0
 add wave -noupdate -expand -group Control -color Orchid /tb_top/i_reset_n
 add wave -noupdate -expand -group Control -color Yellow /tb_top/i_brd_clk
@@ -74,15 +76,15 @@ add wave -noupdate -radix binary /tb_top/MONITOR_i_wb_sel
 add wave -noupdate -radix hexadecimal /tb_top/MONITOR_i_wb_dat
 add wave -noupdate -radix hexadecimal /tb_top/MONITOR_o_wb_dat
 add wave -noupdate /tb_top/MONITOR_i_wb_we
+add wave -noupdate -color Thistle /tb_top/MONITOR_ready_r
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_write_request
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_write_request_r
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_read_request
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_read_request_r
-add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_ram_write_final_r
-add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_ram_read_final_r
+add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_wb_read_final_r
 add wave -noupdate /tb_top/o_monitor
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {12908164 ps} 0} {{Cursor 2} {19789234 ps} 0}
+WaveRestoreCursors {{Cursor 1} {231425 ps} 0} {{Cursor 2} {19789234 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 552
 configure wave -valuecolwidth 199
@@ -98,4 +100,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {12824061 ps} {12993645 ps}
+WaveRestoreZoom {200940 ps} {370524 ps}
