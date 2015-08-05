@@ -31,7 +31,7 @@ set CLKd_min 0.000
 
 # Specify the maximum clock-to-out of the external device
 #set tCO_max __tCOMax
-set tCO_max 5.000
+set tCO_max 1.000
 
 # Specify the minimum clock-to-out of the external device
 #set tCO_min __tCOMin
@@ -40,7 +40,7 @@ set tCO_min 0.000
 
 # Specify the maximum setup time of the external device
 #set tSU __tSU
-set tSU 15.000
+set tSU 5.000
 
 # Specify the minimum hold time of the external device
 #set tH __tH
@@ -107,16 +107,12 @@ set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - 
 set_input_delay -clock clk_eth_rx_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports { i_mrx* i_mcoll* i_mcrs* }]
 set_input_delay -clock clk_eth_mgt_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports io_md*]
 set_input_delay -clock clk_sram_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports { io_sram_* }]
-#set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports amber_i_*]
-#set_input_delay -clock clk0_virtual -max [expr $CLKs_max + $tCO_max + $BD_max - $CLKd_min] [get_ports wb_i_*]
 
 # Create the input minimum delay for the data input to the FPGA that accounts for all delays specified
 set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports { i_uart* io_i2c* i_spi* }]
 set_input_delay -clock clk_eth_rx_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports { i_mrx* i_mcoll* i_mcrs* }]
 set_input_delay -clock clk_eth_mgt_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports io_md*]
 set_input_delay -clock clk_sram_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports { io_sram_* }]
-#set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports amber_i_*]
-#set_input_delay -clock clk0_virtual -min [expr $CLKs_min + $tCO_min + $BD_min - $CLKd_max] [get_ports wb_i_*]
 
 
 #**************************************************************
@@ -126,18 +122,17 @@ set_input_delay -clock clk_sram_virtual -min [expr $CLKs_min + $tCO_min + $BD_mi
 set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports { o_uart* o_led* o_i2c* io_i2c* o_spi* }]
 set_output_delay -clock clk_eth_tx_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports o_mtx*]
 set_output_delay -clock clk_sram_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports { o_sram_* io_sram_* }]
-#set_output_delay -clock clk0_virtual -max [expr $CLKs_max + $BD_max + $tSU - $CLKd_min] [get_ports wb_o_*]
 
 # Create the output minimum delay for the data output from the FPGA that accounts for all delays specified
 set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports { o_uart* o_led* o_i2c* io_i2c* o_spi* }]
 set_output_delay -clock clk_eth_tx_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports o_mtx*]
 set_output_delay -clock clk_sram_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports { o_sram_* io_sram_* }]
-#set_output_delay -clock clk0_virtual -min [expr $CLKs_min + $BD_min - $tH - $CLKd_max] [get_ports wb_o_*]
 
 
 #**************************************************************
 # Set Clock Groups
 #**************************************************************
+set_clock_groups -asynchronous -group [get_clocks clk_sram_virtual]
 
 
 #**************************************************************
@@ -145,8 +140,11 @@ set_output_delay -clock clk_sram_virtual -min [expr $CLKs_min + $BD_min - $tH - 
 #**************************************************************
 set_false_path -from [get_ports { i_reset_n io_md }] -to [all_registers]
 set_false_path -from [all_registers] -to [get_ports { o_mdc io_md o_phy_reset_n }]
-set_false_path -from [get_clocks { clk0 }] -to [get_clocks { clk_sram_virtual }]
-set_false_path -from [get_clocks { clk_sram_virtual }] -to [get_clocks { clk0 }]
+
+#set_false_path -from [get_clocks { clk0 }] -to [get_clocks { clk_sram_virtual }]
+#set_false_path -from [get_clocks { clk_sram_virtual }] -to [get_clocks { clk0 }]
+set_false_path -from [get_ports { io_sram_* }] -to [all_registers]
+set_false_path -from [all_registers] -to [get_ports { o_sram_* io_sram_* }]
 
 
 #**************************************************************

@@ -1,4 +1,25 @@
 onerror {resume}
+quietly virtual signal -install /tb_top { /tb_top/o_monitor[5:2]} ram_state
+quietly virtual signal -install /tb_top { /tb_top/o_monitor[1:0]} MONITOR_wb_state
+quietly virtual signal -install /tb_top { /tb_top/o_monitor[5:2]} MONITOR_ram_state
+quietly virtual signal -install /tb_top { /tb_top/o_monitor[17:14]} MONITOR_i_wb_sel
+quietly virtual signal -install /tb_top { /tb_top/o_monitor[21:18]} MONITOR_i_wb_adr
+quietly virtual signal -install /tb_top { /tb_top/o_monitor[25:22]} MONITOR_i_wb_dat
+quietly virtual signal -install /tb_top { /tb_top/o_monitor[29:26]} MONITOR_o_wb_dat
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[6]  } MONITOR_i_sys_rst
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[7]  } MONITOR_i_wb_clk
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[8]  } MONITOR_i_ram_clk
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[9]  } MONITOR_i_wb_cyc
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[10]  } MONITOR_i_wb_stb
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[11]  } MONITOR_o_wb_ack
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[12]  } MONITOR_o_wb_err
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[13]  } MONITOR_i_wb_we
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[30]  } MONITOR_write_request
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[31]  } MONITOR_write_request_r
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[32]  } MONITOR_read_request
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[33]  } MONITOR_read_request_r
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[34]  } MONITOR_ram_write_final_r
+quietly virtual signal -install /tb_top {/tb_top/o_monitor[35]  } MONITOR_ram_read_final_r
 quietly WaveActivateNextPane {} 0
 add wave -noupdate -expand -group Top -expand -group DEBUG_Top -color Cyan /tb_top/u_dut/testfail
 add wave -noupdate -expand -group Top -expand -group DEBUG_Top -color Cyan /tb_top/u_dut/clk_count
@@ -36,7 +57,27 @@ add wave -noupdate -expand -group Top -group UART -group UART0 /tb_top/o_uart0_r
 add wave -noupdate -expand -group Top -group UART -group UART0 /tb_top/o_uart0_cts
 add wave -noupdate -expand -group Top -group UART -group UART0 /tb_top/i_uart0_tx
 add wave -noupdate -expand -group Top -group UART -group UART0 /tb_top/i_uart0_rts
-add wave -noupdate -expand -group Top -color Gold /tb_top/o_monitor
+add wave -noupdate -expand -group Top -color Yellow /tb_top/MONITOR_i_wb_clk
+add wave -noupdate -expand -group Top -color Yellow /tb_top/MONITOR_i_ram_clk
+add wave -noupdate -expand -group Top -color Tan /tb_top/MONITOR_i_sys_rst
+add wave -noupdate -expand -group Top -color Cyan -radix unsigned -subitemconfig {{/tb_top/o_monitor[1]} {-color Cyan} {/tb_top/o_monitor[0]} {-color Cyan}} /tb_top/MONITOR_wb_state
+add wave -noupdate -expand -group Top -color Cyan -radix unsigned -childformat {{{/tb_top/MONITOR_ram_state[3]} -radix unsigned} {{/tb_top/MONITOR_ram_state[2]} -radix unsigned} {{/tb_top/MONITOR_ram_state[1]} -radix unsigned} {{/tb_top/MONITOR_ram_state[0]} -radix unsigned}} -subitemconfig {{/tb_top/o_monitor[5]} {-color Cyan -radix unsigned} {/tb_top/o_monitor[4]} {-color Cyan -radix unsigned} {/tb_top/o_monitor[3]} {-color Cyan -radix unsigned} {/tb_top/o_monitor[2]} {-color Cyan -radix unsigned}} /tb_top/MONITOR_ram_state
+add wave -noupdate -expand -group Top -color Wheat /tb_top/MONITOR_i_wb_cyc
+add wave -noupdate -expand -group Top -color Wheat /tb_top/MONITOR_i_wb_stb
+add wave -noupdate -expand -group Top -color Wheat /tb_top/MONITOR_o_wb_ack
+add wave -noupdate -expand -group Top -color Wheat /tb_top/MONITOR_o_wb_err
+add wave -noupdate -expand -group Top -radix hexadecimal -childformat {{{/tb_top/MONITOR_i_wb_adr[3]} -radix hexadecimal} {{/tb_top/MONITOR_i_wb_adr[2]} -radix hexadecimal} {{/tb_top/MONITOR_i_wb_adr[1]} -radix hexadecimal} {{/tb_top/MONITOR_i_wb_adr[0]} -radix hexadecimal}} -subitemconfig {{/tb_top/o_monitor[21]} {-radix hexadecimal} {/tb_top/o_monitor[20]} {-radix hexadecimal} {/tb_top/o_monitor[19]} {-radix hexadecimal} {/tb_top/o_monitor[18]} {-radix hexadecimal}} /tb_top/MONITOR_i_wb_adr
+add wave -noupdate -expand -group Top -radix binary -childformat {{{/tb_top/MONITOR_i_wb_sel[3]} -radix binary} {{/tb_top/MONITOR_i_wb_sel[2]} -radix binary} {{/tb_top/MONITOR_i_wb_sel[1]} -radix binary} {{/tb_top/MONITOR_i_wb_sel[0]} -radix binary}} -subitemconfig {{/tb_top/o_monitor[17]} {-radix binary} {/tb_top/o_monitor[16]} {-radix binary} {/tb_top/o_monitor[15]} {-radix binary} {/tb_top/o_monitor[14]} {-radix binary}} /tb_top/MONITOR_i_wb_sel
+add wave -noupdate -expand -group Top -radix hexadecimal -childformat {{{/tb_top/MONITOR_i_wb_dat[3]} -radix hexadecimal} {{/tb_top/MONITOR_i_wb_dat[2]} -radix hexadecimal} {{/tb_top/MONITOR_i_wb_dat[1]} -radix hexadecimal} {{/tb_top/MONITOR_i_wb_dat[0]} -radix hexadecimal}} -subitemconfig {{/tb_top/o_monitor[25]} {-radix hexadecimal} {/tb_top/o_monitor[24]} {-radix hexadecimal} {/tb_top/o_monitor[23]} {-radix hexadecimal} {/tb_top/o_monitor[22]} {-radix hexadecimal}} /tb_top/MONITOR_i_wb_dat
+add wave -noupdate -expand -group Top -radix hexadecimal /tb_top/MONITOR_o_wb_dat
+add wave -noupdate -expand -group Top /tb_top/MONITOR_i_wb_we
+add wave -noupdate -expand -group Top -color {Sky Blue} /tb_top/MONITOR_write_request
+add wave -noupdate -expand -group Top -color {Sky Blue} /tb_top/MONITOR_write_request_r
+add wave -noupdate -expand -group Top -color {Sky Blue} /tb_top/MONITOR_read_request
+add wave -noupdate -expand -group Top -color {Sky Blue} /tb_top/MONITOR_read_request_r
+add wave -noupdate -expand -group Top -color {Sky Blue} /tb_top/MONITOR_ram_write_final_r
+add wave -noupdate -expand -group Top -color {Sky Blue} /tb_top/MONITOR_ram_read_final_r
+add wave -noupdate -expand -group Top -radix binary /tb_top/o_monitor
 add wave -noupdate -expand -group {Clocks & Resets} -color Orchid -radix hexadecimal /tb_top/u_dut/u_system/u_clocks_resets/i_brd_clk
 add wave -noupdate -expand -group {Clocks & Resets} -color Yellow -radix hexadecimal /tb_top/u_dut/u_system/u_clocks_resets/o_sys_clk
 add wave -noupdate -expand -group {Clocks & Resets} -color Yellow -radix hexadecimal /tb_top/u_dut/u_system/u_clocks_resets/o_ram_clk
@@ -443,9 +484,9 @@ add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand 
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group SRAM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/io_sram_data_l
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group I/O_S2 -expand -group SRAM_S2 -radix hexadecimal /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/io_sram_data_e
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 -color {Sky Blue} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_request
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_request_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 -color {Sky Blue} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/read_request_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 -color {Sky Blue} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request
-add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request_r
+add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group Sync_IN_S2 -color {Sky Blue} /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/write_request_r
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color Cyan -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wb_state
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color {Medium Blue} -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wbsync1_ram_state
 add wave -noupdate -expand -group SRAM_Bridge__S2 -expand -group Internal_S2 -expand -group State_S2 -expand -group FSM_WB_S2 -color Aquamarine -radix unsigned /tb_top/u_dut/u_system/u_wb_sram_2m08b_bridge/wbsync2_ram_state
@@ -655,8 +696,8 @@ add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s9_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_dat
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {i_brd_reset_n {999025 ps} 1} {{i_brd_reset (synced)} {1073785 ps} 1} {o_sys_rst {1673871 ps} 1} {{1st SRAM Read Cycle} {12849603 ps} 1} {{1st SRAM Datum at WB} {13173072 ps} 1} {{2nd SRAM Datum at WB} {13572469 ps} 1} {{4th SRAM Datum at WB - Cache line full} {13929602 ps} 1} {{SRAM write access} {14471741 ps} 1} {{Cursor 10} {14775482 ps} 0} {{Cursor 10} {14800131 ps} 0} {{Cursor 11} {14836871 ps} 0}
-quietly wave cursor active 11
+WaveRestoreCursors {i_brd_reset_n {999025 ps} 1} {{i_brd_reset (synced)} {1073785 ps} 1} {o_sys_rst {1673871 ps} 1} {{1st SRAM Read Cycle} {12849603 ps} 1} {{1st SRAM Datum at WB} {13173072 ps} 1} {{2nd SRAM Datum at WB} {13572469 ps} 1} {{4th SRAM Datum at WB - Cache line full} {13929602 ps} 1} {{SRAM write access} {14471741 ps} 1} {{Cursor 10} {1721340 ps} 0} {{Cursor 10} {14800131 ps} 0} {{Cursor 11} {14836871 ps} 0}
+quietly wave cursor active 9
 configure wave -namecolwidth 561
 configure wave -valuecolwidth 100
 configure wave -justifyvalue left
@@ -671,4 +712,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {14436446 ps} {15039177 ps}
+WaveRestoreZoom {0 ps} {602731 ps}
