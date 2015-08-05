@@ -42,7 +42,7 @@ output                          o_phy_reset_n,
 
 output                          altera_reserved_tdo,
 
-output      [35:0]              o_monitor
+output      [36: 0]             o_monitor
 );
 
 

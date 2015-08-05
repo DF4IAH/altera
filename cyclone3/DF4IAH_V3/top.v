@@ -98,7 +98,7 @@ input                           altera_reserved_tms,
 output                          altera_reserved_tdo,
 
 //output    [ 2:0]              o_monitor
-output      [35:0]              o_monitor
+output      [36: 0]             o_monitor
 // {ALTERA_IO_END} DO NOT REMOVE THIS LINE!
 );
 

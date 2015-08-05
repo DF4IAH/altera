@@ -52,7 +52,7 @@ input                       i_brd_clk,
 //input                       i_brd_clk_p,  
 //input                       i_brd_clk_n,  
 input                       i_ddr_calib_done,
-output                      o_sys_rst,
+output reg                  o_sys_rst,
 output                      o_sys_clk,
 output                      o_ram_clk
 
@@ -61,9 +61,12 @@ output                      o_ram_clk
 
 wire                        calib_done_33mhz;
 wire                        rst0;
+wire                        sys_rst;
 
-assign o_sys_rst = rst0 || !calib_done_33mhz;
+assign sys_rst = rst0 || !calib_done_33mhz;
 
+always @( posedge o_sys_clk )
+    o_sys_rst   <= sys_rst;
 
 
 `ifdef XILINX_FPGA

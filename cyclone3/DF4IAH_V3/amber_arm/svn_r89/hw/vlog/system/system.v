@@ -119,7 +119,7 @@ inout   [7:0]               io_sram_data,
 `endif
 
 output  [3:0]               led,
-output  [35:0]              o_monitor
+output  [36:0]              o_monitor
 );
 
 

@@ -24,6 +24,7 @@ quietly virtual signal -install /tb_top {/tb_top/o_monitor[34]  } MONITOR_ram_wr
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[35]  } MONITOR_ram_read_final_r
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[34]  } MONITOR_wb_read_final_r
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[35]  } MONITOR_ready_r
+quietly virtual signal -install /tb_top/u_dut {/tb_top/u_dut/o_monitor[36]  } MONITOR_ramsync2_sys_rst
 quietly WaveActivateNextPane {} 0
 add wave -noupdate -expand -group Control -color Orchid /tb_top/i_reset_n
 add wave -noupdate -expand -group Control -color Yellow /tb_top/i_brd_clk
@@ -65,6 +66,7 @@ add wave -noupdate -divider {MONITOR Section}
 add wave -noupdate -color Yellow /tb_top/MONITOR_i_wb_clk
 add wave -noupdate -color Yellow /tb_top/MONITOR_i_ram_clk
 add wave -noupdate -color Tan /tb_top/MONITOR_i_sys_rst
+add wave -noupdate -color Tan /tb_top/u_dut/MONITOR_ramsync2_sys_rst
 add wave -noupdate -color Cyan -radix unsigned /tb_top/MONITOR_wb_state
 add wave -noupdate -color Cyan -radix unsigned /tb_top/MONITOR_ram_state
 add wave -noupdate -color Wheat /tb_top/MONITOR_i_wb_cyc
@@ -82,10 +84,11 @@ add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_write_request_r
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_read_request
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_read_request_r
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_wb_read_final_r
+add wave -noupdate {/tb_top/u_dut/o_monitor[36]}
 add wave -noupdate /tb_top/o_monitor
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {231425 ps} 0} {{Cursor 2} {19789234 ps} 0}
-quietly wave cursor active 1
+WaveRestoreCursors {{Cursor 1} {1758164 ps} 0} {{Cursor 2} {1762607 ps} 0}
+quietly wave cursor active 2
 configure wave -namecolwidth 552
 configure wave -valuecolwidth 199
 configure wave -justifyvalue left
@@ -100,4 +103,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {200940 ps} {370524 ps}
+WaveRestoreZoom {1728458 ps} {1813250 ps}

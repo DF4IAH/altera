@@ -94,9 +94,9 @@ derive_pll_clocks -create_base_clocks
 #**************************************************************
 # Set Clock Uncertainty
 #**************************************************************
-if { $::TimeQuestInfo(family) == "HardCopy II"} {
+#if { $::TimeQuestInfo(family) == "HardCopy II"} {
 derive_clock_uncertainty
-}
+#}
 #set_clock_uncertainty -setup -from [get_clocks __listOfWildcards] -to [get_clocks __listOfWildcards]
 #set_clock_uncertainty -hold  -from [get_clocks __listOfWildcards] -to [get_clocks __listOfWildcards]
 

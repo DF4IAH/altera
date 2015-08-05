@@ -68,8 +68,8 @@ output reg  [3:0]               o_sram_cs           = 'd0,      // ChipSelect
 output reg                      o_sram_read         = 'd0,      // Read
 output reg                      o_sram_write        = 'd0,      // Write
 output      [SRAM_ADR_L-1:0]    o_sram_addr,                    // Addressbus
-inout       [SRAM_DATA_L-1:0]   io_sram_data,                    // Databus
-output      [35:0]              o_monitor
+inout       [SRAM_DATA_L-1:0]   io_sram_data,                   // Databus
+output      [36: 0]             o_monitor
 );
 
 
@@ -117,14 +117,14 @@ localparam RAM_FSM_READ_LOOP_STATE                  = 4'd8;
 localparam RAM_FSM_READ_END_STATE                   = 4'd9;
 
 reg  [3:0]              ram_state                   = RAM_FSM_INIT_STATE;
-reg                     ram_write_final_r           = 'd0;
-reg                     ram_read_final_r            = 'd0;
 reg  [SRAM_ADR_L-1:0]   ram_sr_adr_r                = 'd0;
 reg  [WB_DWIDTH-1:0]    ram_dat_r                   = 'd0;
 reg  [WB_DWIDTH-1:0]    ram_dat_out_r               = 'd0;
 reg  [WB_SWIDTH-1:0]    ram_sel_r                   = 'd0;
 reg  [1:0]              ram_pos_r                   = 'd0;
 reg  [2:0]              ram_cyc_ctr                 = 'd0;
+reg                     ramsync1_sys_rst            = 'd0;
+reg                     ramsync2_sys_rst            = 'd0;
 reg  [1:0]              ramsync1_wb_state           = 'd0;
 reg  [1:0]              ramsync2_wb_state           = 'd0;
 reg  [SRAM_ADR_L-1:0]   ramsync1_wb_adr_r           = 'd0;
@@ -152,9 +152,11 @@ always @( posedge i_wb_clk )
         begin
         write_request_r             <= 'd0;
         read_request_r              <= 'd0;
+ 
         o_wb_dat                    <= 'd0;
         wbsync1_ram_dat_out_r       <= 'd0;
         wbsync2_ram_dat_out_r       <= 'd0;
+
         wbsync1_ram_state           <= 'd0;
         wbsync2_ram_state           <= 'd0;
         end
@@ -171,15 +173,25 @@ always @( posedge i_wb_clk )
         wbsync1_ram_state           <= ram_state;
         end
 
+
 always @( posedge i_ram_clk )
-    if ( i_sys_rst )  // reset has to be synced
+        begin
+        ramsync2_sys_rst            <= ramsync1_sys_rst;
+        ramsync1_sys_rst            <= i_sys_rst;
+        end
+
+always @( posedge i_ram_clk )
+    if ( ramsync2_sys_rst )
         begin
         ramsync1_wb_state           <= 'd0;
         ramsync2_wb_state           <= 'd0;
+
         ramsync1_wb_adr_r           <= 'd0;
         ramsync2_wb_adr_r           <= 'd0;
+
         ramsync1_wb_dat_r           <= 'd0;
         ramsync2_wb_dat_r           <= 'd0;
+
         ramsync1_wb_sel_r           <= 'd0;
         ramsync2_wb_sel_r           <= 'd0;
         end
@@ -233,7 +245,7 @@ always @( posedge i_wb_clk )
                     wb_dat_r        <= i_wb_dat;
                     wb_sel_r        <= i_wb_sel;
                     end
-                else if ( read_request  && (wbsync2_ram_state == RAM_FSM_READY_STATE) )
+                else if ( read_request && (wbsync2_ram_state == RAM_FSM_READY_STATE) )
                     begin
                     wb_state        <= WB_FSM_READ_STATE;
                     ready_r         <= 'd0;
@@ -265,11 +277,9 @@ always @( posedge i_wb_clk )
 // External SRAM FSM
 // ------------------------------------------------------
 always @( posedge i_ram_clk )
-    if ( i_sys_rst )
+    if ( ramsync2_sys_rst )
         begin
         ram_state               <= RAM_FSM_INIT_STATE;
-        ram_write_final_r       <= 'd0;
-        ram_read_final_r        <= 'd0;
         ram_dat_out_r           <= 'd0;
         o_sram_cs               <= 4'b0000;
         o_sram_read             <= 'd0;
@@ -287,8 +297,6 @@ always @( posedge i_ram_clk )
             RAM_FSM_INIT_STATE:
                 begin
                 ram_state               <= RAM_FSM_READY_STATE;
-                ram_write_final_r       <= 'd0;
-                ram_read_final_r        <= 'd0;
                 ram_dat_out_r           <= 'd0;
                 o_sram_cs               <= 4'b0000;
                 o_sram_read             <= 'd0;
@@ -366,7 +374,6 @@ always @( posedge i_ram_clk )
                         ram_sr_adr_r                <= 'd0;
                         io_sram_data_l              <= 'd0;
                         io_sram_data_e              <= 'd0;
-                        ram_write_final_r           <= 'd1;
                         end
                     end
                 else if ( ramsync2_wb_state == WB_FSM_READ_STATE )
@@ -424,7 +431,6 @@ always @( posedge i_ram_clk )
                         io_sram_data_l              <= 'd0;
                         io_sram_data_e              <= 'd0;
                         ram_dat_out_r               <= 'd0;                     // reading w/o any selected bytes
-                        ram_read_final_r            <= 'd1;
                         end
                     end
 
@@ -451,7 +457,6 @@ always @( posedge i_ram_clk )
                     if ( ram_sel_r == 4'd0 )
                         begin
                         ram_state                   <= RAM_FSM_WRITE_END_STATE;
-                        ram_write_final_r           <= 'd1;
                         end
                     else
                         ram_state                   <= RAM_FSM_WRITE_LOOP_STATE;
@@ -506,7 +511,6 @@ always @( posedge i_ram_clk )
 //              else                                                            // dead code
 //                  begin
 //                  ram_state           <= RAM_FSM_WRITE_END_STATE;
-//                  write_final_r       <= 'd1;
 //                  end
                 end
 					
@@ -515,7 +519,6 @@ always @( posedge i_ram_clk )
                 if ( ramsync2_wb_state <= WB_FSM_READY_STATE )
                     begin
                     ram_state                       <= RAM_FSM_READY_STATE;
-                    ram_write_final_r               <= 'd0;
                     o_sram_cs                       <= 4'b0000;
                     o_sram_read                     <= 'd0;
                     o_sram_write  	                <= 'd0;
@@ -549,7 +552,6 @@ always @( posedge i_ram_clk )
                     if ( ram_sel_r == 4'd0 )
                         begin
                         ram_state                   <= RAM_FSM_READ_END_STATE;
-                        ram_read_final_r            <= 'd1;
                         ram_dat_out_r               <= ram_dat_r | ({24'd0,io_sram_data} << ({3'd0,ram_pos_r} << 3));
                         end
                     else
@@ -598,7 +600,6 @@ always @( posedge i_ram_clk )
 //                  begin
 //                  ram_state                       <= RAM_FSM_READ_END_STATE;
 //                  ram_dat_out_r                   <= ram_dat_r;
-//                  read_final_r                    <= 'd1;
 //                  end
                 end
 
@@ -607,7 +608,6 @@ always @( posedge i_ram_clk )
                 if ( ramsync2_wb_state <= WB_FSM_READY_STATE )
                     begin
                     ram_state                       <= RAM_FSM_READY_STATE;
-                    ram_read_final_r                <= 'd0;
                     o_sram_cs                       <= 4'b0000;
                     o_sram_read                     <= 'd0;
                     o_sram_write  	                <= 'd0;
@@ -645,8 +645,9 @@ assign o_monitor[30:30] = write_request;
 assign o_monitor[31:31] = write_request_r;
 assign o_monitor[32:32] = read_request;
 assign o_monitor[33:33] = read_request_r;
-assign o_monitor[34:34] = ram_write_final_r;
-assign o_monitor[35:35] = ram_read_final_r;
+assign o_monitor[34:34] = wb_read_final_r;
+assign o_monitor[35:35] = ready_r;
+assign o_monitor[36:36] = ramsync2_sys_rst;
 
 
 // ========================================================
