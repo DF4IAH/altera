@@ -25,7 +25,7 @@ quietly virtual signal -install /tb_top {/tb_top/o_monitor[35]  } MONITOR_ram_re
 quietly WaveActivateNextPane {} 0
 add wave -noupdate -expand -group Control -color Orchid /tb_top/i_reset_n
 add wave -noupdate -expand -group Control -color Yellow /tb_top/i_brd_clk
-add wave -noupdate -expand -group LEDs -color Gold -subitemconfig {{/tb_top/o_led[3]} {-color Gold} {/tb_top/o_led[2]} {-color Gold} {/tb_top/o_led[1]} {-color Gold} {/tb_top/o_led[0]} {-color Gold}} /tb_top/o_led
+add wave -noupdate -expand -group LEDs -color Gold /tb_top/o_led
 add wave -noupdate -expand -group UART0 /tb_top/o_uart0_rx
 add wave -noupdate -expand -group UART0 -color Tan /tb_top/o_uart0_cts
 add wave -noupdate -expand -group UART0 /tb_top/i_uart0_tx
@@ -39,7 +39,7 @@ add wave -noupdate -group SPI0 /tb_top/i_spi0_miso
 add wave -noupdate -expand -group SRAM /tb_top/o_sram_cs_n
 add wave -noupdate -expand -group SRAM -color {Sky Blue} /tb_top/o_sram_read_n
 add wave -noupdate -expand -group SRAM -color {Sky Blue} /tb_top/o_sram_write_n
-add wave -noupdate -expand -group SRAM -radix hexadecimal -childformat {{{/tb_top/o_sram_addr[20]} -radix hexadecimal} {{/tb_top/o_sram_addr[19]} -radix hexadecimal} {{/tb_top/o_sram_addr[18]} -radix hexadecimal} {{/tb_top/o_sram_addr[17]} -radix hexadecimal} {{/tb_top/o_sram_addr[16]} -radix hexadecimal} {{/tb_top/o_sram_addr[15]} -radix hexadecimal} {{/tb_top/o_sram_addr[14]} -radix hexadecimal} {{/tb_top/o_sram_addr[13]} -radix hexadecimal} {{/tb_top/o_sram_addr[12]} -radix hexadecimal} {{/tb_top/o_sram_addr[11]} -radix hexadecimal} {{/tb_top/o_sram_addr[10]} -radix hexadecimal} {{/tb_top/o_sram_addr[9]} -radix hexadecimal} {{/tb_top/o_sram_addr[8]} -radix hexadecimal} {{/tb_top/o_sram_addr[7]} -radix hexadecimal} {{/tb_top/o_sram_addr[6]} -radix hexadecimal} {{/tb_top/o_sram_addr[5]} -radix hexadecimal} {{/tb_top/o_sram_addr[4]} -radix hexadecimal} {{/tb_top/o_sram_addr[3]} -radix hexadecimal} {{/tb_top/o_sram_addr[2]} -radix hexadecimal} {{/tb_top/o_sram_addr[1]} -radix hexadecimal} {{/tb_top/o_sram_addr[0]} -radix hexadecimal}} -subitemconfig {{/tb_top/o_sram_addr[20]} {-radix hexadecimal} {/tb_top/o_sram_addr[19]} {-radix hexadecimal} {/tb_top/o_sram_addr[18]} {-radix hexadecimal} {/tb_top/o_sram_addr[17]} {-radix hexadecimal} {/tb_top/o_sram_addr[16]} {-radix hexadecimal} {/tb_top/o_sram_addr[15]} {-radix hexadecimal} {/tb_top/o_sram_addr[14]} {-radix hexadecimal} {/tb_top/o_sram_addr[13]} {-radix hexadecimal} {/tb_top/o_sram_addr[12]} {-radix hexadecimal} {/tb_top/o_sram_addr[11]} {-radix hexadecimal} {/tb_top/o_sram_addr[10]} {-radix hexadecimal} {/tb_top/o_sram_addr[9]} {-radix hexadecimal} {/tb_top/o_sram_addr[8]} {-radix hexadecimal} {/tb_top/o_sram_addr[7]} {-radix hexadecimal} {/tb_top/o_sram_addr[6]} {-radix hexadecimal} {/tb_top/o_sram_addr[5]} {-radix hexadecimal} {/tb_top/o_sram_addr[4]} {-radix hexadecimal} {/tb_top/o_sram_addr[3]} {-radix hexadecimal} {/tb_top/o_sram_addr[2]} {-radix hexadecimal} {/tb_top/o_sram_addr[1]} {-radix hexadecimal} {/tb_top/o_sram_addr[0]} {-radix hexadecimal}} /tb_top/o_sram_addr
+add wave -noupdate -expand -group SRAM -radix hexadecimal -childformat {{{/tb_top/o_sram_addr[20]} -radix hexadecimal} {{/tb_top/o_sram_addr[19]} -radix hexadecimal} {{/tb_top/o_sram_addr[18]} -radix hexadecimal} {{/tb_top/o_sram_addr[17]} -radix hexadecimal} {{/tb_top/o_sram_addr[16]} -radix hexadecimal} {{/tb_top/o_sram_addr[15]} -radix hexadecimal} {{/tb_top/o_sram_addr[14]} -radix hexadecimal} {{/tb_top/o_sram_addr[13]} -radix hexadecimal} {{/tb_top/o_sram_addr[12]} -radix hexadecimal} {{/tb_top/o_sram_addr[11]} -radix hexadecimal} {{/tb_top/o_sram_addr[10]} -radix hexadecimal} {{/tb_top/o_sram_addr[9]} -radix hexadecimal} {{/tb_top/o_sram_addr[8]} -radix hexadecimal} {{/tb_top/o_sram_addr[7]} -radix hexadecimal} {{/tb_top/o_sram_addr[6]} -radix hexadecimal} {{/tb_top/o_sram_addr[5]} -radix hexadecimal} {{/tb_top/o_sram_addr[4]} -radix hexadecimal} {{/tb_top/o_sram_addr[3]} -radix hexadecimal} {{/tb_top/o_sram_addr[2]} -radix hexadecimal} {{/tb_top/o_sram_addr[1]} -radix hexadecimal} {{/tb_top/o_sram_addr[0]} -radix hexadecimal}} -subitemconfig {{/tb_top/o_sram_addr[20]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[19]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[18]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[17]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[16]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[15]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[14]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[13]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[12]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[11]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[10]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[9]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[8]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[7]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[6]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[5]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[4]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[3]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[2]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[1]} {-height 15 -radix hexadecimal} {/tb_top/o_sram_addr[0]} {-height 15 -radix hexadecimal}} /tb_top/o_sram_addr
 add wave -noupdate -expand -group SRAM -radix hexadecimal /tb_top/io_sram_data
 add wave -noupdate -expand -group SRAM -color Cyan -radix hexadecimal /tb_top/sram_data_reg
 add wave -noupdate -group Ethernet -expand -group Config_Ethernet -color Yellow /tb_top/o_mdc
@@ -82,7 +82,7 @@ add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_ram_write_final_r
 add wave -noupdate -color {Sky Blue} /tb_top/MONITOR_ram_read_final_r
 add wave -noupdate /tb_top/o_monitor
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {21365240 ps} 0} {{Cursor 2} {19789234 ps} 0}
+WaveRestoreCursors {{Cursor 1} {12908164 ps} 0} {{Cursor 2} {19789234 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 552
 configure wave -valuecolwidth 199
@@ -98,4 +98,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {25511262 ps} {26867934 ps}
+WaveRestoreZoom {12824061 ps} {12993645 ps}
