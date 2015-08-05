@@ -68,8 +68,8 @@ output reg  [3:0]               o_sram_cs           = 'd0,      // ChipSelect
 output reg                      o_sram_read         = 'd0,      // Read
 output reg                      o_sram_write        = 'd0,      // Write
 output      [SRAM_ADR_L-1:0]    o_sram_addr,                    // Addressbus
-inout       [SRAM_DATA_L-1:0]   io_sram_data                    // Databus
-
+inout       [SRAM_DATA_L-1:0]   io_sram_data,                    // Databus
+output      [35:0]              o_monitor
 );
 
 
@@ -626,6 +626,27 @@ assign io_sram_data                                 = (io_sram_data_e) ?  io_sra
 // Wishbone async signals
 assign o_wb_ack                                     = i_wb_stb && (write_request || wb_read_final_r);
 assign o_wb_err                                     = 'd0;
+
+assign o_monitor[ 1: 0] = wb_state;
+assign o_monitor[ 5: 2] = ram_state;
+assign o_monitor[ 6: 6] = i_sys_rst;
+assign o_monitor[ 7: 7] = i_wb_clk;
+assign o_monitor[ 8: 8] = i_ram_clk;
+assign o_monitor[ 9: 9] = i_wb_cyc;
+assign o_monitor[10:10] = i_wb_stb;
+assign o_monitor[11:11] = o_wb_ack;
+assign o_monitor[12:12] = o_wb_err;
+assign o_monitor[13:13] = i_wb_we;
+assign o_monitor[17:14] = i_wb_sel[3:0];
+assign o_monitor[21:18] = i_wb_adr[3:0];
+assign o_monitor[25:22] = i_wb_dat[3:0];
+assign o_monitor[29:26] = o_wb_dat[3:0];
+assign o_monitor[30:30] = write_request;
+assign o_monitor[31:31] = write_request_r;
+assign o_monitor[32:32] = read_request;
+assign o_monitor[33:33] = read_request_r;
+assign o_monitor[34:34] = ram_write_final_r;
+assign o_monitor[35:35] = ram_read_final_r;
 
 
 // ========================================================

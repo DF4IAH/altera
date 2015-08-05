@@ -118,7 +118,8 @@ output  [20:0]              o_sram_addr,
 inout   [7:0]               io_sram_data,
 `endif
 
-output  [3:0]               led
+output  [3:0]               led,
+output  [35:0]              o_monitor
 );
 
 
@@ -535,7 +536,8 @@ endgenerate
         .o_sram_read            ( o_sram_read           ),
         .o_sram_write           ( o_sram_write          ),
         .o_sram_addr            ( o_sram_addr           ),
-        .io_sram_data           ( io_sram_data          )
+        .io_sram_data           ( io_sram_data          ),
+        .o_monitor              ( o_monitor             )
     );
 
 `else

@@ -97,7 +97,8 @@ input                           altera_reserved_tdi,
 input                           altera_reserved_tms,
 output                          altera_reserved_tdo,
 
-output      [ 2:0]              o_monitor
+//output    [ 2:0]              o_monitor
+output      [35:0]              o_monitor
 // {ALTERA_IO_END} DO NOT REMOVE THIS LINE!
 );
 
@@ -239,7 +240,8 @@ system u_system (
     .io_sram_data       ( io_sram_data      ),
 `endif
 
-    .led                ( o_led             )
+    .led                ( o_led             ),
+    .o_monitor          ( o_monitor         )
 );
 
 
@@ -256,9 +258,9 @@ always @ ( posedge i_brd_clk )
 
 // Monitoring
 //
-assign o_monitor[0] = !i_reset_n;
-assign o_monitor[1] = !i_reset_n_r;
-assign o_monitor[2] =  brd_rst;
+//assign o_monitor[0] = !i_reset_n;
+//assign o_monitor[1] = !i_reset_n_r;
+//assign o_monitor[2] =  brd_rst;
 
 
 initial 

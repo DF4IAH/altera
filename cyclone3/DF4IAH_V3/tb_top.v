@@ -8,7 +8,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-`timescale  1 ps / 1 ps
+`timescale  1 ns / 1 ps
 
 
 module tb_top #(
@@ -159,29 +159,31 @@ initial
     i_mrx_clk   = 0;
     tb_sram_clk = 0;
 
-    #1000000     i_reset_n = 1;                 // 1 us
+//       #1000  i_reset_n = 1;                  // RTL simulation:   1 µs
+         #1000  i_reset_n = 1;                  // GL  simulation:   1 µs
+//  #500000000  i_reset_n = 1;                  // GL  simulation: 500 ms
     end
 
 
 always
     begin
-    #25000      i_brd_clk = !i_brd_clk;         // 20 MHz
+    #25         i_brd_clk = !i_brd_clk;         // 20 MHz
     end
 
 always
     begin
-    #5555       tb_sram_clk = !tb_sram_clk;     // 90 MHz
+    #5.555      tb_sram_clk = !tb_sram_clk;     // 90 MHz
     end
 
 always
     begin
-    #20000      i_mtx_clk = !i_mtx_clk;         // 25 MHz MMI @ 100 MBit
+    #20         i_mtx_clk = !i_mtx_clk;         // 25 MHz MMI @ 100 MBit
     end
 
 always
     begin
-      #200      ;
-    #19800      i_mrx_clk = !i_mrx_clk;         // 25 MHz MMI @ 100 MBit
+     #0.2       ;
+    #19.800     i_mrx_clk = !i_mrx_clk;         // 25 MHz MMI @ 100 MBit
     end
 
 integer             sram_data_ctr = 'd0;

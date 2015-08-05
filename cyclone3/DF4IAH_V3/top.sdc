@@ -31,16 +31,16 @@ set CLKd_min 0.000
 
 # Specify the maximum clock-to-out of the external device
 #set tCO_max __tCOMax
-set tCO_max 6.000
+set tCO_max 5.000
 
 # Specify the minimum clock-to-out of the external device
 #set tCO_min __tCOMin
-set tCO_min 1.000
+set tCO_min 0.000
 
 
 # Specify the maximum setup time of the external device
 #set tSU __tSU
-set tSU 5.000
+set tSU 15.000
 
 # Specify the minimum hold time of the external device
 #set tH __tH
@@ -145,6 +145,8 @@ set_output_delay -clock clk_sram_virtual -min [expr $CLKs_min + $BD_min - $tH - 
 #**************************************************************
 set_false_path -from [get_ports { i_reset_n io_md }] -to [all_registers]
 set_false_path -from [all_registers] -to [get_ports { o_mdc io_md o_phy_reset_n }]
+set_false_path -from [get_clocks { clk0 }] -to [get_clocks { clk_sram_virtual }]
+set_false_path -from [get_clocks { clk_sram_virtual }] -to [get_clocks { clk0 }]
 
 
 #**************************************************************

@@ -1,12 +1,20 @@
 onerror {resume}
 quietly WaveActivateNextPane {} 0
+add wave -noupdate /tb_top/o_led
+add wave -noupdate /tb_top/o_uart0_rx
+add wave -noupdate /tb_top/o_uart0_cts
+add wave -noupdate /tb_top/o_i2c0_scl
+add wave -noupdate /tb_top/io_i2c0_sda
+add wave -noupdate /tb_top/o_spi0_sclk
+add wave -noupdate /tb_top/o_spi0_mosi
+add wave -noupdate /tb_top/o_spi0_ss_n
 add wave -noupdate -expand -group Control -color Orchid /tb_top/i_reset_n
 add wave -noupdate -expand -group Control -color Yellow /tb_top/i_brd_clk
-add wave -noupdate -group LEDs -color Gold /tb_top/o_led
-add wave -noupdate -group UART0 /tb_top/o_uart0_rx
-add wave -noupdate -group UART0 -color Tan /tb_top/o_uart0_cts
-add wave -noupdate -group UART0 /tb_top/i_uart0_tx
-add wave -noupdate -group UART0 -color Tan /tb_top/i_uart0_rts
+add wave -noupdate -expand -group LEDs -color Gold /tb_top/o_led
+add wave -noupdate -expand -group UART0 /tb_top/o_uart0_rx
+add wave -noupdate -expand -group UART0 -color Tan /tb_top/o_uart0_cts
+add wave -noupdate -expand -group UART0 /tb_top/i_uart0_tx
+add wave -noupdate -expand -group UART0 -color Tan /tb_top/i_uart0_rts
 add wave -noupdate -group I2C -color Yellow /tb_top/o_i2c0_scl
 add wave -noupdate -group I2C /tb_top/io_i2c0_sda
 add wave -noupdate -group SPI0 -color Yellow /tb_top/o_spi0_sclk
@@ -38,10 +46,10 @@ add wave -noupdate -group JTAG /tb_top/altera_reserved_tdo
 add wave -noupdate -color Cyan /tb_top/sram_data_ctr
 add wave -noupdate /tb_top/o_monitor
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {13589417 ps} 0} {{Cursor 2} {13600455 ps} 0}
-quietly wave cursor active 2
-configure wave -namecolwidth 257
-configure wave -valuecolwidth 163
+WaveRestoreCursors {{Cursor 1} {5104709 ps} 0} {{Cursor 2} {13600455 ps} 0}
+quietly wave cursor active 1
+configure wave -namecolwidth 552
+configure wave -valuecolwidth 199
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -54,4 +62,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {17395930 ps} {19279450 ps}
+WaveRestoreZoom {10711353 ps} {12067929 ps}
