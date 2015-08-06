@@ -188,19 +188,17 @@ always
     end
 
 integer             sram_data_ctr = 'd0;
-reg         [7:0]   sram_data_reg = 'd0;
 reg         [7:0]   sram_read_r   = 'd0;
 always @ (posedge tb_sram_clk)
     begin
     if ( !sram_read_r && o_sram_read_n )        // rising edge of o_sram_read_n
         begin
-        sram_data_reg <= sram_data_ctr[7:0];
         sram_data_ctr <= sram_data_ctr + 1;
         end
     sram_read_r <= o_sram_read_n;
     end
 
-assign io_sram_data = !o_sram_read_n ? sram_data_reg : 8'bz;
+assign io_sram_data = !o_sram_read_n ? sram_data_ctr[7:0] : 8'bz;
 
 
 //always @ (posedge i_brd_clk)

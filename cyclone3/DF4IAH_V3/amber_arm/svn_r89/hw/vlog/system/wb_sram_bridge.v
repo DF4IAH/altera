@@ -124,15 +124,15 @@ reg  [WB_SWIDTH-1:0]    ram_sel_r                   = 'd0;
 reg  [1:0]              ram_pos_r                   = 'd0;
 reg  [2:0]              ram_cyc_ctr                 = 'd0;
 reg                     ramsync1_sys_rst            = 'd0;
-reg                     ramsync2_sys_rst            = 'd0;
+//reg                     ramsync2_sys_rst            = 'd0;
 reg  [1:0]              ramsync1_wb_state           = 'd0;
-reg  [1:0]              ramsync2_wb_state           = 'd0;
+//reg  [1:0]              ramsync2_wb_state           = 'd0;
 reg  [SRAM_ADR_L-1:0]   ramsync1_wb_adr_r           = 'd0;
-reg  [SRAM_ADR_L-1:0]   ramsync2_wb_adr_r           = 'd0;
+//reg  [SRAM_ADR_L-1:0]   ramsync2_wb_adr_r           = 'd0;
 reg  [WB_DWIDTH-1:0]    ramsync1_wb_dat_r           = 'd0;
-reg  [WB_DWIDTH-1:0]    ramsync2_wb_dat_r           = 'd0;
+//reg  [WB_DWIDTH-1:0]    ramsync2_wb_dat_r           = 'd0;
 reg  [WB_SWIDTH-1:0]    ramsync1_wb_sel_r           = 'd0;
-reg  [WB_SWIDTH-1:0]    ramsync2_wb_sel_r           = 'd0;
+//reg  [WB_SWIDTH-1:0]    ramsync2_wb_sel_r           = 'd0;
 reg  [31:0]             dummy                       = 'd0;
 
 
@@ -176,37 +176,37 @@ always @( posedge i_wb_clk )
 
 always @( posedge i_ram_clk )
         begin
-        ramsync2_sys_rst            <= ramsync1_sys_rst;
+//        ramsync2_sys_rst            <= ramsync1_sys_rst;
         ramsync1_sys_rst            <= i_sys_rst;
         end
 
 always @( posedge i_ram_clk )
-    if ( ramsync2_sys_rst )
+    if ( ramsync1_sys_rst )
         begin
         ramsync1_wb_state           <= 'd0;
-        ramsync2_wb_state           <= 'd0;
+//        ramsync2_wb_state           <= 'd0;
 
         ramsync1_wb_adr_r           <= 'd0;
-        ramsync2_wb_adr_r           <= 'd0;
+//        ramsync2_wb_adr_r           <= 'd0;
 
         ramsync1_wb_dat_r           <= 'd0;
-        ramsync2_wb_dat_r           <= 'd0;
+//        ramsync2_wb_dat_r           <= 'd0;
 
         ramsync1_wb_sel_r           <= 'd0;
-        ramsync2_wb_sel_r           <= 'd0;
+//        ramsync2_wb_sel_r           <= 'd0;
         end
     else
         begin
-        ramsync2_wb_state           <= ramsync1_wb_state;
+//        ramsync2_wb_state           <= ramsync1_wb_state;
         ramsync1_wb_state           <= wb_state;
 
-        ramsync2_wb_adr_r           <= ramsync1_wb_adr_r;
+//        ramsync2_wb_adr_r           <= ramsync1_wb_adr_r;
         ramsync1_wb_adr_r           <= wb_adr_r;
 
-        ramsync2_wb_dat_r           <= ramsync1_wb_dat_r;
+//        ramsync2_wb_dat_r           <= ramsync1_wb_dat_r;
         ramsync1_wb_dat_r           <= wb_dat_r;
 
-        ramsync2_wb_sel_r           <= ramsync1_wb_sel_r;
+//        ramsync2_wb_sel_r           <= ramsync1_wb_sel_r;
         ramsync1_wb_sel_r           <= wb_sel_r;
         end
 
@@ -277,7 +277,7 @@ always @( posedge i_wb_clk )
 // External SRAM FSM
 // ------------------------------------------------------
 always @( posedge i_ram_clk )
-    if ( ramsync2_sys_rst )
+    if ( ramsync1_sys_rst )
         begin
         ram_state               <= RAM_FSM_INIT_STATE;
         ram_dat_out_r           <= 'd0;
@@ -311,51 +311,51 @@ always @( posedge i_ram_clk )
                 end
 				
             RAM_FSM_READY_STATE:
-                if ( ramsync2_wb_state == WB_FSM_WRITE_STATE )
+                if ( ramsync1_wb_state == WB_FSM_WRITE_STATE )
                     begin
-                    if ( ramsync2_wb_sel_r[0] )
+                    if ( ramsync1_wb_sel_r[0] )
                         begin
                         // data w/o shift available
                         ram_state                   <= RAM_FSM_WRITE_BYTE_SU_STATE;
                         o_sram_cs                   <=  4'b0001;
-                        ram_sr_adr_r                <= ramsync2_wb_adr_r;
-                        io_sram_data_l              <= ramsync2_wb_dat_r[ 7: 0];
+                        ram_sr_adr_r                <= ramsync1_wb_adr_r;
+                        io_sram_data_l              <= ramsync1_wb_dat_r[ 7: 0];
                         io_sram_data_e              <= 'd1;
                         ram_pos_r                   <= 2'd0;                            // Litte Endian
-                        ram_sel_r                   <= ramsync2_wb_sel_r >> 1;           // shift one bit right
-                        ram_dat_r                   <= ramsync2_wb_dat_r >> 8;
+                        ram_sel_r                   <= ramsync1_wb_sel_r >> 1;           // shift one bit right
+                        ram_dat_r                   <= ramsync1_wb_dat_r >> 8;
                         ram_cyc_ctr                 <= RAM_CYC_CTR_VALUE_WR_SU;
                         end
-                    else if ( ramsync2_wb_sel_r[1] )
+                    else if ( ramsync1_wb_sel_r[1] )
                         begin
                         ram_state                   <= RAM_FSM_WRITE_BYTE_SU_STATE;
                         o_sram_cs                   <= 4'b0001;
-                        {dummy[31:21],ram_sr_adr_r} <= ramsync2_wb_adr_r + 1;
-                        io_sram_data_l              <= ramsync2_wb_dat_r[15: 8];
+                        {dummy[31:21],ram_sr_adr_r} <= ramsync1_wb_adr_r + 1;
+                        io_sram_data_l              <= ramsync1_wb_dat_r[15: 8];
                         io_sram_data_e              <= 'd1;
                         ram_pos_r                   <= 2'd1;
-                        ram_sel_r                   <= ramsync2_wb_sel_r >> 2;           // shift two bits right
-                        ram_dat_r                   <= ramsync2_wb_dat_r >> 16;
+                        ram_sel_r                   <= ramsync1_wb_sel_r >> 2;           // shift two bits right
+                        ram_dat_r                   <= ramsync1_wb_dat_r >> 16;
                         ram_cyc_ctr                 <= RAM_CYC_CTR_VALUE_WR_SU;
                         end
-                    else if ( ramsync2_wb_sel_r[2] )
+                    else if ( ramsync1_wb_sel_r[2] )
                         begin
                         ram_state                   <= RAM_FSM_WRITE_BYTE_SU_STATE;
                         o_sram_cs                   <= 4'b0001;
-                        {dummy[31:21],ram_sr_adr_r} <= ramsync2_wb_adr_r + 2;
-                        io_sram_data_l              <= ramsync2_wb_dat_r[23:16];
+                        {dummy[31:21],ram_sr_adr_r} <= ramsync1_wb_adr_r + 2;
+                        io_sram_data_l              <= ramsync1_wb_dat_r[23:16];
                         io_sram_data_e              <= 'd1;
                         ram_pos_r                   <= 2'd2;
-                        ram_sel_r                   <= ramsync2_wb_sel_r >> 3;           // shift three bits right
-                        ram_dat_r                   <= ramsync2_wb_dat_r >> 24;
+                        ram_sel_r                   <= ramsync1_wb_sel_r >> 3;           // shift three bits right
+                        ram_dat_r                   <= ramsync1_wb_dat_r >> 24;
                         ram_cyc_ctr                 <= RAM_CYC_CTR_VALUE_WR_SU;
                         end
-                    else if ( ramsync2_wb_sel_r[3] )
+                    else if ( ramsync1_wb_sel_r[3] )
                         begin
                         ram_state                   <= RAM_FSM_WRITE_BYTE_SU_STATE;
                         o_sram_cs                   <= 4'b0001;
-                        {dummy[31:21],ram_sr_adr_r} <= ramsync2_wb_adr_r + 3;
-                        io_sram_data_l              <= ramsync2_wb_dat_r[31:24];
+                        {dummy[31:21],ram_sr_adr_r} <= ramsync1_wb_adr_r + 3;
+                        io_sram_data_l              <= ramsync1_wb_dat_r[31:24];
                         io_sram_data_e              <= 'd1;
                         ram_pos_r                   <= 2'd3;
                         ram_sel_r                   <= 'd0;
@@ -363,7 +363,7 @@ always @( posedge i_ram_clk )
                         ram_cyc_ctr                 <= RAM_CYC_CTR_VALUE_WR_SU;
                         end
 `ifdef AMBER_A25_CORE
-                    else if ( ramsync2_wb_sel_r[WB_SWIDTH-1] )
+                    else if ( ramsync1_wb_sel_r[WB_SWIDTH-1] )
                         begin
                         end
 `endif
@@ -376,47 +376,47 @@ always @( posedge i_ram_clk )
                         io_sram_data_e              <= 'd0;
                         end
                     end
-                else if ( ramsync2_wb_state == WB_FSM_READ_STATE )
+                else if ( ramsync1_wb_state == WB_FSM_READ_STATE )
                     begin
-                    if ( ramsync2_wb_sel_r[0] )
+                    if ( ramsync1_wb_sel_r[0] )
                         begin
                         // first least significant byte available
                         ram_state 	                <= RAM_FSM_READ_BYTE_SU_STATE;
                         o_sram_cs                   <=  4'b0001;
-                        ram_sr_adr_r                <= ramsync2_wb_adr_r;
+                        ram_sr_adr_r                <= ramsync1_wb_adr_r;
                         io_sram_data_e              <= 'd0;                             // Litte Endian
-                        ram_sel_r                   <= ramsync2_wb_sel_r >> 1;
+                        ram_sel_r                   <= ramsync1_wb_sel_r >> 1;
                         ram_pos_r                   <= 2'd0;
                         ram_dat_r                   <= 'd0;
                         ram_cyc_ctr                 <= RAM_CYC_CTR_VALUE_RD_SU;
                         end
-                    else if ( ramsync2_wb_sel_r[1] )
+                    else if ( ramsync1_wb_sel_r[1] )
                         begin
                         ram_state 	                <= RAM_FSM_READ_BYTE_SU_STATE;
                         o_sram_cs                   <=  4'b0001;
-                        {dummy[31:21],ram_sr_adr_r} <= ramsync2_wb_adr_r + 1;
+                        {dummy[31:21],ram_sr_adr_r} <= ramsync1_wb_adr_r + 1;
                         io_sram_data_e              <= 'd0;
-                        ram_sel_r                   <= ramsync2_wb_sel_r >> 2;
+                        ram_sel_r                   <= ramsync1_wb_sel_r >> 2;
                         ram_pos_r                   <= 2'd1;
                         ram_dat_r                   <= 'd0;
                         ram_cyc_ctr                 <= RAM_CYC_CTR_VALUE_RD_SU;
                         end
-                    else if ( ramsync2_wb_sel_r[2] )
+                    else if ( ramsync1_wb_sel_r[2] )
                         begin
                         ram_state 	                <= RAM_FSM_READ_BYTE_SU_STATE;
                         o_sram_cs                   <=  4'b0001;
-                        {dummy[31:21],ram_sr_adr_r} <= ramsync2_wb_adr_r + 2;
+                        {dummy[31:21],ram_sr_adr_r} <= ramsync1_wb_adr_r + 2;
                         io_sram_data_e              <= 'd0;
-                        ram_sel_r                   <= ramsync2_wb_sel_r >> 3;
+                        ram_sel_r                   <= ramsync1_wb_sel_r >> 3;
                         ram_pos_r                   <= 2'd2;
                         ram_dat_r                   <= 'd0;
                         ram_cyc_ctr                 <= RAM_CYC_CTR_VALUE_RD_SU;
                         end
-                    else if ( ramsync2_wb_sel_r[3] )
+                    else if ( ramsync1_wb_sel_r[3] )
                         begin
                         ram_state 	                <= RAM_FSM_READ_BYTE_SU_STATE;
                         o_sram_cs                   <=  4'b0001;
-                        {dummy[31:21],ram_sr_adr_r} <= ramsync2_wb_adr_r + 3;
+                        {dummy[31:21],ram_sr_adr_r} <= ramsync1_wb_adr_r + 3;
                         io_sram_data_e              <= 'd0;
                         ram_sel_r                   <= 'd0;
                         ram_pos_r                   <= 2'd3;
@@ -516,7 +516,7 @@ always @( posedge i_ram_clk )
 					
             RAM_FSM_WRITE_END_STATE:
                 begin
-                if ( ramsync2_wb_state <= WB_FSM_READY_STATE )
+                if ( ramsync1_wb_state <= WB_FSM_READY_STATE )
                     begin
                     ram_state                       <= RAM_FSM_READY_STATE;
                     o_sram_cs                       <= 4'b0000;
@@ -605,7 +605,7 @@ always @( posedge i_ram_clk )
 
             RAM_FSM_READ_END_STATE:
                 begin
-                if ( ramsync2_wb_state <= WB_FSM_READY_STATE )
+                if ( ramsync1_wb_state <= WB_FSM_READY_STATE )
                     begin
                     ram_state                       <= RAM_FSM_READY_STATE;
                     o_sram_cs                       <= 4'b0000;
@@ -647,7 +647,8 @@ assign o_monitor[32:32] = read_request;
 assign o_monitor[33:33] = read_request_r;
 assign o_monitor[34:34] = wb_read_final_r;
 assign o_monitor[35:35] = ready_r;
-assign o_monitor[36:36] = ramsync2_sys_rst;
+//assign o_monitor[36:36] = ramsync2_sys_rst;
+assign o_monitor[36:36] = 1'b0;
 
 
 // ========================================================
