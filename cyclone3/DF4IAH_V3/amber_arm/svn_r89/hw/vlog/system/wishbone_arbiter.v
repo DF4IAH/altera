@@ -275,7 +275,7 @@ assign current_slave = in_ethmac     ( master_adr ) ? 4'd0  :  // Ethmac
                        in_ic         ( master_adr ) ? 4'd7  :  // Interrupt Controller
                        in_dma        ( master_adr ) ? 4'd8  :  // DMA Controller
 //                     in_cd         ( master_adr ) ? 4'd10 :  // ConfigData Controller
-                                                      4'd2  ;  // default to main memory
+                                                      4'd15 ;  // default to nowhere to inhibit spikes until address decoder has settled
 
 
 assign master_adr   = (current_master == 0) ?  i_m0_wb_adr : (current_master == 1) ?  i_m1_wb_adr : i_m2_wb_adr;

@@ -47,8 +47,8 @@ module system
 (
 input                       brd_rst,
 input                       brd_clk,
-//input                       brd_clk_p,
-//input                       brd_clk_n,
+//input                     brd_clk_p,
+//input                     brd_clk_n,
 
 
 // UART 0 Interface
