@@ -41,19 +41,19 @@
 module a23_coprocessor
 (
 input                       i_clk,
-input                       i_fetch_stall,    // stall all stages of the cpu at the same time
-input       [2:0]           i_copro_opcode1,
-input       [2:0]           i_copro_opcode2,
-input       [3:0]           i_copro_crn,      // Register Number 
-input       [3:0]           i_copro_crm,
-input       [3:0]           i_copro_num,
-input       [1:0]           i_copro_operation,
+input                       i_fetch_stall,      // stall all stages of the cpu at the same time
+input       [2:0]           i_copro_opcode1,    // CP Opc Coprocessor operation mode
+input       [2:0]           i_copro_opcode2,    // CP     Coprocessor information
+input       [3:0]           i_copro_crn,        // CRn    Coprocessor source/destination register 
+input       [3:0]           i_copro_crm,        // CRm    Coprocessor operand register
+input       [3:0]           i_copro_num,        // CP#    Coprocessor number
+input       [1:0]           i_copro_operation,  // b00: NOP, b01: CoPro --> CPU-Reg, b10: CPU-Reg --> CoPro, b11: illegal
 input       [31:0]          i_copro_write_data,
 
 input                       i_system_rdy,
-input                       i_fault,          // high to latch the fault address and status
+input                       i_fault,            // high to latch the fault address and status
 input       [7:0]           i_fault_status,
-input       [31:0]          i_fault_address,  // the address that caused the fault
+input       [31:0]          i_fault_address,    // the address that caused the fault
 
 output reg  [31:0]          o_copro_read_data,
 output                      o_cache_enable,
@@ -62,11 +62,11 @@ output      [31:0]          o_cacheable_area
 );
 
 // Bit 0 - Cache on(1)/off
-// Bit 1 - Shared (1) or seperate User/Supervisor address space
+// Bit 1 - Shared (1) or separate User/Supervisor address space
 // Bit 2 - address monitor mode(1)
 reg [2:0]  cache_control = 3'b000;
 
-// Bit 0 - 2MB memory from 0 to 0x01fffff cacheable(1)/not cachable
+// Bit 0 - 2MB memory from 0 to 0x01fffff cacheable(1)/not cacheable
 // Bit 1 - next 2MB region etc.
 reg [31:0] cacheable_area = 32'h0;
 
@@ -126,18 +126,18 @@ always @ ( posedge i_clk )
         disruptive_area <= 32'h0;
         end
     else if ( !i_fetch_stall )         
-        begin
-        if ( i_copro_operation == 2'd2 )
-            case ( i_copro_crn )
-                4'd2: cache_control   <= i_copro_write_data[2:0];
-                4'd3: cacheable_area  <= i_copro_write_data[31:0];
-                4'd4: updateable_area <= i_copro_write_data[31:0];
-                4'd5: disruptive_area <= i_copro_write_data[31:0];
-            endcase
-        end
+        case ( i_copro_num )
+            4'd15: if ( i_copro_operation == 2'd2 )
+                case ( i_copro_crn )
+                        4'd2: cache_control   <= i_copro_write_data[ 2:0];
+                        4'd3: cacheable_area  <= i_copro_write_data[31:0];
+                        4'd4: updateable_area <= i_copro_write_data[31:0];
+                        4'd5: disruptive_area <= i_copro_write_data[31:0];
+                endcase
+        endcase
 
 // Flush the cache
-assign copro15_reg1_write = !i_fetch_stall && i_copro_operation == 2'd2 && i_copro_crn == 4'd1;
+assign copro15_reg1_write = !i_fetch_stall && i_copro_num == 4'd15 && i_copro_operation == 2'd2 && i_copro_crn == 4'd1;
 
 
 // ---------------------------
@@ -187,30 +187,32 @@ always @( posedge i_clk )
 
 always @( posedge i_clk )
     if ( !i_fetch_stall )
-        begin
-        if ( i_copro_operation == 2'd2 )  // mcr
-            case ( i_copro_crn )
-                4'd 1: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #1, Flush Cache", i_copro_write_data); end
-                4'd 2: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #2, Cache Control", i_copro_write_data); end
-                4'd 3: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #3, Cacheable area", i_copro_write_data); end
-                4'd 4: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #4, Updateable area", i_copro_write_data); end
-                4'd 5: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #5, Disruptive area", i_copro_write_data); end
-            endcase
+        case ( i_copro_num )
+            4'd15: begin
+                if ( i_copro_operation == 2'd2 )  // mcr
+                    case ( i_copro_crn )
+                        4'd 1: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #1, Flush Cache", i_copro_write_data); end
+                        4'd 2: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #2, Cache Control", i_copro_write_data); end
+                        4'd 3: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #3, Cacheable area", i_copro_write_data); end
+                        4'd 4: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #4, Updateable area", i_copro_write_data); end
+                        4'd 5: begin `TB_DEBUG_MESSAGE $display ("Write 0x%08h to   Co-Pro 15 #5, Disruptive area", i_copro_write_data); end
+                    endcase
             
-        if ( copro_operation_d1 == 2'd1 ) // mrc
-            case ( copro_crn_d1 )
-                4'd 0: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #0, ID Register", o_copro_read_data); end
-                4'd 2: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #2, Cache control", o_copro_read_data); end
-                4'd 3: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #3, Cacheable area", o_copro_read_data); end
-                4'd 4: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #4, Updateable area", o_copro_read_data); end
-                4'd 5: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #4, Disruptive area", o_copro_read_data); end
-                4'd 6: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #6, Fault Status Register", o_copro_read_data); end
-                4'd 7: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #7, Fault Address Register", o_copro_read_data); end
-            endcase
-    end
+                if ( copro_operation_d1 == 2'd1 ) // mrc
+                    case ( copro_crn_d1 )
+                        4'd 0: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #0, ID Register", o_copro_read_data); end
+                        4'd 2: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #2, Cache control", o_copro_read_data); end
+                        4'd 3: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #3, Cacheable area", o_copro_read_data); end
+                        4'd 4: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #4, Updateable area", o_copro_read_data); end
+                        4'd 5: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #5, Disruptive area", o_copro_read_data); end
+                        4'd 6: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #6, Fault Status Register", o_copro_read_data); end
+                        4'd 7: begin `TB_DEBUG_MESSAGE $display ("Read  0x%08h from Co-Pro 15 #7, Fault Address Register", o_copro_read_data); end
+                    endcase
+                end
+            default: begin `TB_DEBUG_MESSAGE $display ("Access to Co-Pro %02d", i_copro_num); end
+        endcase
 //synopsys translate_on
 //synthesis translate_on
 `endif
 
 endmodule
-
