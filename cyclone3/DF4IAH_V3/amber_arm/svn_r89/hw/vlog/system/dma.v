@@ -289,10 +289,10 @@ always @( posedge i_clk )
             PP_PRELOAD:
                 if (fsm_master != MASTER_INIT)
                     begin                                                       // PULL request
-                    pp_dma_block                    <= 'd1;                     // init first and block CPU
+                    pp_dma_block                    <= 'd1;                     // initialize first from ROM and block CPU as long it takes
                     pp_src_ptr                      <= CONFIG_BASE + PRG_OFFS;
                     pp_dst_ptr                      <= BOOT_BASE;
-                    {dummy[31:16],pp_remain}        <= 16'd256 - 4;             // 4096 x 32 words
+                    {dummy[31:16],pp_remain}        <= 16'd512 - 4;             // 4096 x 32 words		// TODO: change to 16'd4096 - 4
                     pp_sel_r                        <= 4'b1111;                 // aligned words
                     o_m_wb_adr                      <= (CONFIG_BASE + PRG_OFFS) & 32'hffff_fffc;
                     o_m_wb_sel                      <= 4'b1111;
