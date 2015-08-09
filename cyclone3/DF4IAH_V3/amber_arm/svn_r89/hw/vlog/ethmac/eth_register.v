@@ -72,6 +72,7 @@
 //
 
 `include "timescale.v"
+`include "../system/system_config_defines.vh"
 
 
 module eth_register(DataIn, DataOut, Write, Clk, Reset, SyncReset);
@@ -90,19 +91,38 @@ output [WIDTH-1:0] DataOut;
 reg    [WIDTH-1:0] DataOut;
 
 
+`ifdef ALTERA_FPGA
+    `ifdef ALTERA_CYCLONE3_FPGA
+        cyc3_sram_1x32_byte_en
+    `elsif ALTERA_MAX10_FPGA
+        max10_sram_1x32_byte_en
+    `endif 
 
-always @ (posedge Clk or posedge Reset)
-begin
-  if(Reset)
-    DataOut<=#1 RESET_VALUE;
-  else
-  if(SyncReset)
-    DataOut<=#1 RESET_VALUE;
-  else
-  if(Write)                         // write
-    DataOut<=#1 DataIn;
-end
+    #(
+        .DATA_WIDTH     ( 32            )
+    ) u_registerram (
+        .i_clk          ( clk           ),
+        .i_write_data   ( di            ),
+        .i_write_enable ( write_enable  ),
+        .i_byte_enable  ( we            ),
+        .o_read_data    ( do            )
+    );
 
+`else
+    // generic
+
+    always @ (posedge Clk or posedge Reset)
+    begin
+      if(Reset)
+          DataOut<=#1 RESET_VALUE;
+      else
+      if(SyncReset)
+          DataOut<=#1 RESET_VALUE;
+      else
+      if(Write)                         // write
+          DataOut<=#1 DataIn;
+    end
+`endif
 
 
 endmodule   // Register

@@ -38,6 +38,8 @@
 //////////////////////////////////////////////////////////////////
 
 `include "timescale.v"
+`include "../system/system_config_defines.vh"
+
 
 module eth_spram_256x32(
 	//
@@ -57,29 +59,35 @@ module eth_spram_256x32(
 wire write_enable;
 assign write_enable = ce & (|we);
 
-`ifdef XILINX_SPARTAN6_FPGA
-    xs6_sram_256x32_byte_en 
-`endif
+`ifdef XILINX_FPGA
+    `ifdef XILINX_SPARTAN6_FPGA
+        xs6_sram_256x32_byte_en 
+    `elsif XILINX_VIRTEX6_FPGA
+        xv6_sram_256x32_byte_en 
+    `endif
 
-`ifdef XILINX_VIRTEX6_FPGA
-    xv6_sram_256x32_byte_en 
-`endif
+`elsif ALTERA_FPGA
+    `ifdef ALTERA_CYCLONE3_FPGA
+        cyc3_sram_256x32_byte_en
+    `elsif ALTERA_MAX10_FPGA
+        max10_sram_256x32_byte_en
+    `endif 
 
-`ifndef XILINX_FPGA
+`else
     generic_sram_byte_en
 `endif
 
     #(
-    .DATA_WIDTH     ( 32            ) ,
-    .ADDRESS_WIDTH  ( 8             )
-) u_ram (
-    .i_clk          ( clk           ),
-    .i_write_data   ( di            ),
-    .i_write_enable ( write_enable  ),
-    .i_address      ( addr          ),
-    .i_byte_enable  ( we            ),
-    .o_read_data    ( do            )
-);
+        .DATA_WIDTH     ( 32            ) ,
+        .ADDRESS_WIDTH  ( 8             )
+    ) u_spram (
+        .i_clk          ( clk           ),
+        .i_write_data   ( di            ),
+        .i_write_enable ( write_enable  ),
+        .i_address      ( addr          ),
+        .i_byte_enable  ( we            ),
+        .o_read_data    ( do            )
+    );
 
 
 endmodule

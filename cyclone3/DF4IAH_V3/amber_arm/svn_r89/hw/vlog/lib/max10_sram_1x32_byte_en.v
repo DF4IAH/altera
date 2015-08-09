@@ -44,10 +44,9 @@
 `timescale 1 ps / 1 ps
 //synopsys translate_on
 //synthesis translate_on
-module max10_sram_4096x32_byte_en
+module max10_sram_1x32_byte_en
 #(
 parameter DATA_WIDTH    = 32,
-parameter ADDRESS_WIDTH = 12,
 parameter BLOCK_WIDTH   = 32,
 parameter INIT_FILE     = "none.hex"
 )
@@ -56,7 +55,6 @@ parameter INIT_FILE     = "none.hex"
 	i_clk,
 	i_write_data,
 	i_write_enable,
-	i_address,
 	i_byte_enable,
 	o_read_data
 );
@@ -64,7 +62,6 @@ parameter INIT_FILE     = "none.hex"
 	input                           i_clk;
 	input      [DATA_WIDTH-1:0]     i_write_data;
 	input                           i_write_enable;
-	input      [ADDRESS_WIDTH-1:0]  i_address;
 	input      [(DATA_WIDTH/8)-1:0] i_byte_enable;
 	output     [DATA_WIDTH-1:0]     o_read_data;
 `ifndef ALTERA_RESERVED_QIS
@@ -94,12 +91,12 @@ generate
                .logical_ram_name              ( "ALTSYNCRAM"            ),
                .mixed_port_feed_through_mode  ( "old"                   ),
                .operation_mode                ( "dual_port"             ),
-               .port_a_address_width          ( 8                       ),
+               .port_a_address_width          ( 0                       ),
                .port_a_data_width             ( BLOCK_WIDTH             ),
                .port_a_first_address          ( 0                       ),
                .port_a_first_bit_number       ( BLOCK_WIDTH*i           ),
-               .port_a_last_address           ( 2**ADDRESS_WIDTH-1      ),
-               .port_a_logical_ram_depth      ( 2**ADDRESS_WIDTH        ),
+               .port_a_last_address           ( 0                       ),
+               .port_a_logical_ram_depth      ( 1                       ),
                .port_a_logical_ram_width      ( DATA_WIDTH              ),
                .port_b_address_clear          ( "none"                  ),
                .port_b_address_clock          ( "clock0"                ),
@@ -109,8 +106,8 @@ generate
                .port_b_data_width             ( BLOCK_WIDTH             ),
                .port_b_first_address          ( 0                       ),
                .port_b_first_bit_number       ( BLOCK_WIDTH*i           ),
-               .port_b_last_address           ( 2**ADDRESS_WIDTH-1      ),
-               .port_b_logical_ram_depth      ( 2**ADDRESS_WIDTH        ),
+               .port_b_last_address           ( 0                       ),
+               .port_b_logical_ram_depth      ( 1                       ),
                .port_b_logical_ram_width      ( DATA_WIDTH              ),
                .port_b_read_enable_clock      ( "clock0"                ),
                .power_up_uninitialized        ( "false"                 ),
@@ -119,11 +116,11 @@ generate
         ) 
         u_ram_byte (
             .clk0(i_clk),
-            .portaaddr(i_address),
+            .portaaddr(1'b0),
             .portadatain({i_write_data[(BLOCK_WIDTH*(i+1)-1):(BLOCK_WIDTH*i)]}),
             .portadataout(),
             .portawe(i_write_enable),
-            .portbaddr(i_address),
+            .portbaddr(1'b0),
             .portbdataout(sub_wire[(BLOCK_WIDTH*(i+1)-1):(BLOCK_WIDTH*i)]),
             .portbre(1'b1)
             `ifndef FORMAL_VERIFICATION
@@ -166,7 +163,6 @@ endgenerate
 initial
     begin
     if ( DATA_WIDTH    != 32  ) $display("%M Warning: Incorrect parameter DATA_WIDTH");
-    if ( ADDRESS_WIDTH != 12  ) $display("%M Warning: Incorrect parameter ADDRESS_WIDTH");
     end
 //synopsys translate_on
 //synthesis translate_on
