@@ -44,8 +44,6 @@ set_global_assignment -name PROJECT_CREATION_TIME_DATE "16:49:22  JULY 08, 2015"
 set_global_assignment -name LAST_QUARTUS_VERSION 13.1
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
-set_global_assignment -name DEVICE_FILTER_PACKAGE "ANY QFP"
-set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "NO HEAT SINK WITH STILL AIR"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name VERILOG_INPUT_VERSION VERILOG_2001
@@ -164,7 +162,10 @@ set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_RO
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "100 ps" -section_id tb_top
 set_global_assignment -name EDA_TEST_BENCH_FILE tb_top.v -section_id tb_top
-set_global_assignment -name EDA_MAP_ILLEGAL_CHARACTERS ON -section_id eda_simulation
+set_global_assignment -name EDA_MAP_ILLEGAL_CHARACTERS OFF -section_id eda_simulation
+set_global_assignment -name DEVICE_FILTER_PACKAGE "ANY QFP"
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 240
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 8
 set_global_assignment -name VERILOG_INCLUDE_FILE amber_arm/svn_r89/hw/vlog/system/system_config_defines.vh
 set_global_assignment -name VERILOG_INCLUDE_FILE amber_arm/svn_r89/hw/vlog/system/memory_configuration.vh
 set_global_assignment -name VERILOG_INCLUDE_FILE amber_arm/svn_r89/hw/vlog/system/register_addresses.vh
@@ -180,10 +181,18 @@ set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_s
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/generic_sram_byte_en.v
 set_global_assignment -name VERILOG_INCLUDE_FILE bootmem.vh
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cfgdta_rom_byte_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_1x8_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_256x21_line_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_256x32_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_256x128_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_1024x128_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/cyc3_sram_4096x32_byte_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/max10_sram_1x8_byte_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/max10_sram_256x21_line_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/max10_sram_256x32_byte_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/max10_sram_256x128_byte_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/max10_sram_1024x128_byte_en.v
+set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/lib/max10_sram_4096x32_byte_en.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/ethmac/xilinx_dist_ram_16x32.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/ethmac/timescale.v
 set_global_assignment -name VERILOG_FILE amber_arm/svn_r89/hw/vlog/ethmac/eth_wishbone.v

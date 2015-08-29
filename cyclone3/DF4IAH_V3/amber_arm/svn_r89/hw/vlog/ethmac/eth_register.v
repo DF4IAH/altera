@@ -88,24 +88,22 @@ input Reset;
 input SyncReset;
 
 output [WIDTH-1:0] DataOut;
-reg    [WIDTH-1:0] DataOut;
 
 
 `ifdef ALTERA_FPGA
     `ifdef ALTERA_CYCLONE3_FPGA
-        cyc3_sram_1x32_byte_en
+        cyc3_sram_1x8_byte_en
     `elsif ALTERA_MAX10_FPGA
-        max10_sram_1x32_byte_en
+        max10_sram_1x8_byte_en
     `endif 
 
     #(
-        .DATA_WIDTH     ( 32            )
+        .DATA_WIDTH     ( WIDTH         )
     ) u_registerram (
-        .i_clk          ( clk           ),
-        .i_write_data   ( di            ),
-        .i_write_enable ( write_enable  ),
-        .i_byte_enable  ( we            ),
-        .o_read_data    ( do            )
+        .i_clk          ( Clk           ),
+        .i_write_data   ( DataIn        ),
+        .i_write_enable ( Write         ),
+        .o_read_data    ( DataOut       )
     );
 
 `else

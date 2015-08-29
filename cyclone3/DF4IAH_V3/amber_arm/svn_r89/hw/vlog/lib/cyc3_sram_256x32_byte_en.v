@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////////////
 //                                                              //
-//  Boot-RAM for Amber Core                                     //
+//  RAM-based tag cache for Amber Core                          //
 //                                                              //
 //  This file is part of the Amber project                      //
 //  http://www.opencores.org/project,amber                      //
 //                                                              //
 //  Description                                                 //
-//  Contains 4096 addresses of 32 bit wide DATA                 //
+//  Contains 256 lines of 32 bit                                //
 //                                                              //
 //  Author(s):                                                  //
 //      - Ulrich Habel, espero7757 at gmx.net                   //
@@ -44,10 +44,11 @@
 `timescale 1 ps / 1 ps
 //synopsys translate_on
 //synthesis translate_on
-module cyc3_sram_1x32_byte_en
+module cyc3_sram_256x32_byte_en
 #(
 parameter DATA_WIDTH         = 32,
-parameter BLOCK_WIDTH        = 32,
+parameter INITIALIZE_TO_ZERO = 0,
+parameter ADDRESS_WIDTH      = 8,
 parameter INIT_FILE          = "none.hex"
 )
 
@@ -55,13 +56,15 @@ parameter INIT_FILE          = "none.hex"
 	i_clk,
 	i_write_data,
 	i_write_enable,
+	i_address,
 	i_byte_enable,
 	o_read_data
-);
+);                                                     
 
 	input                           i_clk;
 	input      [DATA_WIDTH-1:0]     i_write_data;
 	input                           i_write_enable;
+	input      [ADDRESS_WIDTH-1:0]  i_address;
 	input      [(DATA_WIDTH/8)-1:0] i_byte_enable;
 	output     [DATA_WIDTH-1:0]     o_read_data;
 `ifndef ALTERA_RESERVED_QIS
@@ -75,6 +78,10 @@ parameter INIT_FILE          = "none.hex"
 //synthesis translate_on
 `endif
 
+
+//	wire [DATA_WIDTH-1:0] sub_wire;
+//	wire [DATA_WIDTH-1:0] o_read_data = sub_wire[DATA_WIDTH-1:0];
+
 genvar   i;
 generate
     for (i=0;i<1;i=i+1) begin : u_gen
@@ -85,9 +92,9 @@ generate
                .indata_reg_b                       ( "CLOCK0"           ),
                .init_file                          ( INIT_FILE          ),
                .lpm_type                           ( "altsyncram"       ),
-               .maximum_depth                      ( 1                  ),
-               .numwords_a                         ( 1                  ),
-               .numwords_b                         ( 1                  ),
+               .maximum_depth                      ( 2**ADDRESS_WIDTH   ),
+               .numwords_a                         ( 2**ADDRESS_WIDTH   ),
+               .numwords_b                         ( 2**ADDRESS_WIDTH   ),
                .operation_mode                     ( "BIDIR_DUAL_PORT"  ),
                .outdata_reg_a                      ( "UNREGISTERED"     ),
                .outdata_reg_b                      ( "UNREGISTERED"     ),
@@ -97,15 +104,15 @@ generate
                .read_during_write_mode_port_b      ( "OLD_DATA"         ),
                .width_a                            ( DATA_WIDTH         ),
                .width_b                            ( DATA_WIDTH         ),
-               .width_byteena_a                    ( BLOCK_WIDTH/8      ),
-               .width_byteena_b                    ( BLOCK_WIDTH/8      ),
-               .widthad_a                          ( 0                  ),
-               .widthad_b                          ( 0                  ),
+               .width_byteena_a                    ( DATA_WIDTH/8       ),
+               .width_byteena_b                    ( DATA_WIDTH/8       ),
+               .widthad_a                          ( ADDRESS_WIDTH      ),
+               .widthad_b                          ( ADDRESS_WIDTH      ),
                .wrcontrol_wraddress_reg_b          ( "CLOCK0"           )
         ) 
-        u_ram_byte (
-            .address_a (1'b0),
-            .address_b (1'b0),
+        u_ram_line (
+            .address_a (i_address),
+            .address_b (i_address),
             .addressstall_a (1'b0),
             .addressstall_b (1'b0),
             .byteena_a (i_byte_enable),
@@ -116,8 +123,8 @@ generate
 //          .clocken1 (1'b0),
 //          .clocken2 (1'b0),
 //          .clocken3 (1'b0),
-            .data_a (i_write_data),
-            .data_b ({DATA_WIDTH{1'b0}}),
+            .data_a ({{11'b0},i_write_data}),
+            .data_b ({32{1'b0}}),
             .q_a (),
             .q_b (o_read_data),
             .rden_a (1'b0),
@@ -137,6 +144,7 @@ endgenerate
 initial
     begin
     if ( DATA_WIDTH    != 32  ) $display("%M Warning: Incorrect parameter DATA_WIDTH");
+    if ( ADDRESS_WIDTH != 8   ) $display("%M Warning: Incorrect parameter ADDRESS_WIDTH");
     end
 //synopsys translate_on
 //synthesis translate_on

@@ -45,14 +45,14 @@ module eth_spram_256x32(
 	//
 	// Generic synchronous single-port RAM interface
 	//
-	input           clk,  // Clock, rising edge
-	input           rst,  // Reset, active high
-	input           ce,   // Chip enable input, active high
-	input  [3:0]    we,   // Write enable input, active high
-	input           oe,   // Output enable input, active high
-	input  [7:0]    addr, // address bus inputs
-	input  [31:0]   di,   // input data bus
-	output [31:0]   do    // output data bus
+	input           clk,  	// Clock, rising edge
+	input           rst,  	// Reset, active high
+	input           ce,   	// Chip enable input, active high
+	input  [3:0]    we,   	// Write enable input, active high
+	input           oe,   	// Output enable input, active high
+	input  [7:0]    addr, 	// address bus inputs
+	input  [31:0]   i_dat,	// input data bus
+	output [31:0]   o_dat 	// output data bus
 
 );
 
@@ -82,11 +82,11 @@ assign write_enable = ce & (|we);
         .ADDRESS_WIDTH  ( 8             )
     ) u_spram (
         .i_clk          ( clk           ),
-        .i_write_data   ( di            ),
+        .i_write_data   ( i_dat         ),
         .i_write_enable ( write_enable  ),
         .i_address      ( addr          ),
         .i_byte_enable  ( we            ),
-        .o_read_data    ( do            )
+        .o_read_data    ( o_dat         )
     );
 
 

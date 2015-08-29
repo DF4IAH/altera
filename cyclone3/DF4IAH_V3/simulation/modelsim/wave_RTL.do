@@ -21,6 +21,82 @@ quietly virtual signal -install /tb_top {/tb_top/o_monitor[33]  } MONITOR_read_r
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[34]  } MONITOR_ram_write_final_r
 quietly virtual signal -install /tb_top {/tb_top/o_monitor[35]  } MONITOR_ram_read_final_r
 quietly WaveActivateNextPane {} 0
+add wave -noupdate /tb_top/o_led
+add wave -noupdate /tb_top/o_uart0_rx
+add wave -noupdate /tb_top/o_uart0_cts
+add wave -noupdate /tb_top/o_i2c0_scl
+add wave -noupdate /tb_top/io_i2c0_sda
+add wave -noupdate /tb_top/o_spi0_sclk
+add wave -noupdate /tb_top/o_spi0_mosi
+add wave -noupdate /tb_top/o_spi0_ss_n
+add wave -noupdate /tb_top/o_sram_cs_n
+add wave -noupdate /tb_top/o_sram_read_n
+add wave -noupdate /tb_top/o_sram_write_n
+add wave -noupdate -radix hexadecimal /tb_top/o_sram_addr
+add wave -noupdate -radix hexadecimal /tb_top/io_sram_data
+add wave -noupdate /tb_top/o_mtxd
+add wave -noupdate /tb_top/o_mtxen
+add wave -noupdate /tb_top/o_mtxerr
+add wave -noupdate /tb_top/io_md
+add wave -noupdate /tb_top/o_mdc
+add wave -noupdate /tb_top/o_phy_reset_n
+add wave -noupdate /tb_top/altera_reserved_tdo
+add wave -noupdate /tb_top/o_monitor
+add wave -noupdate /tb_top/i_uart0_tx
+add wave -noupdate /tb_top/i_uart0_rts
+add wave -noupdate /tb_top/i_spi0_miso
+add wave -noupdate /tb_top/i_mrxd
+add wave -noupdate /tb_top/i_mrxdv
+add wave -noupdate /tb_top/i_mcoll
+add wave -noupdate /tb_top/i_mcrs
+add wave -noupdate /tb_top/altera_reserved_tck
+add wave -noupdate /tb_top/altera_reserved_tdi
+add wave -noupdate /tb_top/altera_reserved_tms
+add wave -noupdate /tb_top/i_reset_n
+add wave -noupdate /tb_top/i_brd_clk
+add wave -noupdate /tb_top/i_mtx_clk
+add wave -noupdate /tb_top/i_mrx_clk
+add wave -noupdate /tb_top/tb_sram_clk
+add wave -noupdate /tb_top/sram_data_ctr
+add wave -noupdate -radix hexadecimal /tb_top/sram_read_r
+add wave -noupdate /tb_top/o_led
+add wave -noupdate /tb_top/o_uart0_rx
+add wave -noupdate /tb_top/o_uart0_cts
+add wave -noupdate /tb_top/o_i2c0_scl
+add wave -noupdate /tb_top/io_i2c0_sda
+add wave -noupdate /tb_top/o_spi0_sclk
+add wave -noupdate /tb_top/o_spi0_mosi
+add wave -noupdate /tb_top/o_spi0_ss_n
+add wave -noupdate /tb_top/o_sram_cs_n
+add wave -noupdate /tb_top/o_sram_read_n
+add wave -noupdate /tb_top/o_sram_write_n
+add wave -noupdate -radix hexadecimal /tb_top/o_sram_addr
+add wave -noupdate -radix hexadecimal /tb_top/io_sram_data
+add wave -noupdate /tb_top/o_mtxd
+add wave -noupdate /tb_top/o_mtxen
+add wave -noupdate /tb_top/o_mtxerr
+add wave -noupdate /tb_top/io_md
+add wave -noupdate /tb_top/o_mdc
+add wave -noupdate /tb_top/o_phy_reset_n
+add wave -noupdate /tb_top/altera_reserved_tdo
+add wave -noupdate /tb_top/o_monitor
+add wave -noupdate /tb_top/i_uart0_tx
+add wave -noupdate /tb_top/i_uart0_rts
+add wave -noupdate /tb_top/i_spi0_miso
+add wave -noupdate /tb_top/i_mrxd
+add wave -noupdate /tb_top/i_mrxdv
+add wave -noupdate /tb_top/i_mcoll
+add wave -noupdate /tb_top/i_mcrs
+add wave -noupdate /tb_top/altera_reserved_tck
+add wave -noupdate /tb_top/altera_reserved_tdi
+add wave -noupdate /tb_top/altera_reserved_tms
+add wave -noupdate /tb_top/i_reset_n
+add wave -noupdate /tb_top/i_brd_clk
+add wave -noupdate /tb_top/i_mtx_clk
+add wave -noupdate /tb_top/i_mrx_clk
+add wave -noupdate /tb_top/tb_sram_clk
+add wave -noupdate /tb_top/sram_data_ctr
+add wave -noupdate -radix hexadecimal /tb_top/sram_read_r
 add wave -noupdate -expand -group Top -expand -group DEBUG_Top -color Cyan /tb_top/u_dut/testfail
 add wave -noupdate -expand -group Top -expand -group DEBUG_Top -color Cyan /tb_top/u_dut/clk_count
 add wave -noupdate -expand -group Top -expand -group Input_Control -color Orchid /tb_top/i_reset_n
@@ -690,7 +766,7 @@ add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/i_s9_wb_dat
 add wave -noupdate -expand -group WishboneArbiter -group S9 -radix hexadecimal /tb_top/u_dut/u_system/u_wishbone_arbiter/o_s9_wb_dat
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {i_brd_reset_n {999025 ps} 1} {{i_brd_reset (synced)} {1073785 ps} 1} {o_sys_rst {1673871 ps} 1} {{1st SRAM Read Cycle} {12849603 ps} 1} {{1st SRAM Datum at WB} {13222238 ps} 1} {{2nd SRAM Datum at WB} {13621627 ps} 1} {{4th SRAM Datum at WB - Cache line full} {14020481 ps} 1} {{SRAM write access} {14620029 ps} 1} {{Cursor 10} {14669444 ps} 0} {{Cursor 10} {14725000 ps} 0} {{Cursor 11} {25774903 ps} 0}
+WaveRestoreCursors {i_brd_reset_n {999025 ps} 1} {{i_brd_reset (synced)} {1073785 ps} 1} {o_sys_rst {1698073 ps} 1} {{1st SRAM Read Cycle} {24521531 ps} 1} {{1st SRAM Datum at WB} {24896877 ps} 1} {{2nd SRAM Datum at WB} {25296705 ps} 1} {{4th SRAM Datum at WB - Cache line full} {26097694 ps} 1} {{SRAM write access} {26296596 ps} 1} {{Cursor 10} {26347222 ps} 0} {{Cursor 10} {26402342 ps} 0} {{Cursor 11} {26413643 ps} 0}
 quietly wave cursor active 11
 configure wave -namecolwidth 561
 configure wave -valuecolwidth 100
@@ -706,4 +782,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {25622403 ps} {25923769 ps}
+WaveRestoreZoom {24920824 ps} {25639582 ps}
